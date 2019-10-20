@@ -42,15 +42,6 @@ public class MulticastClient extends Thread {
 
                 System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
                 String message = new String(packet.getData(), 0, packet.getLength());
-                String[] result = message.split(" ; ");
-                String[] type = result[0].split(" ! ");
-                //System.out.println(type[1]);
-                if (type[1].equals("login") ){
-                    String username=result[1].split(" ! ")[1];
-                    //System.out.println(username);
-                    String password=result[2].split(" ! ")[1];
-                    System.out.println(username + " "+ password);
-                }
                 System.out.println(message);
             }
         } catch (IOException e) {
