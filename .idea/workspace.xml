@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="" />
+    <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="big stuff">
+      <change afterPath="$PROJECT_DIR$/src/RMIClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/HelloClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Hello_C_I.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Hello_C_I.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Hello_S_I.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Hello_S_I.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/HelloClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Hello_C_I.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Hello_C_I.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Hello_S_I.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Hello_S_I.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MulticastClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,17 +30,18 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1SKW4s9DwCYQLMP8Sy2q6YpNn6F" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/IdeaProjects/calculator" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -40,7 +55,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.RMIServer">
+  <component name="RunManager" selected="Application.RMIClient">
     <configuration name="MulticastClient" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MulticastClient" />
       <module name="Projeto" />
@@ -50,6 +65,13 @@
     </configuration>
     <configuration name="MulticastServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MulticastServer" />
+      <module name="Projeto" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RMIClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="RMIClient" />
       <module name="Projeto" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -66,9 +88,11 @@
       <item itemvalue="Application.MulticastClient" />
       <item itemvalue="Application.MulticastServer" />
       <item itemvalue="Application.RMIServer" />
+      <item itemvalue="Application.RMIClient" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.RMIClient" />
         <item itemvalue="Application.RMIServer" />
         <item itemvalue="Application.MulticastServer" />
         <item itemvalue="Application.MulticastClient" />
@@ -88,6 +112,7 @@
       <workItem from="1571312584720" duration="6774000" />
       <workItem from="1571406513009" duration="484000" />
       <workItem from="1571576568416" duration="3918000" />
+      <workItem from="1571585879696" duration="23128000" />
     </task>
     <servers />
   </component>
@@ -99,10 +124,16 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="big stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="big stuff" />
   </component>
 </project>

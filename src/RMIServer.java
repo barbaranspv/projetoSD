@@ -7,58 +7,90 @@ import java.rmi.registry.Registry;
 
 
 public class RMIServer extends UnicastRemoteObject implements Hello_S_I {
-	static Hello_C_I client;
-	static private String MULTICAST_ADDRESS = "224.0.224.0";
 	static private int PORT = 4321;
+	private final String MULTICAST_ADDRESS = "224.3.2.3";
+	private DatagramSocket dSocket = new DatagramSocket(4322);
 
-	public RMIServer() throws RemoteException {
+
+
+	public RMIServer() throws RemoteException, SocketException {
 		super();
 	}
 
-	public void print_on_server(String s) throws RemoteException {
-		System.out.println("> " + s);
+	public void enviarPacote(String s) {
+		try {
+			MulticastSocket socket = new MulticastSocket();
+			InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
+			socket.joinGroup(group);
+
+			byte[] buffer = s.getBytes();
+			DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(MULTICAST_ADDRESS), PORT);
+			socket.send(packet);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
 	}
 
-	public void subscribe(String name, Hello_C_I c) throws RemoteException {
-		System.out.println("Subscribing " + name);
-		System.out.print("> ");
-		client = c;
+	public String recebePacote() {
+		byte[] buffer = new byte[1000];
+		DatagramPacket message = new DatagramPacket(buffer, buffer.length);
+		while (true) {
+			try {
+				dSocket.setSoTimeout(20000);
+			} catch (SocketException e) {
+				e.printStackTrace();
+			}
+			try {
+				dSocket.receive(message);
+				System.out.println(message);
+				break;
+			} catch (IOException e) {
+				return "fail";
+			}
+		}
+		return new String(message.getData(), 0, message.getLength());
 	}
+
+	public String confereLogin(String username, String password) {
+		String toSend = "type ! login ; username ! " + username + " ; password ! " + password;
+		enviarPacote(toSend);
+		String received = recebePacote();
+		return received;
+
+	}
+
+	public String registaUtilizador(String username, String password) {
+		String toSend = "type ! register ; username ! " + username + " ; password ! " + password;
+		enviarPacote(toSend);
+		String received = recebePacote();
+		return received;
+
+	}
+
+
+	public String sayHello() throws RemoteException {
+		System.out.println("print do lado do servidor...!.");
+
+		return "Hello, World!";
+	}
+
 
 	// =======================================================
 
-	public static void main(String args[]) {
-		String a;
 
-		System.getProperties().put("java.security.policy", "policy.all");
-		System.setSecurityManager(new RMISecurityManager());
-		MulticastSocket socket = null;
-		InputStreamReader input = new InputStreamReader(System.in);
-		BufferedReader reader = new BufferedReader(input);
+	public static void main(String args[]) throws SocketException {
 
 		try {
-			//User user = new User();
 			RMIServer h = new RMIServer();
 			Registry r = LocateRegistry.createRegistry(7000);
 			r.rebind("project", h);
 			System.out.println("Hello Server ready.");
-			socket = new MulticastSocket(PORT);  // create socket and bind it
-			InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
-			socket.joinGroup(group);
-			while (true) {
-				/*System.out.print("> ");
-				a = reader.readLine();
-				client.print_on_client(a);*/
-				byte[] buffer = new byte[256];
-				DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-				socket.receive(packet);
-
-				System.out.println("RMI...Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
-				String message = new String(packet.getData(), 0, packet.getLength());
-				System.out.println(message);
-				}
-		} catch (Exception re) {
+		} catch (RemoteException re) {
 			System.out.println("Exception in HelloImpl.main: " + re);
-		} 
+		}
 	}
+
 }

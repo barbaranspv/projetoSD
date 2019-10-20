@@ -1,6 +1,7 @@
 import java.rmi.*;
 
 public interface Hello_S_I extends Remote {
-	public void print_on_server(String s) throws java.rmi.RemoteException;
-  public void subscribe(String name, Hello_C_I client) throws RemoteException;
+	public String sayHello() throws java.rmi.RemoteException;
+    public String confereLogin(String username,String password) throws RemoteException;
+    public String registaUtilizador(String username,String password)throws RemoteException;
 }
