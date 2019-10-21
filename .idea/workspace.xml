@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="big stuff">
-      <change afterPath="$PROJECT_DIR$/src/RMIClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/HelloClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Hello_C_I.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Hello_C_I.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Hello_S_I.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Hello_S_I.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/HelloClient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Hello_C_I.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Hello_C_I.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Hello_S_I.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Hello_S_I.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MulticastClient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Projeto.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Projeto.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastClient.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServerReceive.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,11 +32,16 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/IdeaProjects/calculator" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Dropbox/Apps/NONIO-Inforestudante/Licenciatura em Engenharia Informática/2019 2020/1.º Semestre/Sistemas Distribuídos/jsoupExample (1)/jsoupExample/lib/jsoup-1.12.1.jar!/" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\barba\Documents\GitHub\projetoSD\src" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -55,10 +55,21 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.RMIClient">
-    <configuration name="MulticastClient" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="MulticastClient" />
-      <module name="Projeto" />
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pt.uc.dei.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -85,17 +96,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.MulticastClient" />
       <item itemvalue="Application.MulticastServer" />
       <item itemvalue="Application.RMIServer" />
       <item itemvalue="Application.RMIClient" />
+      <item itemvalue="Application.Main" />
+      <item itemvalue="Application.Main (1)" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Main (1)" />
         <item itemvalue="Application.RMIClient" />
         <item itemvalue="Application.RMIServer" />
         <item itemvalue="Application.MulticastServer" />
-        <item itemvalue="Application.MulticastClient" />
       </list>
     </recent_temporary>
   </component>
@@ -112,8 +125,16 @@
       <workItem from="1571312584720" duration="6774000" />
       <workItem from="1571406513009" duration="484000" />
       <workItem from="1571576568416" duration="3918000" />
-      <workItem from="1571585879696" duration="23128000" />
+      <workItem from="1571585879696" duration="25816000" />
     </task>
+    <task id="LOCAL-00001" summary="big stuff">
+      <created>1571611261678</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1571611261679</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
