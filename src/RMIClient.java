@@ -26,7 +26,7 @@ public class RMIClient {
                             MenuAdmin(msg[2]);
                             break;
                         } else {
-                            MenuPrincipal();
+                            MenuPrincipal(msg[2]);
                             break;
                         }
                     } else if (resposta.equals("Utilizador não existente, por favor efetue o registo")) {
@@ -50,7 +50,7 @@ public class RMIClient {
                             MenuAdmin(msg[2]);
                             break;
                         } else {
-                            MenuPrincipal();
+                            MenuPrincipal(msg[2]);
                             break;
                         }
                     } else
@@ -77,11 +77,11 @@ public class RMIClient {
             System.out.println("Pesquisa por:");
             Scanner myObj2 = new Scanner(System.in);
             String pesquisa = myObj.nextLine();
-            String resposta = efetuarPesquisa(username,pesquisa);
+            String resposta = efetuarPesquisa(username);
         }
     }
 
-    public static void MenuAdmin() throws RemoteException {
+    public static void MenuAdmin(String username) throws RemoteException {
         System.out.println("\n_________Menu de Administrador:________");
         System.out.println("1-Efetuar Pesquisa");
         System.out.println("2-Ver ligacoes de uma determinada página");
@@ -94,6 +94,12 @@ public class RMIClient {
         Scanner myObj = new Scanner(System.in);
         String opcao = myObj.nextLine();
         int op=Integer.parseInt(opcao);
+    }
+    public static String efetuarPesquisa(String username) throws RemoteException {
+        System.out.println("Pesquisa por:");
+        String pesquisa=scan.nextLine();
+        String flag = server.pesquisar(username,pesquisa);
+        return flag;
     }
 
     public static String efetuarLogin() throws RemoteException {
