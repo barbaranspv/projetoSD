@@ -33,7 +33,7 @@ public class RMIClient {
                         System.out.println(resposta);
                         menuInicial();
                         break;
-                    } else if (resposta.equals("Username não encontrado, por favor efetue o registo ou verifique o username colocado")) {
+                    } else if (resposta.equals("Utilizador não existente, por favor efetue o registo ou verifique o username colocado")) {
                         System.out.println(resposta);
                         menuInicial();
                     }
@@ -47,6 +47,7 @@ public class RMIClient {
                     if (msg[0].equals("type ! status ; logged ! on ; msg ! Welcome to ucBusca")) {
                         System.out.println(msg[0]);
                         if (msg[1].equals("admin")) {
+                            System.out.println(msg[2]);
                             MenuAdmin(msg[2]);
                             break;
                         } else {
@@ -74,9 +75,6 @@ public class RMIClient {
         String opcao = myObj.nextLine();
         int op=Integer.parseInt(opcao);
         if(op==1) {
-            System.out.println("Pesquisa por:");
-            Scanner myObj2 = new Scanner(System.in);
-            String pesquisa = myObj.nextLine();
             String resposta = efetuarPesquisa(username);
         }
     }
@@ -124,8 +122,6 @@ public class RMIClient {
     }
 
     public static void main(String args[]) {
-
-
         try {
             server = (RMI_S_I) LocateRegistry.getRegistry(7000).lookup("project");
             server.sayHello();

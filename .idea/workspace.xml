@@ -37,11 +37,11 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/IdeaProjects/calculator" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -70,7 +70,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RMIClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="RMIClient" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RMIClient" />
       <module name="Projeto" />
       <method v="2">
@@ -113,6 +113,10 @@
       <workItem from="1571406513009" duration="484000" />
       <workItem from="1571576568416" duration="3918000" />
       <workItem from="1571585879696" duration="23128000" />
+      <workItem from="1571647360545" duration="16000" />
+      <workItem from="1571647444132" duration="4705000" />
+      <workItem from="1571658292895" duration="46000" />
+      <workItem from="1571658355066" duration="12125000" />
     </task>
     <servers />
   </component>

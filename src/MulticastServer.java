@@ -58,9 +58,9 @@ public class MulticastServer extends Thread {
                             {
                                 if(listaUsers.get(i).password.equals(password)) {
                                     if(listaUsers.get(i).admin==true)
-                                        enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin");
+                                        enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-"+username);
                                     else
-                                        enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- ");
+                                        enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -"+username);
                                     System.out.println(message + " tamanho da lista:" + listaUsers.size());
                                 }
                                 else
@@ -125,7 +125,7 @@ public class MulticastServer extends Thread {
                                 {
                                     System.out.println("Erro ao escrever no ficheiro");
                                 }
-                                enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- ");
+                                enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -"+username);
                             }
                             else {
                                 System.out.println(username);
@@ -233,6 +233,7 @@ class Utilizador implements Serializable {
     String password;
     boolean admin;
     private ArrayList<String> listaURLS = new ArrayList<String>();
+    boolean online = false;
 
     public Utilizador(String username,String password,boolean admin){
         this.username=username;

@@ -77,11 +77,10 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	}
 
 	public String pesquisar(String username, String pesquisa) {
-		String toSend = "type ! search ; username ! " + username + " ; key word ! " + pesquisa;
+		String toSend = "type ! search ; username ! " + username + " ; key words ! " + pesquisa;
 		enviarPacote(toSend); //enviar ao Multicast Server
 		String received = recebePacote();
 		return received;
-
 	}
 
 
