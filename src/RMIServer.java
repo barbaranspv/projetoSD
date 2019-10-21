@@ -6,7 +6,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 
-public class RMIServer extends UnicastRemoteObject implements Hello_S_I {
+public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	static private int PORT = 4321;
 	private final String MULTICAST_ADDRESS = "224.3.2.3";
 	private DatagramSocket dSocket = new DatagramSocket(4322);
@@ -56,7 +56,7 @@ public class RMIServer extends UnicastRemoteObject implements Hello_S_I {
 
 	public String confereLogin(String username, String password) {
 		String toSend = "type ! login ; username ! " + username + " ; password ! " + password;
-		enviarPacote(toSend);
+		enviarPacote(toSend); //envia ao Multicast Server
 		String received = recebePacote();
 		return received;
 
@@ -64,17 +64,24 @@ public class RMIServer extends UnicastRemoteObject implements Hello_S_I {
 
 	public String registaUtilizador(String username, String password) {
 		String toSend = "type ! register ; username ! " + username + " ; password ! " + password;
-		enviarPacote(toSend);
+		enviarPacote(toSend); //enviar ao Multicast Server
 		String received = recebePacote();
 		return received;
 
 	}
 
-
 	public String sayHello() throws RemoteException {
 		System.out.println("print do lado do servidor...!.");
 
 		return "Hello, World!";
+	}
+
+	public String efetuarPesquisa(String username, String pesquisa) {
+		String toSend = "type ! search ; username ! " + username + " ; key word ! " + pesquisa;
+		enviarPacote(toSend); //enviar ao Multicast Server
+		String received = recebePacote();
+		return received;
+
 	}
 
 
