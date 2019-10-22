@@ -26,7 +26,7 @@ public class MulticastServer extends Thread {
     }
 
     public void run() {
-        boolean existUsername=false;
+        boolean existUsername = false;
         MulticastSocket socket = null;
         try {
             socket = new MulticastSocket(PORT);  // create socket and bind it
@@ -50,104 +50,103 @@ public class MulticastServer extends Thread {
                         System.out.println(username);
                         String password = result[2].split(" ! ")[1];
                         System.out.println(username + " " + password);
-                        if(listaUsers.size()==0)
+                        if (listaUsers.size() == 0)
                             enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo");
-                        for(int i=listaUsers.size()-1; i>=0; i--)
-                        {
-                            if(username.equals(listaUsers.get(i).username))
-                            {
-                                if(listaUsers.get(i).password.equals(password)) {
-                                    if(listaUsers.get(i).admin==true)
-                                        enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-"+username);
-                                    else
-                                        enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -"+username);
-                                    System.out.println(message + " tamanho da lista:" + listaUsers.size());
+                        else {
+                            for (int i = listaUsers.size() - 1; i >= 0; i--) {
+                                if (username.equals(listaUsers.get(i).username)) {
+                                    if (listaUsers.get(i).password.equals(password)) {
+                                        if (listaUsers.get(i).admin == true) {
+                                            listaUsers.get(i).online = true;
+                                            enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-" + username);
+                                        } else {
+                                            listaUsers.get(i).online = true;
+                                            enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
+                                        }
+                                        System.out.println(message + " tamanho da lista:" + listaUsers.size());
+                                    } else
+                                        enviaInfoRMI(socket, packet.getAddress(), "Password incorreta! Tente novamente");
                                 }
-                                else
-                                    enviaInfoRMI(socket, packet.getAddress(), "Password incorreta! Tente novamente");
                             }
-                            else
-                                enviaInfoRMI(socket, packet.getAddress(), "Username não encontrado, por favor efetue o registo ou verifique o username colocado");
+                            enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo ou verifique o username colocado");
                         }
+                        enviaInfoRMI(socket, packet.getAddress(), "Username não encontrado, por favor efetue o registo ou verifique o username colocado");
                     } else if (type[1].equals("register")) {
                         String username = result[1].split(" ! ")[1];
                         //System.out.println(username);
                         String password = result[2].split(" ! ")[1];
                         System.out.println(username + " " + password);
-
-                        //System.out.println("size:"+listaUsers.size());
-
-                        if(listaUsers.isEmpty()==true){
-                            Utilizador firstUser = new Utilizador(username,password,true);
+                        if (listaUsers.isEmpty() == true) {
+                            Utilizador firstUser = new Utilizador(username, password, true);
                             listaUsers.add(firstUser);
                             File fich = new File("Users.txt");
-                            try
-                            {
+                            try {
                                 FileOutputStream is = new FileOutputStream(fich);
                                 ObjectOutputStream ois = new ObjectOutputStream(is);
                                 ois.writeObject(listaUsers);
                                 ois.close();
-                            }
-                            catch (FileNotFoundException b)
-                            {
+                            } catch (FileNotFoundException b) {
                                 System.out.println("Nao encontrei o ficheiro");
-                            }
-                            catch(IOException b)
-                            {
+                            } catch (IOException b) {
                                 System.out.println("Erro ao escrever no ficheiro");
                             }
-                            enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-"+username);
-                        }
-                        else if(listaUsers.isEmpty()==false){
-                            for(int i=listaUsers.size()-1; i>=0; i--)
-                            {
-                                if(username.equals(listaUsers.get(i).username))
-                                {
-                                    existUsername=true;
+                            firstUser.online = true;
+                            enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-" + username);
+                        } else if (listaUsers.isEmpty() == false) {
+                            for (int i = listaUsers.size() - 1; i >= 0; i--) {
+                                if (username.equals(listaUsers.get(i).username)) {
+                                    existUsername = true;
                                 }
                             }
-                            if(existUsername==false) {
-                                Utilizador user = new Utilizador(username,password,false);
+                            if (existUsername == false) {
+                                Utilizador user = new Utilizador(username, password, false);
                                 listaUsers.add(user);
                                 File fich = new File("Users.txt");
-                                try
-                                {
+                                try {
                                     FileOutputStream is = new FileOutputStream(fich);
                                     ObjectOutputStream ois = new ObjectOutputStream(is);
                                     ois.writeObject(listaUsers);
                                     ois.close();
-                                }
-                                catch (FileNotFoundException b)
-                                {
+                                } catch (FileNotFoundException b) {
                                     System.out.println("Nao encontrei o ficheiro");
-                                }
-                                catch(IOException b)
-                                {
+                                } catch (IOException b) {
                                     System.out.println("Erro ao escrever no ficheiro");
                                 }
-                                enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -"+username);
-                            }
-                            else {
+                                user.online = true;
+                                enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
+                            } else {
                                 System.out.println(username);
                                 enviaInfoRMI(socket, packet.getAddress(), "Username já existente!");
-                                existUsername=false;
+                                existUsername = false;
                             }
                         }
+                    } else if (type[1].equals("search")) {
+                        String username = result[1].split(" ! ")[1];
+                        System.out.println(username+" esta a fazer uma pesquisa");
+                        enviaInfoRMI(socket, packet.getAddress(), "Fez uma pesquisa");
+                    }else if (type[1].equals("logout")) {
+                        String username = result[1].split(" ! ")[1];
+                        System.out.println(username+" esta a fazer logout");
+                        for(int i=listaUsers.size()-1;i>=0;i--)
+                        {
+                            if(username.equals(listaUsers.get(i).username))
+                                listaUsers.get(i).online=false;
+                        }
+                        enviaInfoRMI(socket, packet.getAddress(), "Fez Logout!");
                     }
-                }
-                catch (NumberFormatException n)
-                {
+                } catch (NumberFormatException n) {
                     System.out.println("Nao foi possivel fazer parseInt da mensagem"); // nao esta a dar bem
+                } finally {
+                    socket.close();
                 }
             }
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            socket.close();
         }
     }
-    private void lerFicheiroUsers()
-    {
+    private void lerFicheiroUsers(){
         File fich = new File("Users.txt");
         if(fich.exists() && fich.isFile())
         {
@@ -194,6 +193,7 @@ public class MulticastServer extends Thread {
         MulticastServer server = new MulticastServer();
         server.start();
         server.lerFicheiroUsers();
+
         MulticastUser user = new MulticastUser();
         user.start();
     }
@@ -228,6 +228,7 @@ class MulticastUser extends Thread {
         }
     }
 }
+
 class Utilizador implements Serializable {
     String username;
     String password;
@@ -240,5 +241,4 @@ class Utilizador implements Serializable {
         this.password=password;
         this.admin=admin;
     }
-
 }

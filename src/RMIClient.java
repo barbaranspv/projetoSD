@@ -65,33 +65,65 @@ public class RMIClient {
     }
 
     public static void MenuPrincipal(String username) throws RemoteException {
-        System.out.println("\n____________Menu Principal:___________");
-        System.out.println("1-Efetuar Pesquisa");
-        System.out.println("2-Ver ligações de uma determinada pagina");
-        System.out.println("3-Ver historico de pesquisas");
-        System.out.println("4-Logout");
-        System.out.print("\n> Opcao: ");
-        Scanner myObj = new Scanner(System.in);
-        String opcao = myObj.nextLine();
-        int op=Integer.parseInt(opcao);
-        if(op==1) {
-            String resposta = efetuarPesquisa(username);
+        while(true) {
+            System.out.println("\n____________Menu Principal:___________");
+            System.out.println("1-Efetuar Pesquisa");
+            System.out.println("2-Ver ligações de uma determinada pagina");
+            System.out.println("3-Ver historico de pesquisas");
+            System.out.println("4-Logout");
+            System.out.print("\n> Opcao: ");
+            Scanner myObj = new Scanner(System.in);
+            String opcao = myObj.nextLine();
+            int op = Integer.parseInt(opcao);
+            if (op == 1) {
+                String resposta = efetuarPesquisa(username);
+            } else if (op == 2) {
+
+            } else if (op == 3) {
+
+            } else if (op == 4) {
+                efetuarLogout(username);
+                break;
+            }
         }
     }
 
     public static void MenuAdmin(String username) throws RemoteException {
-        System.out.println("\n_________Menu de Administrador:________");
-        System.out.println("1-Efetuar Pesquisa");
-        System.out.println("2-Ver ligacoes de uma determinada página");
-        System.out.println("3-Ver histórico de pesquisas");
-        System.out.println("4-Indexar novo URL");
-        System.out.println("5-Ver pagina de administracao");
-        System.out.println("6-Dar previlegios de Admin a outro user");
-        System.out.println("7-Logout");
-        System.out.print("\n> Opcao: ");
-        Scanner myObj = new Scanner(System.in);
-        String opcao = myObj.nextLine();
-        int op=Integer.parseInt(opcao);
+        while (true) {
+            System.out.println("\n_________Menu de Administrador:________");
+            System.out.println("1-Efetuar Pesquisa");
+            System.out.println("2-Ver ligacoes de uma determinada página");
+            System.out.println("3-Ver histórico de pesquisas");
+            System.out.println("4-Indexar novo URL");
+            System.out.println("5-Ver pagina de administracao");
+            System.out.println("6-Dar previlegios de Admin a outro user");
+            System.out.println("7-Logout");
+            System.out.print("\n> Opcao: ");
+            Scanner myObj = new Scanner(System.in);
+            String opcao = myObj.nextLine();
+            int op = Integer.parseInt(opcao);
+            if (op == 1) {
+                String resposta = efetuarPesquisa(username);
+            } else if (op == 2) {
+
+            } else if (op == 3) {
+
+            } else if (op == 4) {
+
+            } else if (op == 5) {
+
+            } else if (op == 6) {
+
+            } else if (op == 7) {
+                efetuarLogout(username);
+                break;
+            }
+        }
+    }
+
+    public static String efetuarLogout(String username) throws RemoteException {
+        String flag = server.logout(username);
+        return flag;
     }
     public static String efetuarPesquisa(String username) throws RemoteException {
         System.out.println("Pesquisa por:");
@@ -135,3 +167,4 @@ public class RMIClient {
 
     }
 }
+

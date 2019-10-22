@@ -82,7 +82,12 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		String received = recebePacote();
 		return received;
 	}
-
+	public String logout(String username) {
+		String toSend = "type ! logout ; username ! " + username + " ; msg ! Logging out";
+		enviarPacote(toSend); //enviar ao Multicast Server
+		String received = recebePacote();
+		return received;
+	}
 
 	// =======================================================
 

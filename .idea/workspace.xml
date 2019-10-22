@@ -32,13 +32,11 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Project" />
     <property name="last_opened_file_path" value="$USER_HOME$/Dropbox/Apps/NONIO-Inforestudante/Licenciatura em Engenharia Informática/2019 2020/1.º Semestre/Sistemas Distribuídos/jsoupExample (1)/jsoupExample/lib/jsoup-1.12.1.jar!/" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -133,6 +131,7 @@
       <workItem from="1571658292895" duration="46000" />
       <workItem from="1571658355066" duration="12125000" />
       <workItem from="1571585879696" duration="25816000" />
+      <workItem from="1571678064923" duration="991000" />
     </task>
     <task id="LOCAL-00001" summary="big stuff">
       <created>1571611261678</created>
