@@ -12,7 +12,7 @@ import java.util.*;
 public class MulticastServer extends Thread {
     private String MULTICAST_ADDRESS = "224.3.2.3";
     private int PORT = 4371;
-    private ArrayList<Utilizador> listaUsers = new ArrayList<Utilizador>();
+    public ArrayList<Utilizador> listaUsers = new ArrayList<Utilizador>();
     private HashMap< String, ArrayList<Site>> dic=leFicheiroObjetosHashMap();; //leFicheiroObjetosHashMap();  new HashMap< String, ArrayList<Site>>();
     private ArrayList<Site> siteArray=leFicheiroObjetosSites();//leFicheiroObjetosSites(); new  ArrayList<Site>()
 
@@ -53,33 +53,39 @@ public class MulticastServer extends Thread {
                 try {
 
                     if (type[1].equals("login")) {
+                        System.out.println("entrei no login");
                         String username = result[1].split(" ! ")[1];
                         String password = result[2].split(" ! ")[1];
                         System.out.println(username + " " + password);
                         if (listaUsers.size() == 0)
                             enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo");
                         else {
-                            int i = 0;
+                            int i;
+                            int flagPercorreuTudo=1;
                             for (i = listaUsers.size() - 1; i >= 0; i--) {
                                 if (username.equals(listaUsers.get(i).username)) {
                                     if (listaUsers.get(i).password.equals(password)) {
                                         if (listaUsers.get(i).admin == true) {
                                             listaUsers.get(i).online = true;
                                             enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-" + username);
+                                            flagPercorreuTudo=0;
                                             break;
                                         } else {
                                             listaUsers.get(i).online = true;
                                             enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
+                                            flagPercorreuTudo=0;
                                             break;
                                         }
                                     } else {
                                         enviaInfoRMI(socket, packet.getAddress(), "Password incorreta! Tente novamente");
+                                        flagPercorreuTudo=0;
                                         break;
                                     }
                                 }
                             }
-                            if (i == 0)
+                            if (flagPercorreuTudo == 1) {
                                 enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo ou verifique o username colocado");
+                            }
                         }
                     } else if (type[1].equals("register")) {
                         String username = result[1].split(" ! ")[1];
@@ -89,17 +95,7 @@ public class MulticastServer extends Thread {
                         if (listaUsers.isEmpty() == true) {
                             Utilizador firstUser = new Utilizador(username, password, true);
                             listaUsers.add(firstUser);
-                            File fich = new File("Users.txt");
-                           /* try {
-                               // FileOutputStream is = new FileOutputStream(fich);
-                               // ObjectOutputStream ois = new ObjectOutputStream(is);
-                                //ois.writeObject(listaUsers);
-                                //ois.close();
-                            } catch (FileNotFoundException b) {
-                                System.out.println("Nao encontrei o ficheiro");
-                            } catch (IOException b) {
-                                System.out.println("Erro ao escrever no ficheiro");
-                            }*/
+                            escreverFicheiroUsers();
                             firstUser.online = true;
                             enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-" + username);
                         } else if (listaUsers.isEmpty() == false) {
@@ -111,17 +107,7 @@ public class MulticastServer extends Thread {
                             if (existUsername == false) {
                                 Utilizador user = new Utilizador(username, password, false);
                                 listaUsers.add(user);
-                                File fich = new File("Users.txt");
-                                /* try {
-                                    FileOutputStream is = new FileOutputStream(fich);
-                                    ObjectOutputStream ois = new ObjectOutputStream(is);
-                                    ois.writeObject(listaUsers);
-                                    ois.close();
-                                } catch (FileNotFoundException b) {
-                                    System.out.println("Nao encontrei o ficheiro");
-                                } catch (IOException b) {
-                                    System.out.println("Erro ao escrever no ficheiro");
-                                }*/
+                                escreverFicheiroUsers();
                                 user.online = true;
                                 enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
                             } else {
@@ -148,13 +134,15 @@ public class MulticastServer extends Thread {
                         enviaInfoRMI(socket, packet.getAddress(), indexar);
 
                     }else if (type[1].equals("logout")) {
+                        System.out.println("entrei no logout");
                         String username = result[1].split(" ! ")[1];
                         System.out.println(username + " esta a fazer logout");
-                        for (int i = listaUsers.size() - 1; i >= 0; i--) {
-                            if (username.equals(listaUsers.get(i).username))
-                                listaUsers.get(i).online = false;
+                        for (int j = listaUsers.size() - 1; j >= 0; j--) {
+                            if (username.equals(listaUsers.get(j).username))
+                                listaUsers.get(j).online = false;
                         }
-                        enviaInfoRMI(socket, packet.getAddress(), "Fez Logout!");
+                        enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! off ; msg ! Goodbye!");
+                        System.out.println("enviei a info");
                     }
                 } catch (NumberFormatException n) {
                     System.out.println("Nao foi possivel fazer parseInt da mensagem"); // nao esta a dar bem
@@ -167,6 +155,19 @@ public class MulticastServer extends Thread {
             System.out.println("Socket Exception");
         }finally {
             socket.close();
+        }
+    }
+    private void escreverFicheiroUsers(){
+        File fich = new File("Users.txt");
+        try {
+            FileOutputStream is = new FileOutputStream(fich);
+            ObjectOutputStream ois = new ObjectOutputStream(is);
+            ois.writeObject(listaUsers);
+            ois.close();
+        } catch (FileNotFoundException b) {
+            System.out.println("Nao encontrei o ficheiro");
+        } catch (IOException b) {
+            System.out.println("Erro ao escrever no ficheiro");
         }
     }
     private void lerFicheiroUsers(){
@@ -297,8 +298,8 @@ public class MulticastServer extends Thread {
 
     private void itera(String ws, int num) throws IOException {
         // Read website
-        Map<String, Integer> countMap ;
-        if (num>-1) {
+        Map<String, Integer> countMap;
+        if (num > -1) {
             try {
                 if (!ws.startsWith("http://") && !ws.startsWith("https://"))
                     ws = "http://".concat(ws);
@@ -312,7 +313,7 @@ public class MulticastServer extends Thread {
                 // Get all links
                 Elements links = doc.select("a[href]");
                 int j;
-                for (j=0;j<siteArray.size();j++){
+                for (j = 0; j < siteArray.size(); j++) {
                     if (siteArray.get(j).url.equals(ws))
                         break;
                 }
@@ -330,57 +331,54 @@ public class MulticastServer extends Thread {
                     // System.out.println("Link: " + link.attr("href"));
                     //System.out.println("Text: " + link.text() + "\n");
                     String text = doc.text(); // We can use doc.body().text() if we only want to get text from <body></body>
-                    countMap=countWords(text);
-                    int controlo=0;
+                    countMap = countWords(text);
+                    int controlo = 0;
                     int i;
-                    for (i =0; i< siteArray.size();i++){
-                        if (siteArray.get(i).url.equals(link.attr("href"))){
-                            controlo=controlo+1;
+                    for (i = 0; i < siteArray.size(); i++) {
+                        if (siteArray.get(i).url.equals(link.attr("href"))) {
+                            controlo = controlo + 1;
                             break;
                         }
                     }
                     Site site = null;
-                    if (controlo==0){
-                        site= new Site();
-                        site.url=link.attr("href");
-                        site.title=link.text();
-                        site.text=text;
-                        site.words=countMap.keySet().toArray(new String[countMap.size()]);
+                    if (controlo == 0) {
+                        site = new Site();
+                        site.url = link.attr("href");
+                        site.title = link.text();
+                        site.text = text;
+                        site.words = countMap.keySet().toArray(new String[countMap.size()]);
                         siteArray.add(site);
-                    }
-
-                    else if (controlo==1){
-                        site=siteArray.get(i);
+                    } else if (controlo == 1) {
+                        site = siteArray.get(i);
 
                     }
-                    controlo=0;
-                    for (i =0; i< site.pages.size();i++){
-                        if (site.pages.get(i).url.equals(siteArray.get(j).url)){
+                    controlo = 0;
+                    for (i = 0; i < site.pages.size(); i++) {
+                        if (site.pages.get(i).url.equals(siteArray.get(j).url)) {
 
-                            controlo=controlo+1;
+                            controlo = controlo + 1;
                             break;
                         }
                     }
-                    if (controlo==0){
-                        site.countPages=site.countPages+1;
+                    if (controlo == 0) {
+                        site.countPages = site.countPages + 1;
                         site.pages.add(siteArray.get(j));
                     }
 
                     for (String word : countMap.keySet()) {
-                        if (dic.get(word)==null){
+                        if (dic.get(word) == null) {
                             ArrayList<Site> outrosLinks = new ArrayList<>();
                             outrosLinks.add(site);
-                            dic.put(word,outrosLinks);
-                        }
-                        else {
-                            controlo=0;
-                            for (i=0;i< dic.get(word).size();i++){
-                                if (dic.get(word).get(i).url.equals(site.url)){
-                                    controlo=controlo+1;
+                            dic.put(word, outrosLinks);
+                        } else {
+                            controlo = 0;
+                            for (i = 0; i < dic.get(word).size(); i++) {
+                                if (dic.get(word).get(i).url.equals(site.url)) {
+                                    controlo = controlo + 1;
                                     break;
                                 }
                             }
-                            if (controlo==0){
+                            if (controlo == 0) {
                                 dic.get(word).add(site);
                             }
                         }
@@ -396,11 +394,8 @@ public class MulticastServer extends Thread {
                 e.printStackTrace();
             }
         }
-
-
-
-
     }
+
     protected void escreveFicheiroObjetosSites(){
         File f=new File("sites.txt");
 
@@ -529,7 +524,6 @@ public class MulticastServer extends Thread {
         MulticastServer server = new MulticastServer();
         server.start();
         server.lerFicheiroUsers();
-
         MulticastUser user = new MulticastUser();
         user.start();
     }

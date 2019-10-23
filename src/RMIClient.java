@@ -7,14 +7,15 @@ public class RMIClient {
     public static Scanner scan=new Scanner(System.in);
 
     public static void menuInicial() throws RemoteException {
+        Scanner myObj = new Scanner(System.in);
+        String opcao;
         while (true) {
             System.out.println("Bem Vindo! O que desejas fazer? -");
             System.out.println("1- Login");
             System.out.println("2- Register");
-            System.out.println("0- Sair");
+            System.out.println("3- Sair");
             System.out.print("\n> Opcao: ");
-            Scanner myObj = new Scanner(System.in);
-            String opcao = myObj.nextLine();
+            opcao = myObj.nextLine();
             int op = Integer.parseInt(opcao);
             if (op == 1) {
                 while (true) {
@@ -38,9 +39,8 @@ public class RMIClient {
                         menuInicial();
                     }
                 }
-
             }
-            if (op == 2) {
+            else if (op == 2) {
                 while (true) {
                     String resposta = registarUtilizador();
                     String[] msg = resposta.split("-", 3);
@@ -58,7 +58,8 @@ public class RMIClient {
                         System.out.println(resposta);
                 }
             }
-            if (op == 3) {
+            else if (op == 3) {
+                System.out.println("type ! status ; logged ! off ; msg ! Leaving...Bye");
                 System.exit(0);
             }
         }
@@ -115,7 +116,8 @@ public class RMIClient {
             } else if (op == 6) {
 
             } else if (op == 7) {
-                efetuarLogout(username);
+                String answer = efetuarLogout(username);
+                System.out.println(answer);
                 break;
             }
         }
