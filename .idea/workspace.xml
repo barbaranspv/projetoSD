@@ -3,13 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hashmap.txt" beforeDir="false" afterPath="$PROJECT_DIR$/hashmap.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Projeto/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMI_S_I.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMI_S_I.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites.txt" beforeDir="false" afterPath="$PROJECT_DIR$/sites.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
