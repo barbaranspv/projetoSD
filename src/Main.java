@@ -3,7 +3,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import sun.reflect.generics.tree.Tree;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -187,13 +186,8 @@ public class Main {
                 e.printStackTrace();
             }
         }
-
-
-
-
-
-
     }
+
     protected static void escreveFicheiroObjetosSites(){
         File f=new File("sites.txt");
 

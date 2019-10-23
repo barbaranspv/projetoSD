@@ -47,30 +47,33 @@ public class MulticastServer extends Thread {
 
                     if (type[1].equals("login")) {
                         String username = result[1].split(" ! ")[1];
-                        System.out.println(username);
                         String password = result[2].split(" ! ")[1];
                         System.out.println(username + " " + password);
                         if (listaUsers.size() == 0)
                             enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo");
                         else {
-                            for (int i = listaUsers.size() - 1; i >= 0; i--) {
+                            int i = 0;
+                            for (i = listaUsers.size() - 1; i >= 0; i--) {
                                 if (username.equals(listaUsers.get(i).username)) {
                                     if (listaUsers.get(i).password.equals(password)) {
                                         if (listaUsers.get(i).admin == true) {
                                             listaUsers.get(i).online = true;
                                             enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-" + username);
+                                            break;
                                         } else {
                                             listaUsers.get(i).online = true;
                                             enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
+                                            break;
                                         }
-                                        System.out.println(message + " tamanho da lista:" + listaUsers.size());
-                                    } else
+                                    } else {
                                         enviaInfoRMI(socket, packet.getAddress(), "Password incorreta! Tente novamente");
+                                        break;
+                                    }
                                 }
                             }
-                            enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo ou verifique o username colocado");
+                            if (i == 0)
+                                enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo ou verifique o username colocado");
                         }
-                        enviaInfoRMI(socket, packet.getAddress(), "Username não encontrado, por favor efetue o registo ou verifique o username colocado");
                     } else if (type[1].equals("register")) {
                         String username = result[1].split(" ! ")[1];
                         //System.out.println(username);
@@ -122,28 +125,28 @@ public class MulticastServer extends Thread {
                         }
                     } else if (type[1].equals("search")) {
                         String username = result[1].split(" ! ")[1];
-                        System.out.println(username+" esta a fazer uma pesquisa");
+                        System.out.println(username + " esta a fazer uma pesquisa");
                         enviaInfoRMI(socket, packet.getAddress(), "Fez uma pesquisa");
-                    }else if (type[1].equals("logout")) {
+                    } else if (type[1].equals("logout")) {
                         String username = result[1].split(" ! ")[1];
-                        System.out.println(username+" esta a fazer logout");
-                        for(int i=listaUsers.size()-1;i>=0;i--)
-                        {
-                            if(username.equals(listaUsers.get(i).username))
-                                listaUsers.get(i).online=false;
+                        System.out.println(username + " esta a fazer logout");
+                        for (int i = listaUsers.size() - 1; i >= 0; i--) {
+                            if (username.equals(listaUsers.get(i).username))
+                                listaUsers.get(i).online = false;
                         }
                         enviaInfoRMI(socket, packet.getAddress(), "Fez Logout!");
                     }
                 } catch (NumberFormatException n) {
                     System.out.println("Nao foi possivel fazer parseInt da mensagem"); // nao esta a dar bem
-                } finally {
-                    socket.close();
                 }
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Socket Exception");
+        }finally {
+            socket.close();
         }
     }
     private void lerFicheiroUsers(){
