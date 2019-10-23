@@ -77,6 +77,7 @@ public class MulticastServer extends Thread {
                                             break;
                                         }
                                     } else {
+                                        System.out.println("password incorreta");
                                         enviaInfoRMI(socket, packet.getAddress(), "Password incorreta! Tente novamente");
                                         flagPercorreuTudo=0;
                                         break;
@@ -123,6 +124,7 @@ public class MulticastServer extends Thread {
 
                         String search= search(kw);
                         System.out.println(username+" esta a fazer uma pesquisa");
+                        System.out.println(search);
                         enviaInfoRMI(socket, packet.getAddress(), search);
 
                     }else if (type[1].equals("indexar")) {
@@ -267,7 +269,7 @@ public class MulticastServer extends Thread {
             for (i=0;i< dic.get(kw).size();i++){
                 if ( dic.get(kw).get(i).countPages!=1){
                     conta+=1;
-                     result = result + dic.get(kw).get(i).url + " \n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages ;
+                     result = result + dic.get(kw).get(i).url + " \n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages;
                     //for (int k=0;  k<dic.get(kw).get(i).pages.size(); k++){
                        // System.out.println( dic.get(kw).get(i).pages.get(k).url);
                     //}

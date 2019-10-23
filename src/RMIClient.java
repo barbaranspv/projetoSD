@@ -32,11 +32,14 @@ public class RMIClient {
                         }
                     } else if (resposta.equals("Utilizador não existente, por favor efetue o registo")) {
                         System.out.println(resposta);
-                        menuInicial();
                         break;
                     } else if (resposta.equals("Utilizador não existente, por favor efetue o registo ou verifique o username colocado")) {
                         System.out.println(resposta);
-                        menuInicial();
+                        break;
+                    } else if(resposta.equals("Password incorreta! Tente novamente"))
+                    {
+                        System.out.println(resposta);
+                        break;
                     }
                 }
             }
