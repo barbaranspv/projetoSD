@@ -7,9 +7,9 @@ import java.rmi.registry.Registry;
 
 
 public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
-	static private int PORT = 4321;
+	static private int PORT = 4371;
 	private final String MULTICAST_ADDRESS = "224.3.2.3";
-	private DatagramSocket dSocket = new DatagramSocket(4322);
+	private DatagramSocket dSocket = new DatagramSocket(4370);
 
 
 
@@ -39,7 +39,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		DatagramPacket message = new DatagramPacket(buffer, buffer.length);
 		while (true) {
 			try {
-				dSocket.setSoTimeout(20000);
+				dSocket.setSoTimeout(40000);
 			} catch (SocketException e) {
 				e.printStackTrace();
 			}
@@ -82,6 +82,16 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		String received = recebePacote();
 		return received;
 	}
+
+
+    public String indexar(String username, String ws) {
+        String toSend = "type ! indexar ; username ! " + username + " ; website ! " + ws;
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        return received;
+    }
+
+
 	public String logout(String username) {
 		String toSend = "type ! logout ; username ! " + username + " ; msg ! Logging out";
 		enviarPacote(toSend); //enviar ao Multicast Server
@@ -96,7 +106,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
 		try {
 			RMIServer h = new RMIServer();
-			Registry r = LocateRegistry.createRegistry(7000);
+			Registry r = LocateRegistry.createRegistry(7500);
 			r.rebind("project", h);
 			System.out.println("Hello Server ready.");
 		} catch (RemoteException re) {
