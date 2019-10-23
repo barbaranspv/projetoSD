@@ -76,7 +76,7 @@ public class RMIClient {
             String opcao = myObj.nextLine();
             int op = Integer.parseInt(opcao);
             if (op == 1) {
-                String resposta = efetuarPesquisa(username);
+                System.out.println(efetuarPesquisa(username));
             } else if (op == 2) {
 
             } else if (op == 3) {
@@ -103,13 +103,13 @@ public class RMIClient {
             String opcao = myObj.nextLine();
             int op = Integer.parseInt(opcao);
             if (op == 1) {
-                String resposta = efetuarPesquisa(username);
+                System.out.println(efetuarPesquisa(username));
             } else if (op == 2) {
 
             } else if (op == 3) {
 
             } else if (op == 4) {
-
+                System.out.println(indexarURL(username));
             } else if (op == 5) {
 
             } else if (op == 6) {
@@ -143,6 +143,14 @@ public class RMIClient {
     }
 
 
+    public static String indexarURL(String username) throws RemoteException {
+        System.out.println("Que site quer indexar?");
+        String site=scan.nextLine();
+        String flag = server.indexar(username,site);
+        return flag;
+    }
+
+
     public static String registarUtilizador() throws RemoteException {
         System.out.println("Username:");
         String user=scan.nextLine();
@@ -155,7 +163,7 @@ public class RMIClient {
 
     public static void main(String args[]) {
         try {
-            server = (RMI_S_I) LocateRegistry.getRegistry(7000).lookup("project");
+            server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
             server.sayHello();
 
             menuInicial();

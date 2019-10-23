@@ -6,4 +6,5 @@ public interface RMI_S_I extends Remote {
     public String registaUtilizador(String username,String password)throws RemoteException;
     public String pesquisar(String username,String pesquisa) throws RemoteException;
     public String logout(String username) throws RemoteException;
+    String indexar(String username, String site) throws RemoteException;
 }

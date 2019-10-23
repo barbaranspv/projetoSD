@@ -12,6 +12,83 @@ public class Main {
     static HashMap< String, ArrayList<Site>> dic=leFicheiroObjetosHashMap();; //leFicheiroObjetosHashMap();  new HashMap< String, ArrayList<Site>>();
     public static ArrayList<Site> siteArray=leFicheiroObjetosSites();//leFicheiroObjetosSites(); new  ArrayList<Site>()
 
+    public void loadSite(String ws){
+        Map<String, Integer> countMap ;
+        //leFicheiroObjetosHashMap()
+        //leFicheiroObjetosSites()
+        // Read website
+        try {
+            if (! ws.startsWith("http://") && ! ws.startsWith("https://"))
+                ws = "http://".concat(ws);
+            int i;
+
+            int controlo=0;
+            System.out.println("Loading websites...");
+            for (i =0; i< siteArray.size();i++){
+                if (siteArray.get(i).equals(ws)){
+                    controlo=controlo+1;
+                    break;
+                }
+            }
+            if (controlo==0) {
+                // Attempt to connect and get the document
+                Document doc = Jsoup.connect(ws).get();
+                Site site = new Site();
+                site.url = ws;
+                site.title = doc.title();
+                site.text = doc.text();
+                countMap = countWords(doc.text());
+                site.words = countMap.keySet().toArray(new String[countMap.size()]);
+                siteArray.add(site);
+            }
+            itera(ws,1);
+
+
+
+
+            escreveFicheiroObjetosHashMap();
+            escreveFicheiroObjetosSites();
+            // Get website text and count words
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void search(String kw){
+        int conta=0;
+        int i;
+        Collections.sort(dic.get(kw), (Site s1, Site s2) -> (int)( s2.countPages-s1.countPages));
+        if (dic.get(kw).size()<=20){
+            for (i=0;i< dic.get(kw).size();i++){
+                if ( dic.get(kw).get(i).countPages!=1){
+                    conta+=1;
+                    System.out.println(dic.get(kw).get(i).url + " \n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages );
+                    for (int k=0;  k<dic.get(kw).get(i).pages.size(); k++){
+                        System.out.println( dic.get(kw).get(i).pages.get(k).url);
+                    }
+                    System.out.println();
+
+                }
+            }
+        }
+        else{
+            for (i=0;i< 20;i++){
+                if ( dic.get(kw).get(i).countPages!=1){
+                    conta+=1;
+                    System.out.println("Link: "+  dic.get(kw).get(i).url + " \nTexto: "+ dic.get(kw).get(i).text + "\nCount das páginas: "+ dic.get(kw).get(i).countPages + "\n Pages: " );
+                    for (int k=0;  k<dic.get(kw).get(i).pages.size(); k++){
+                        System.out.println( dic.get(kw).get(i).pages.get(k).url);
+                    }
+                    //Thread.sleep(50);
+                    System.out.println();
+
+                }
+            }
+        }
+        System.out.println();
+        System.out.println( "Foram encontrados "+ dic.get(kw).size() +" resultados! Mostrando os "+ conta + " mais relevantes.");
+    }
     public static void main(String[] args) {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         Map<String, Integer> countMap ;
@@ -26,6 +103,7 @@ public class Main {
             if (! ws.startsWith("http://") && ! ws.startsWith("https://"))
                 ws = "http://".concat(ws);
             int i;
+
             int controlo=0;
             System.out.println("Loading websites...");
             for (i =0; i< siteArray.size();i++){
@@ -64,9 +142,10 @@ public class Main {
                     if ( dic.get(kw).get(i).countPages!=1){
                         conta+=1;
                         System.out.println(dic.get(kw).get(i).url + " \n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages );
-                        //Thread.sleep(50);
+                        for (int k=0;  k<dic.get(kw).get(i).pages.size(); k++){
+                            System.out.println( dic.get(kw).get(i).pages.get(k).url);
+                        }
                         System.out.println();
-
                     }
                 }
             }
@@ -74,7 +153,10 @@ public class Main {
                 for (i=0;i< 20;i++){
                     if ( dic.get(kw).get(i).countPages!=1){
                         conta+=1;
-                        System.out.println("Link: "+  dic.get(kw).get(i).url + " \nTexto: "+ dic.get(kw).get(i).text + "\nCount das páginas: "+ dic.get(kw).get(i).countPages );
+                        System.out.println("Link: "+  dic.get(kw).get(i).url + " \nTexto: "+ dic.get(kw).get(i).text + "\nCount das páginas: "+ dic.get(kw).get(i).countPages + "\n Pages: " );
+                        for (int k=0;  k<dic.get(kw).get(i).pages.size(); k++){
+                            System.out.println( dic.get(kw).get(i).pages.get(k).url);
+                        }
                         //Thread.sleep(50);
                         System.out.println();
 
@@ -83,7 +165,10 @@ public class Main {
             }
             System.out.println();
             System.out.println( "Foram encontrados "+ dic.get(kw).size() +" resultados! Mostrando os "+ conta + " mais relevantes.");
+            /*for (i =0; i< siteArray.size();i++){
+                System.out.println(siteArray.get(i).url);
 
+            }*/
 
             escreveFicheiroObjetosHashMap();
             escreveFicheiroObjetosSites();
@@ -93,6 +178,8 @@ public class Main {
             e.printStackTrace();
         }
     }
+
+
     private static void itera(String ws, int num) throws IOException {
         // Read website
         Map<String, Integer> countMap ;
@@ -137,20 +224,31 @@ public class Main {
                                 break;
                             }
                     }
-                    Site site;
+                    Site site = null;
                     if (controlo==0){
                         site= new Site();
                         site.url=link.attr("href");
                         site.title=link.text();
                         site.text=text;
                         site.words=countMap.keySet().toArray(new String[countMap.size()]);
-                        site.countPages=site.countPages+1;
                         siteArray.add(site);
                     }
 
-                    else{
+                    else if (controlo==1){
                         site=siteArray.get(i);
+
+                    }
+                    controlo=0;
+                    for (i =0; i< site.pages.size();i++){
+                        if (site.pages.get(i).url.equals(siteArray.get(j).url)){
+
+                            controlo=controlo+1;
+                            break;
+                        }
+                    }
+                    if (controlo==0){
                         site.countPages=site.countPages+1;
+                        site.pages.add(siteArray.get(j));
                     }
 
                     for (String word : countMap.keySet()) {
@@ -168,13 +266,10 @@ public class Main {
                                 }
                             }
                             if (controlo==0){
-
                                 dic.get(word).add(site);
                             }
-
                         }
                     }
-
                     itera(link.attr("href"), num - 1);
 
                 }
@@ -198,9 +293,9 @@ public class Main {
             oos.writeObject(siteArray);
             oos.close();
         } catch (FileNotFoundException ex) {
-            System.out.println("Erro a criar ficheiro locais.");
+            System.out.println("Erro a criar ficheiro de sites.");
         } catch (IOException ex) {
-            System.out.println("Erro a escrever para o ficheiro locais. ");
+            System.out.println("Erro a escrever para o ficheiro de sites. ");
         }
 
     }
@@ -214,9 +309,9 @@ public class Main {
             oos.writeObject(dic);
             oos.close();
         } catch (FileNotFoundException ex) {
-            System.out.println("Erro a criar ficheiro locais.");
+            System.out.println("Erro a criar ficheiro de hashmap.");
         } catch (IOException ex) {
-            System.out.println("Erro a escrever para o ficheiro locais. ");
+            System.out.println("Erro a escrever para o ficheiro de hashmap. ");
         }
 
     }
@@ -233,11 +328,11 @@ public class Main {
 
             ois.close();
         } catch (FileNotFoundException ex) {
-            System.out.println("Erro a abrir ficheiro locais.");
+            System.out.println("Erro a abrir ficheiro de sites.");
         } catch (IOException ex) {
-            System.out.println("Erro a ler ficheiro locais.");
+            System.out.println("Erro a ler ficheiro de sites.");
         } catch (ClassNotFoundException ex) {
-            System.out.println("Erro a converter objeto locais.");
+            System.out.println("Erro a converter objeto de sites.");
         }
 
         return siteArray;
@@ -255,11 +350,11 @@ public class Main {
 
             ois.close();
         } catch (FileNotFoundException ex) {
-            System.out.println("Erro a abrir ficheiro locais.");
+            System.out.println("Erro a abrir ficheiro de hashmap.");
         } catch (IOException ex) {
-            System.out.println("Erro a ler ficheiro locais.");
+            System.out.println("Erro a ler ficheiro de hashmap.");
         } catch (ClassNotFoundException ex) {
-            System.out.println("Erro a converter objeto locais.");
+            System.out.println("Erro a converter objeto de hashmap.");
         }
         return dic;
 
@@ -309,12 +404,13 @@ public class Main {
         return countMap;
     }
 }
-class Site implements Serializable {
+/*class Site implements Serializable {
     String url;
     String title;
     String text;
     int countPages=0;
+    ArrayList<Site> pages= new ArrayList<>();
     String[] words;
 
 
-}
+}*/
