@@ -116,14 +116,14 @@ public class MulticastServer extends Thread {
                     } else if (type[1].equals("search")) {
                         String username = result[1].split(" ! ")[1];
                         String kw = result[2].split(" ! ")[1];
-                        Collections.sort(dic.get(kw), (Site s1, Site s2) -> (int)( s2.countPages-s1.countPages));
+
                         String search="";
-                        System.out.println("here");
-                        if (dic.get(kw)==null || (dic.get(kw).size()==0)){
+
+                        if (!dic.containsKey(kw) || (dic.get(kw).size()==0)){
                             enviaInfoRMI(socket, packet.getAddress(), "0");
                         }
                         else if (dic.get(kw).size()<=20){
-
+                            Collections.sort(dic.get(kw), (Site s1, Site s2) -> (int)( s2.countPages-s1.countPages));
                             enviaInfoRMI(socket, packet.getAddress(), Integer.toString(dic.get(kw).size()));
                             for (int i=0;i< dic.get(kw).size();i++){
                                 search= search(kw,i);
@@ -150,7 +150,16 @@ public class MulticastServer extends Thread {
                         System.out.println(username+" esta a indexar site");
                         enviaInfoRMI(socket, packet.getAddress(), indexar);
 
-                    }else if (type[1].equals("logout")) {
+                    }
+                    else if (type[1].equals("verLigação")){
+                        String username = result[1].split(" ! ")[1];
+                        String ws = result[2].split(" ! ")[1];
+                        String ligacoes= verLigacoes(ws);
+                        System.out.println(ligacoes);
+                        System.out.println(username+" esta a ver ligacoes");
+                        enviaInfoRMI(socket, packet.getAddress(), ligacoes);
+
+                    } else if (type[1].equals("logout")) {
                         System.out.println("entrei no logout");
                         String username = result[1].split(" ! ")[1];
                         System.out.println(username + " esta a fazer logout");
@@ -271,18 +280,35 @@ public class MulticastServer extends Thread {
         }
     }
 
-    public String search(String kw,int n  ){
-        int conta=0;
-        int i;
-        String result="";
-        result = result + dic.get(kw).get(n).url + " \n"+ dic.get(kw).get(n).text + "\n"+ dic.get(kw).get(n).countPages;
 
-        //result=result+"\n"+ "Foram encontrados "+ dic.get(kw).size() +" resultados! Mostrando os "+ conta + " mais relevantes.";
+    public String search(String kw,int n  ){
+
+        String result = dic.get(kw).get(n).title+ "\n"+ dic.get(kw).get(n).url + "\n"+ dic.get(kw).get(n).text + "\n"+ dic.get(kw).get(n).countPages;
+
         return result;
     }
 
 
+    public String verLigacoes(String ws){
+        int i;
+        String sites="";
+        if (!ws.startsWith("http://") && !ws.startsWith("https://"))
+            ws = "http://".concat(ws);
+        for (i = 0;i< siteArray.size();i++){
 
+            if (siteArray.get(i).url.equals(ws)){
+                if (siteArray.get(i).pages.size()==0)
+                    return "Esse site não tem sites que apontem para ele.";
+                else{
+                    for(int j=0; j< siteArray.get(i).pages.size();j++){
+                        sites=sites+ "Site "+ i+ ": "+ siteArray.get(i).pages.get(j)+ "\n";
+                    }
+                    return sites;
+                }
+            }
+        }
+        return "Esse site não se encontra na base de dados .";
+    }
     private void itera(String ws, int num) throws IOException {
         // Read website
         Map<String, Integer> countMap;
@@ -353,7 +379,7 @@ public class MulticastServer extends Thread {
                     }
 
                     for (String word : countMap.keySet()) {
-                        if (dic.get(word) == null) {
+                        if (!dic.containsKey(word)) {
                             ArrayList<Site> outrosLinks = new ArrayList<>();
                             outrosLinks.add(site);
                             dic.put(word, outrosLinks);

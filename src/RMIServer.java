@@ -81,6 +81,15 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		return "Hello, World!";
 	}
 
+	public String verLigacoes(String username, String page){
+		String toSend = "type ! verLigação ; username ! " + username + " ; pagina ! " + page;
+		enviarPacote(toSend); //enviar ao Multicast Server
+		String received = recebePacote();
+		return received;
+
+
+	}
+
 	public String pesquisar(String username, String pesquisa) {
 		String toSend = "type ! search ; username ! " + username + " ; key words ! " + pesquisa;
 		enviarPacote(toSend); //enviar ao Multicast Server
