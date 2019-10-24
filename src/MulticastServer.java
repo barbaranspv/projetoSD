@@ -25,24 +25,24 @@ public class MulticastServer extends Thread {
 
         try {
             byte[] buffer2 = toSend.getBytes();
-            DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, address, 4370);
-            aSocket.send(packet2);
-        } catch (IOException e) {
-            e.printStackTrace();
+                     DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, address, 4370);
+                aSocket.send(packet2);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-    }
 
-    public void run() {
-        boolean existUsername = false;
-        MulticastSocket socket = null;
-        try {
-            socket = new MulticastSocket(PORT);  // create socket and bind it
-            InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
-            socket.joinGroup(group);
-            while (true) {
-                byte[] buffer = new byte[256];
-                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                socket.receive(packet);
+        public void run() {
+            boolean existUsername = false;
+            MulticastSocket socket = null;
+            try {
+                socket = new MulticastSocket(PORT);  // create socket and bind it
+                InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
+                socket.joinGroup(group);
+                while (true) {
+                    byte[] buffer = new byte[256];
+                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                    socket.receive(packet);
 
                 System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
                 String message = new String(packet.getData(), 0, packet.getLength());
