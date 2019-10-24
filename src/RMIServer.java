@@ -84,7 +84,19 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	public String pesquisar(String username, String pesquisa) {
 		String toSend = "type ! search ; username ! " + username + " ; key words ! " + pesquisa;
 		enviarPacote(toSend); //enviar ao Multicast Server
-		String received = recebePacote();
+		String size = recebePacote();
+		String received="";
+		int sizeint = Integer.parseInt(size);
+		System.out.println(sizeint);
+		if (sizeint!=0){
+		for (int i=0; i< sizeint;i++){
+			received=received + recebePacote()+ "\n\n";
+		}
+		received = received+ recebePacote() + "Mostrando os "+ sizeint + " mais relevantes!";
+		}
+		else{
+			received="Não foram encontrados resultados!";
+		}
 		return received;
 	}
 

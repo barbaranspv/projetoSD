@@ -141,8 +141,9 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
     public static String efetuarPesquisa(String username) throws RemoteException {
         System.out.println("Pesquisa por:");
         String pesquisa=scan.nextLine();
-        String flag = server.pesquisar(username,pesquisa);
-        return flag;
+        String result = server.pesquisar(username,pesquisa);
+        System.out.println("oi");
+        return result;
     }
 
     public static String efetuarLogin() throws RemoteException {
