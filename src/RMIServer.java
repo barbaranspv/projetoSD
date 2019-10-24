@@ -117,22 +117,68 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         return received;
     }
 
-
 	public String logout(String username) {
 		String toSend = "type ! logout ; username ! " + username + " ; msg ! Logging out";
 		enviarPacote(toSend); //enviar ao Multicast Server
 		String received = recebePacote();
 		return received;
 	}
+	public void deleteUserOnline(String username)
+    {
+        for(String name : usersOnline.keySet())
+        {
+            if(name.equals(username))
+                usersOnline.remove(name);
+        }
+        System.out.println("User: "+username+ " ficou offline");
+        for (String i : usersOnline.keySet()) {
+            System.out.println("key: " + i + " | value: " + usersOnline.get(i));
+        }
+    }
 
 	public void addUserOnline(String username, RMI_C_I cliente){
 		usersOnline.put(username,cliente);
+		/*
 		if(username==null)
 			System.out.println("Username a null");
 		if(cliente==null)
 			System.out.println("cliente a null");
-		System.out.println("User: "+username+ "está online com o id:"+ cliente.toString());
+		 */
+		System.out.println("User: "+username+ " está online com o id: "+ cliente.toString());
+        for (String i : usersOnline.keySet())
+            System.out.println("key: " + i + " | value: " + usersOnline.get(i));
 	}
+
+	public String notifyUserToAdmin(String username,String adminName) throws RemoteException {
+	    //verificar se o user existe
+        //verificar se está online
+        String toSend = "type ! verify ; username ! " + username + " ; msg ! Verify user";
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        String[] result = received.split(" ; ");
+        String[] info = result[2].split(" ! ");
+        String message = "O administrador "+adminName+" tornou-te tambem um Administrador! Parabens";
+        if(info[1].equals("User successfully verified")) {
+            if (usersOnline.containsKey(username)){ //se o user que se vai tornar admin estiver online, temos de o notificar
+                //notificar o utilizador que é admin
+                usersOnline.get(username).showNotification(message);
+                return "Definiste o utilizador " + username + " como Administrador.";
+            }
+            else{
+                //guardar notificacao para quando ficar online
+                notificacoes.put(username,message);
+                //quando alguem ficar online verificar as notificacoes
+                return "\nDefiniste o utilizador " + username + " como Administrador. Ele sera notificado quando estiver online";
+            }
+        }
+        else if(info[1].equals("User not found"))
+            return "Utilizador não encontrado!";
+        else {
+            System.out.println(info);
+            return "fail to give Admin permissions";
+        }
+
+    }
 
 	// =======================================================
 
@@ -145,7 +191,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 			System.out.println(LocateRegistry.getRegistry(7500));
 			r.rebind("project", h);
 			//System.out.println("Hello Server ready.");
-		} catch (RemoteException re) {
+		} catch (RemoteException | SocketException re) {
 			System.out.println("Exception in HelloImpl.main: " + re);
 		}
 	}

@@ -11,4 +11,8 @@ public interface RMI_S_I extends Remote {
     public void addUserOnline(String username,RMI_C_I client) throws RemoteException;
 
     String verLigacoes(String username, String page)throws RemoteException;
+
+    public void deleteUserOnline(String username) throws RemoteException;
+    public String notifyUserToAdmin(String username,String adminName) throws RemoteException;
+
 }
