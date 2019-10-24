@@ -80,7 +80,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         while(true) {
             System.out.println("\n____________Menu Principal:___________");
             System.out.println("1-Efetuar Pesquisa");
-            System.out.println("2-Ver ligações de uma determinada pagina");
+            System.out.println("2-Ver ligações para uma determinada pagina");
             System.out.println("3-Ver historico de pesquisas");
             System.out.println("4-Logout");
             System.out.print("\n> Opcao: ");
@@ -90,7 +90,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             if (op == 1) {
                 System.out.println(efetuarPesquisa(username));
             } else if (op == 2) {
-
+                System.out.println(verificarLigacoes( username));
             } else if (op == 3) {
 
             } else if (op == 4) {
@@ -106,7 +106,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         while (true) {
             System.out.println("\n_________Menu de Administrador:________");
             System.out.println("1-Efetuar Pesquisa");
-            System.out.println("2-Ver ligacoes de uma determinada página");
+            System.out.println("2-Ver ligacoes para uma determinada página");
             System.out.println("3-Ver histórico de pesquisas");
             System.out.println("4-Indexar novo URL");
             System.out.println("5-Ver pagina de administracao");
@@ -119,7 +119,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             if (op == 1) {
                 System.out.println(efetuarPesquisa(username));
             } else if (op == 2) {
-
+                System.out.println(verificarLigacoes( username));
             } else if (op == 3) {
 
             } else if (op == 4) {
@@ -152,6 +152,15 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         String pesquisa=scan.nextLine();
         String result = server.pesquisar(username,pesquisa);
         System.out.println("oi");
+        return result;
+    }
+
+
+    public static String verificarLigacoes(String username) throws RemoteException {
+        System.out.println("Quer ver as ligações para que página?");
+        String page=scan.nextLine();
+        String result = server.verLigacoes(username,page);
+
         return result;
     }
 
