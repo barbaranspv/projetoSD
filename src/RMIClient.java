@@ -1,10 +1,16 @@
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
-public class RMIClient {
+public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
     private static RMI_S_I server;
     public static Scanner scan=new Scanner(System.in);
+    private static RMIClient client;
+
+    public RMIClient() throws RemoteException {
+        super();
+    }
 
     public static void menuInicial() throws RemoteException {
         Scanner myObj = new Scanner(System.in);
@@ -23,6 +29,7 @@ public class RMIClient {
                     String[] msg = resposta.split("-", 3);
                     if (msg[0].equals("type ! status ; logged ! on ; msg ! Welcome to ucBusca")) {
                         System.out.println(msg[0]);
+                        server.addUserOnline(msg[2], client);
                         if (msg[1].equals("admin")) {
                             MenuAdmin(msg[2]);
                             break;
@@ -49,6 +56,7 @@ public class RMIClient {
                     String[] msg = resposta.split("-", 3);
                     if (msg[0].equals("type ! status ; logged ! on ; msg ! Welcome to ucBusca")) {
                         System.out.println(msg[0]);
+                        server.addUserOnline(msg[2], client);
                         if (msg[1].equals("admin")) {
                             System.out.println(msg[2]);
                             MenuAdmin(msg[2]);
@@ -168,6 +176,7 @@ public class RMIClient {
 
     public static void main(String args[]) {
         try {
+            client = new RMIClient();
             server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
             server.sayHello();
 

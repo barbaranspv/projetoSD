@@ -89,7 +89,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RMIClient" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
+    <configuration name="RMIClient" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RMIClient" />
       <module name="Projeto" />
       <method v="2">
@@ -104,15 +104,14 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.RMIClient" />
       <item itemvalue="Application.MulticastServer" />
       <item itemvalue="Application.RMIServer" />
-      <item itemvalue="Application.RMIClient" />
       <item itemvalue="Application.Main" />
       <item itemvalue="Application.Main (1)" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.RMIClient" />
         <item itemvalue="Application.RMIServer" />
         <item itemvalue="Application.MulticastServer" />
         <item itemvalue="Application.Main" />
@@ -141,6 +140,7 @@
       <workItem from="1571585879696" duration="25816000" />
       <workItem from="1571678064923" duration="991000" />
       <workItem from="1571850415891" duration="7055000" />
+      <workItem from="1571912588736" duration="7985000" />
     </task>
     <task id="LOCAL-00001" summary="big stuff">
       <created>1571611261678</created>

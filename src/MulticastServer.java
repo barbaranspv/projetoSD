@@ -66,12 +66,10 @@ public class MulticastServer extends Thread {
                                 if (username.equals(listaUsers.get(i).username)) {
                                     if (listaUsers.get(i).password.equals(password)) {
                                         if (listaUsers.get(i).admin == true) {
-                                            listaUsers.get(i).online = true;
                                             enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-" + username);
                                             flagPercorreuTudo=0;
                                             break;
                                         } else {
-                                            listaUsers.get(i).online = true;
                                             enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
                                             flagPercorreuTudo=0;
                                             break;
@@ -97,7 +95,6 @@ public class MulticastServer extends Thread {
                             Utilizador firstUser = new Utilizador(username, password, true);
                             listaUsers.add(firstUser);
                             escreverFicheiroUsers();
-                            firstUser.online = true;
                             enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-" + username);
                         } else if (listaUsers.isEmpty() == false) {
                             for (int i = listaUsers.size() - 1; i >= 0; i--) {
@@ -109,7 +106,6 @@ public class MulticastServer extends Thread {
                                 Utilizador user = new Utilizador(username, password, false);
                                 listaUsers.add(user);
                                 escreverFicheiroUsers();
-                                user.online = true;
                                 enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
                             } else {
                                 System.out.println(username);
@@ -139,10 +135,6 @@ public class MulticastServer extends Thread {
                         System.out.println("entrei no logout");
                         String username = result[1].split(" ! ")[1];
                         System.out.println(username + " esta a fazer logout");
-                        for (int j = listaUsers.size() - 1; j >= 0; j--) {
-                            if (username.equals(listaUsers.get(j).username))
-                                listaUsers.get(j).online = false;
-                        }
                         enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! off ; msg ! Goodbye!");
                         System.out.println("enviei a info");
                     }
@@ -584,7 +576,6 @@ class Utilizador implements Serializable {
     String password;
     boolean admin;
     private ArrayList<String> listaURLS = new ArrayList<String>();
-    boolean online = false;
 
     public Utilizador(String username,String password,boolean admin){
         this.username=username;

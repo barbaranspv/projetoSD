@@ -4,17 +4,22 @@ import java.net.*;
 import java.io.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	static private int PORT = 4371;
 	private final String MULTICAST_ADDRESS = "224.3.2.3";
 	private DatagramSocket dSocket = new DatagramSocket(4370);
-
-
+	private static HashMap<String, String> notificacoes = new HashMap<>();
+	private static HashMap<String,RMI_C_I> usersOnline = new HashMap<String,RMI_C_I>();
 
 	public RMIServer() throws RemoteException, SocketException {
 		super();
+	}
+	public void ping() {
+		System.out.println("Ping recebido");
 	}
 
 	public void enviarPacote(String s) {
@@ -99,6 +104,15 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		return received;
 	}
 
+	public void addUserOnline(String username, RMI_C_I cliente){
+		usersOnline.put(username,cliente);
+		if(username==null)
+			System.out.println("Username a null");
+		if(cliente==null)
+			System.out.println("cliente a null");
+		System.out.println("User: "+username+ "está online com o id:"+ cliente.toString());
+	}
+
 	// =======================================================
 
 
@@ -107,8 +121,9 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		try {
 			RMIServer h = new RMIServer();
 			Registry r = LocateRegistry.createRegistry(7500);
+			System.out.println(LocateRegistry.getRegistry(7500));
 			r.rebind("project", h);
-			System.out.println("Hello Server ready.");
+			//System.out.println("Hello Server ready.");
 		} catch (RemoteException re) {
 			System.out.println("Exception in HelloImpl.main: " + re);
 		}
