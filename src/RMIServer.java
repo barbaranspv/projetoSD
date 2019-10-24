@@ -44,7 +44,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		DatagramPacket message = new DatagramPacket(buffer, buffer.length);
 		while (true) {
 			try {
-				dSocket.setSoTimeout(40000);
+				dSocket.setSoTimeout(30000);
 			} catch (SocketException e) {
 				e.printStackTrace();
 			}
@@ -91,21 +91,24 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	}
 
 	public String pesquisar(String username, String pesquisa) {
-		String toSend = "type ! search ; username ! " + username + " ; key words ! " + pesquisa;
-		enviarPacote(toSend); //enviar ao Multicast Server
-		String size = recebePacote();
-		String received="";
-		int sizeint = Integer.parseInt(size);
-		System.out.println(sizeint);
-		if (sizeint!=0){
-		for (int i=0; i< sizeint;i++){
-			received=received + recebePacote()+ "\n\n";
-		}
-		received = received+ recebePacote() + "Mostrando os "+ sizeint + " mais relevantes!";
-		}
-		else{
-			received="Não foram encontrados resultados!";
-		}
+        String toSend = "type ! search ; username ! " + username + " ; key words ! " + pesquisa;
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String size;
+        String received = "";
+        int sizeint;
+        size = recebePacote();
+        sizeint = Integer.parseInt(size);
+        if (sizeint != 0) {
+        	for (int i = 0; i < sizeint; i++) {
+        		received = received + recebePacote() + "\n\n";
+                }
+            }
+		if (sizeint!=0)
+        	received = received + recebePacote() + "Mostrando os " + sizeint + " mais relevantes!";
+		else
+			received=recebePacote();
+
+        System.out.println(received);
 		return received;
 	}
 

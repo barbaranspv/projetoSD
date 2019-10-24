@@ -86,7 +86,8 @@ public class MulticastServer extends Thread {
                                 enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo ou verifique o username colocado");
                             }
                         }
-                    } else if (type[1].equals("register")) {
+                    }
+                    else if (type[1].equals("register")) {
                         String username = result[1].split(" ! ")[1];
                         //System.out.println(username);
                         String password = result[2].split(" ! ")[1];
@@ -113,35 +114,26 @@ public class MulticastServer extends Thread {
                                 existUsername = false;
                             }
                         }
-                    } else if (type[1].equals("search")) {
+                    }
+
+                    else if (type[1].equals("search")) {
                         String username = result[1].split(" ! ")[1];
                         String kw = result[2].split(" ! ")[1];
-
+                        String[] kwArray = kw.split(" ");
                         String search="";
-
-                        if (!dic.containsKey(kw) || (dic.get(kw).size()==0)){
-                            enviaInfoRMI(socket, packet.getAddress(), "0");
+                        if (kwArray.length==1){
+                            System.out.println(username + " esta a fazer uma pesquisa");
+                            search=search(kwArray[0],socket,packet);
+                            System.out.println(search);
+                            enviaInfoRMI(socket, packet.getAddress(), search);
                         }
-                        else if (dic.get(kw).size()<=20){
-                            Collections.sort(dic.get(kw), (Site s1, Site s2) -> (int)( s2.countPages-s1.countPages));
-                            enviaInfoRMI(socket, packet.getAddress(), Integer.toString(dic.get(kw).size()));
-                            for (int i=0;i< dic.get(kw).size();i++){
-                                search= search(kw,i);
-                                enviaInfoRMI(socket, packet.getAddress(), search);
-                            }
-                        }
-                        else{
-                            enviaInfoRMI(socket, packet.getAddress(),"20");
-                            for (int i=0;i< 20;i++){
-                                    search= search(kw,i);
-                                    enviaInfoRMI(socket, packet.getAddress(), search);
+                        else {
+                            System.out.println(username + " esta a fazer uma pesquisa");
+                            search= searchMultiple(kwArray, socket,packet);
+                            System.out.println(search);
+                            enviaInfoRMI(socket, packet.getAddress(), search);
 
-                            }
                         }
-                        System.out.println(username+" esta a fazer uma pesquisa");
-                        System.out.println(search);
-                        enviaInfoRMI(socket, packet.getAddress(), "Foram encontrados "+dic.get(kw).size()+ " resultados." );
-
                     }else if (type[1].equals("indexar")) {
                         String username = result[1].split(" ! ")[1];
                         String ws = result[2].split(" ! ")[1];
@@ -299,12 +291,78 @@ public class MulticastServer extends Thread {
     }
 
 
-    public String search(String kw,int n  ){
+    public String search(String kw, MulticastSocket socket ,DatagramPacket packet){
+            String search;
+            if (!dic.containsKey(kw) || (dic.get(kw).size() == 0)) {
+                enviaInfoRMI(socket, packet.getAddress(), "0");
+                return "Não foram encontrados resultados!";
+            } else if (dic.get(kw).size() <= 20) {
+                Collections.sort(dic.get(kw), (Site s1, Site s2) ->  (s2.countPages - s1.countPages));
+                enviaInfoRMI(socket, packet.getAddress(), Integer.toString(dic.get(kw).size()));
 
-        String result = dic.get(kw).get(n).title+ "\n"+ dic.get(kw).get(n).url + "\n"+ dic.get(kw).get(n).text + "\n"+ dic.get(kw).get(n).countPages;
+                for (int i = 0; i < dic.get(kw).size(); i++) {
+                    search = dic.get(kw).get(i).title+ "\n"+ dic.get(kw).get(i).url + "\n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages;
+                    enviaInfoRMI(socket, packet.getAddress(), search);
+                }return "Foram encontrados"+ dic.get(kw).size()+ " resultados!";
+            } else {
+                Collections.sort(dic.get(kw), (Site s1, Site s2) ->  (s2.countPages - s1.countPages));
+                enviaInfoRMI(socket, packet.getAddress(), "20");
+                System.out.println("cheguei");
+                for (int i = 0; i < 20; i++) {
+                    search = dic.get(kw).get(i).title+ "\n"+ dic.get(kw).get(i).url + "\n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages;
+                    enviaInfoRMI(socket, packet.getAddress(), search);
+                    System.out.println("im here");
 
-        return result;
+                }
+                return "Foram encontrados"+ dic.get(kw).size()+ " resultados!";
+            }
+
     }
+    public String searchMultiple(String[] kw, MulticastSocket socket ,DatagramPacket packet) {
+        ArrayList<String> temp = new ArrayList<>();
+        ArrayList<Site> search = new ArrayList<>();
+        for (int i = 0; i < kw.length; i++) {
+            if (!dic.containsKey(kw[i]) || (dic.get(kw[i]).size() == 0)) {
+
+
+            } else {
+                for (int j = 0; j < dic.get(kw[i]).size(); j++)
+                    temp.add(dic.get(kw[i]).get(j).url);
+            }
+        }
+        Set<String> st = new HashSet<String>(temp);
+        for (String s : st) {
+            if (Collections.frequency(temp, s) == kw.length) {
+                for (int i = 0; i < dic.get(kw[0]).size(); i++) {
+                    if (dic.get(kw[0]).get(i).url.equals(s)) {
+                        search.add(dic.get(kw[0]).get(i));
+                    }
+                }
+            }
+
+        }
+        String searchStr="";
+        if  (search.size() == 0) {
+            enviaInfoRMI(socket, packet.getAddress(), "0");
+            return "Não foram encontrados resultados";
+        } else if (search.size() <= 20) {
+            Collections.sort(search, (Site s1, Site s2) -> (int) (s2.countPages - s1.countPages));
+            enviaInfoRMI(socket, packet.getAddress(), Integer.toString(search.size()));
+            for (int i = 0; i < search.size(); i++) {
+                searchStr = search.get(i).title + "\n" + search.get(i).url + "\n" + search.get(i).text + "\n" + search.get(i).countPages;
+                enviaInfoRMI(socket, packet.getAddress(), searchStr);
+            }return "Foram encontrados"+ search.size()+ " resultados!";
+        }
+        else {
+            Collections.sort(search, (Site s1, Site s2) -> (int) (s2.countPages - s1.countPages));
+            enviaInfoRMI(socket, packet.getAddress(), "20");
+            for (int i = 0; i < 20; i++) {
+                searchStr = search.get(i).title + "\n" + search.get(i).url + "\n" + search.get(i).text + "\n" + search.get(i).countPages;
+                enviaInfoRMI(socket, packet.getAddress(), searchStr);
+            }
+            return "Foram encontrados"+ search.size()+ " resultados!";
+        }
+}
 
 
     public String verLigacoes(String ws){
@@ -319,7 +377,7 @@ public class MulticastServer extends Thread {
                     return "Esse site não tem sites que apontem para ele.";
                 else{
                     for(int j=0; j< siteArray.get(i).pages.size();j++){
-                        sites=sites+ "Site "+ i+ ": "+ siteArray.get(i).pages.get(j)+ "\n";
+                        sites=sites+ "Site "+ i+ ": "+ siteArray.get(i).pages.get(j).url+ "\n";
                     }
                     return sites;
                 }

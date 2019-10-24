@@ -14,16 +14,18 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
 
     public static void menuInicial() throws RemoteException {
         Scanner myObj = new Scanner(System.in);
-        String opcao;
+        String op;
+
         while (true) {
             System.out.println("Bem Vindo! O que desejas fazer? -");
             System.out.println("1- Login");
             System.out.println("2- Register");
-            System.out.println("3- Sair");
+            System.out.println("3- Efetuar Pesquisa");
+            System.out.println("4- Sair");
             System.out.print("\n> Opcao: ");
-            opcao = myObj.nextLine();
-            int op = Integer.parseInt(opcao);
-            if (op == 1) {
+            op = myObj.nextLine();
+            //int op = Integer.parseInt(opcao);
+            if (op.equals("1")) {
                 while (true) {
                     String resposta = efetuarLogin();
                     String[] msg = resposta.split("-", 3);
@@ -50,7 +52,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
                     }
                 }
             }
-            else if (op == 2) {
+            else if (op.equals("2")) {
                 while (true) {
                     String resposta = registarUtilizador();
                     String[] msg = resposta.split("-", 3);
@@ -69,14 +71,23 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
                         System.out.println(resposta);
                 }
             }
-            else if (op == 3) {
+            else if (op.equals("3")){
+
+            }
+            else if (op.equals("4")) {
                 System.out.println("type ! status ; logged ! off ; msg ! Leaving...Bye");
                 System.exit(0);
             }
+            else{
+                System.out.println("Comando incorreto, use outro por favor.");
+                menuInicial();
+            }
+
         }
     }
 
     public static void MenuPrincipal(String username) throws RemoteException {
+        String op;
         while(true) {
             System.out.println("\n____________Menu Principal:___________");
             System.out.println("1-Efetuar Pesquisa");
@@ -85,24 +96,28 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             System.out.println("4-Logout");
             System.out.print("\n> Opcao: ");
             Scanner myObj = new Scanner(System.in);
-            String opcao = myObj.nextLine();
-            int op = Integer.parseInt(opcao);
-            if (op == 1) {
+            op = myObj.nextLine();
+            //int op = Integer.parseInt(opcao);
+            if (op.equals("1")) {
                 System.out.println(efetuarPesquisa(username));
-            } else if (op == 2) {
+            } else if (op.equals( "2")) {
                 System.out.println(verificarLigacoes( username));
-            } else if (op == 3) {
+            } else if (op.equals("3")) {
 
-            } else if (op == 4) {
+            } else if (op.equals("4")) {
                 String answer = efetuarLogout(username);
                 System.out.println(answer);
                 server.deleteUserOnline(username);
                 break;
+            }else{
+                System.out.println("Comando incorreto, use outro por favor.");
+                MenuPrincipal(username);
             }
         }
     }
 
     public static void MenuAdmin(String username) throws RemoteException {
+        String op ;
         while (true) {
             System.out.println("\n_________Menu de Administrador:________");
             System.out.println("1-Efetuar Pesquisa");
@@ -110,29 +125,33 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             System.out.println("3-Ver histórico de pesquisas");
             System.out.println("4-Indexar novo URL");
             System.out.println("5-Ver pagina de administracao");
-            System.out.println("6-Dar previlegios de Admin a outro user");
+            System.out.println("6-Dar privilegios de Admin a outro user");
             System.out.println("7-Logout");
             System.out.print("\n> Opcao: ");
             Scanner myObj = new Scanner(System.in);
-            String opcao = myObj.nextLine();
-            int op = Integer.parseInt(opcao);
-            if (op == 1) {
+            op = myObj.nextLine();
+            //int op = Integer.parseInt(opcao);
+            if (op .equals("1")) {
                 System.out.println(efetuarPesquisa(username));
-            } else if (op == 2) {
+            } else if (op.equals( "2")) {
                 System.out.println(verificarLigacoes( username));
-            } else if (op == 3) {
+            } else if (op.equals( "3")) {
 
-            } else if (op == 4) {
+            } else if (op.equals("4")) {
                 System.out.println(indexarURL(username));
-            } else if (op == 5) {
+            } else if (op.equals( "5")) {
 
-            } else if (op == 6) {
+            } else if (op.equals( "6")) {
                 System.out.println(darAdmin(username));
-            } else if (op == 7) {
+            } else if (op.equals("7")) {
                 String answer = efetuarLogout(username);
                 System.out.println(answer);
                 server.deleteUserOnline(username);
                 break;
+            }
+            else{
+                System.out.println("Comando incorreto, use outro por favor.");
+                MenuAdmin(username);
             }
         }
     }
@@ -150,8 +169,8 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
     public static String efetuarPesquisa(String username) throws RemoteException {
         System.out.println("Pesquisa por:");
         String pesquisa=scan.nextLine();
+        System.out.println("A pesquisar... Aguarde por favor.");
         String result = server.pesquisar(username,pesquisa);
-        System.out.println("oi");
         return result;
     }
 
