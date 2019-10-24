@@ -115,13 +115,32 @@ public class MulticastServer extends Thread {
                         }
                     } else if (type[1].equals("search")) {
                         String username = result[1].split(" ! ")[1];
-
                         String kw = result[2].split(" ! ")[1];
+                        Collections.sort(dic.get(kw), (Site s1, Site s2) -> (int)( s2.countPages-s1.countPages));
+                        String search="";
+                        System.out.println("here");
+                        if (dic.get(kw)==null || (dic.get(kw).size()==0)){
+                            enviaInfoRMI(socket, packet.getAddress(), "0");
+                        }
+                        else if (dic.get(kw).size()<=20){
 
-                        String search= search(kw);
+                            enviaInfoRMI(socket, packet.getAddress(), Integer.toString(dic.get(kw).size()));
+                            for (int i=0;i< dic.get(kw).size();i++){
+                                search= search(kw,i);
+                                enviaInfoRMI(socket, packet.getAddress(), search);
+                            }
+                        }
+                        else{
+                            enviaInfoRMI(socket, packet.getAddress(),"20");
+                            for (int i=0;i< 20;i++){
+                                    search= search(kw,i);
+                                    enviaInfoRMI(socket, packet.getAddress(), search);
+
+                            }
+                        }
                         System.out.println(username+" esta a fazer uma pesquisa");
                         System.out.println(search);
-                        enviaInfoRMI(socket, packet.getAddress(), search);
+                        enviaInfoRMI(socket, packet.getAddress(), "Foram encontrados "+dic.get(kw).size()+ " resultados." );
 
                     }else if (type[1].equals("indexar")) {
                         String username = result[1].split(" ! ")[1];
@@ -252,39 +271,13 @@ public class MulticastServer extends Thread {
         }
     }
 
-    public String search(String kw){
+    public String search(String kw,int n  ){
         int conta=0;
         int i;
         String result="";
-        Collections.sort(dic.get(kw), (Site s1, Site s2) -> (int)( s2.countPages-s1.countPages));
-        if (dic.get(kw).size()<=20){
-            for (i=0;i< dic.get(kw).size();i++){
-                if ( dic.get(kw).get(i).countPages!=1){
-                    conta+=1;
-                     result = result + dic.get(kw).get(i).url + " \n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages;
-                    //for (int k=0;  k<dic.get(kw).get(i).pages.size(); k++){
-                       // System.out.println( dic.get(kw).get(i).pages.get(k).url);
-                    //}
-                    //System.out.println();
+        result = result + dic.get(kw).get(n).url + " \n"+ dic.get(kw).get(n).text + "\n"+ dic.get(kw).get(n).countPages;
 
-                }
-            }
-        }
-        else{
-            for (i=0;i< 20;i++){
-                if ( dic.get(kw).get(i).countPages!=1){
-                    conta+=1;
-                    result = result + dic.get(kw).get(i).url + " \n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages ;
-                    //for (int k=0;  k<dic.get(kw).get(i).pages.size(); k++){
-                     //   System.out.println( dic.get(kw).get(i).pages.get(k).url);
-                    //}
-                    //Thread.sleep(50);
-                    //System.out.println();
-
-                }
-            }
-        }
-        result=result+"\n"+ "Foram encontrados "+ dic.get(kw).size() +" resultados! Mostrando os "+ conta + " mais relevantes.";
+        //result=result+"\n"+ "Foram encontrados "+ dic.get(kw).size() +" resultados! Mostrando os "+ conta + " mais relevantes.";
         return result;
     }
 
