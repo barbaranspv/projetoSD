@@ -48,7 +48,7 @@ public class MulticastServer extends Thread {
                 String message = new String(packet.getData(), 0, packet.getLength());
                 System.out.println(message);
                 String[] result = message.split(" ; ");
-                String[] type = result[0].split(" ! ");
+                    String[] type = result[0].split(" ! ");
                 //System.out.println(type[1]);
                 try {
 
@@ -156,6 +156,24 @@ public class MulticastServer extends Thread {
                         System.out.println(username + " esta a fazer logout");
                         enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! off ; msg ! Goodbye!");
                         System.out.println("enviei a info");
+                    }
+                    else if (type[1].equals("verify")) {
+                        int userExist=0;
+                        int i;
+                        String username = result[1].split(" ! ")[1];
+                        for (i = listaUsers.size() - 1; i >= 0; i--) {
+                            if(listaUsers.get(i).username.equals(username)) {
+                                userExist = 1;
+                                break;
+                            }
+                        }
+                        if(userExist==1) {
+                            enviaInfoRMI(socket, packet.getAddress(), "type ! verify ; username ! " + username + " ; msg ! User successfully verified");
+                            listaUsers.get(i).admin=true;
+                        }
+                        else
+                            enviaInfoRMI(socket, packet.getAddress(), "type ! verify ; username ! " + username + " ; msg ! User not found");
+                        System.out.println("enviei a info sobre a verificacao de existencia do user");
                     }
                 } catch (NumberFormatException n) {
                     System.out.println("Nao foi possivel fazer parseInt da mensagem"); // nao esta a dar bem

@@ -94,7 +94,9 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             } else if (op == 3) {
 
             } else if (op == 4) {
-                efetuarLogout(username);
+                String answer = efetuarLogout(username);
+                System.out.println(answer);
+                server.deleteUserOnline(username);
                 break;
             }
         }
@@ -125,13 +127,20 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             } else if (op == 5) {
 
             } else if (op == 6) {
-
+                System.out.println(darAdmin(username));
             } else if (op == 7) {
                 String answer = efetuarLogout(username);
                 System.out.println(answer);
+                server.deleteUserOnline(username);
                 break;
             }
         }
+    }
+    public static String darAdmin(String adminName) throws RemoteException{
+        System.out.println("Username da pessoa que desejas tornar Admin:");
+        String user=scan.nextLine();
+        String answer = server.notifyUserToAdmin(user,adminName);
+        return answer;
     }
 
     public static String efetuarLogout(String username) throws RemoteException {
@@ -173,6 +182,10 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         String r = server.registaUtilizador(user,password) ;
 
         return r;
+    }
+
+    public void showNotification(String message) throws RemoteException{
+        System.out.println(message);
     }
 
     public static void main(String args[]) {
