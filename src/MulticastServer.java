@@ -170,6 +170,7 @@ public class MulticastServer extends Thread {
                         if(userExist==1) {
                             enviaInfoRMI(socket, packet.getAddress(), "type ! verify ; username ! " + username + " ; msg ! User successfully verified");
                             listaUsers.get(i).admin=true;
+                            escreverFicheiroUsers();
                         }
                         else
                             enviaInfoRMI(socket, packet.getAddress(), "type ! verify ; username ! " + username + " ; msg ! User not found");
