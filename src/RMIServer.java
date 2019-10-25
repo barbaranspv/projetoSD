@@ -18,6 +18,9 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	public RMIServer() throws RemoteException, SocketException {
 		super();
 	}
+	//criar classe com extend thread para aplicar o run para o backup
+
+
 	public void ping() {
 		System.out.println("Ping recebido");
 	}
@@ -35,8 +38,6 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-
 	}
 
 	public String recebePacote() {
@@ -63,21 +64,28 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		String toSend = "type ! login ; username ! " + username + " ; password ! " + password;
 		enviarPacote(toSend); //envia ao Multicast Server
 		String received = recebePacote();
-		return received;
-
+		System.out.println(received);
+		String[] result = received.split("-");
+		if(result[0].equals("type ! status ; logged ! on ; msg ! Welcome to ucBusca")) {
+			if(notificacoes.containsKey(username)){
+				String notif = notificacoes.get(username);
+				notificacoes.remove(username);
+				return received+"-Tem uma notificação pendente: "+notif;
+			}
+		}
+		return received+"-Nao tem notificacoes";
 	}
 
 	public String registaUtilizador(String username, String password) {
 		String toSend = "type ! register ; username ! " + username + " ; password ! " + password;
 		enviarPacote(toSend); //enviar ao Multicast Server
 		String received = recebePacote();
+		String[] result = received.split("-");
 		return received;
-
 	}
 
 	public String sayHello() throws RemoteException {
 		System.out.println("print do lado do servidor...!.");
-
 		return "Hello, World!";
 	}
 
@@ -86,8 +94,6 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		enviarPacote(toSend); //enviar ao Multicast Server
 		String received = recebePacote();
 		return received;
-
-
 	}
 
 	public String pesquisar(String username, String pesquisa) {
@@ -177,22 +183,20 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             System.out.println(info);
             return "fail to give Admin permissions";
         }
-
     }
 
-	// =======================================================
+	// ==========================MAIN=============================
 
 
-	public static void main(String args[]) throws SocketException {
+	public static void main(String args[]){
 
 		try {
 			RMIServer h = new RMIServer();
 			Registry r = LocateRegistry.createRegistry(7500);
 			System.out.println(LocateRegistry.getRegistry(7500));
 			r.rebind("project", h);
-			//System.out.println("Hello Server ready.");
 		} catch (RemoteException | SocketException re) {
-			System.out.println("Exception in HelloImpl.main: " + re);
+			System.out.println("Exception in RMIServer.main: " + re);
 		}
 	}
 

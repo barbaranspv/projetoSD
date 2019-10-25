@@ -26,9 +26,9 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             if (op == 1) {
                 while (true) {
                     String resposta = efetuarLogin();
-                    String[] msg = resposta.split("-", 3);
+                    String[] msg = resposta.split("-", 4);
                     if (msg[0].equals("type ! status ; logged ! on ; msg ! Welcome to ucBusca")) {
-                        System.out.println(msg[0]);
+                        System.out.println(msg[0]+" - "+msg[3]);
                         server.addUserOnline(msg[2], client);
                         if (msg[1].equals("admin")) {
                             MenuAdmin(msg[2]);
@@ -37,15 +37,14 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
                             MenuPrincipal(msg[2]);
                             break;
                         }
-                    } else if (resposta.equals("Utilizador não existente, por favor efetue o registo")) {
-                        System.out.println(resposta);
+                    } else if (msg[0].equals("Utilizador não existente, por favor efetue o registo")) {
+                        System.out.println(msg[0]);
                         break;
-                    } else if (resposta.equals("Utilizador não existente, por favor efetue o registo ou verifique o username colocado")) {
-                        System.out.println(resposta);
+                    } else if (msg[0].equals("Utilizador não existente, por favor efetue o registo ou verifique o username colocado")) {
+                        System.out.println(msg[0]);
                         break;
-                    } else if(resposta.equals("Password incorreta! Tente novamente"))
-                    {
-                        System.out.println(resposta);
+                    } else if(msg[0].equals("Password incorreta! Tente novamente")) {
+                        System.out.println(msg[0]);
                         break;
                     }
                 }
