@@ -18,6 +18,9 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	public RMIServer() throws RemoteException, SocketException {
 		super();
 	}
+	//criar classe com extend thread para aplicar o run para o backup
+
+
 	public void ping() {
 		System.out.println("Ping recebido");
 	}
@@ -35,19 +38,17 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-
 	}
 
 	public String recebePacote() {
 		byte[] buffer = new byte[1000];
 		DatagramPacket message = new DatagramPacket(buffer, buffer.length);
 		while (true) {
-			/*try {
-				dSocket.setSoTimeout(30000);
+			try {
+				dSocket.setSoTimeout(40000);
 			} catch (SocketException e) {
 				e.printStackTrace();
-			}*/
+			}
 			try {
 				dSocket.receive(message);
 				System.out.println(message);
@@ -63,40 +64,48 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		String toSend = "type ! login ; username ! " + username + " ; password ! " + password;
 		enviarPacote(toSend); //envia ao Multicast Server
 		String received = recebePacote();
-		return received;
-
-	}
-
-	public String registaUtilizador(String username, String password) {
-		String toSend = "type ! register ; username ! " + username + " ; password ! " + password;
-		enviarPacote(toSend); //enviar ao Multicast Server
-		String received = recebePacote();
-		return received;
-
-	}
-
-	public String sayHello() throws RemoteException {
-		System.out.println("print do lado do servidor...!.");
-
-		return "Hello, World!";
-	}
-
-	public String verLigacoes(String username, String page){
-		String toSend = "type ! verLigação ; username ! " + username + " ; pagina ! " + page;
-		enviarPacote(toSend); //enviar ao Multicast Server
-		String received = recebePacote();
-		return received;
-	}
-
-	public String verPainelAdmin(String username){
-		String toSend = "type ! verAdmin ; username ! " + username ;
-		enviarPacote(toSend); //enviar ao Multicast Server
-		String received = recebePacote();
 		System.out.println(received);
-		return received;
-
-
+		String[] result = received.split("-");
+		if(result[0].equals("type ! status ; logged ! on ; msg ! Welcome to ucBusca")) {
+			if(notificacoes.containsKey(username)){
+				String notif = notificacoes.get(username);
+				notificacoes.remove(username);
+				return received+"-Tem uma notificação pendente: "+notif;
+			}
+		}
+		return received+"-Nao tem notificacoes";
 	}
+
+    public String registaUtilizador(String username, String password) {
+        String toSend = "type ! register ; username ! " + username + " ; password ! " + password;
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        return received;
+
+    }
+
+    public String sayHello() throws RemoteException {
+        System.out.println("print do lado do servidor...!.");
+
+        return "Hello, World!";
+    }
+
+    public String verLigacoes(String username, String page){
+        String toSend = "type ! verLigação ; username ! " + username + " ; pagina ! " + page;
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        return received;
+    }
+
+    public String verPainelAdmin(String username){
+        String toSend = "type ! verAdmin ; username ! " + username ;
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        System.out.println(received);
+        return received;
+
+
+    }
     public String verPesquisas(String username){
         String toSend = "type ! verPesquisas ; username ! " + username ;
         enviarPacote(toSend); //enviar ao Multicast Server
@@ -109,7 +118,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
     }
 
-	public String pesquisar(String username, String pesquisa) {
+    public String pesquisar(String username, String pesquisa) {
         String toSend = "type ! search ; username ! " + username + " ; key words ! " + pesquisa;
         enviarPacote(toSend); //enviar ao Multicast Server
         String size;
@@ -118,20 +127,20 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         size = recebePacote();
         sizeint = Integer.parseInt(size);
         if (sizeint != 0) {
-        	for (int i = 0; i < sizeint; i++) {
-        		received = received + recebePacote() + "\n\n";
+            for (int i = 0; i < sizeint; i++) {
+                received = received + recebePacote() + "\n\n";
 
-                }
-
-			received = received + recebePacote() + "Mostrando os " + sizeint + " mais relevantes!";
             }
 
-		else
-			received=recebePacote();
+            received = received + recebePacote() + "Mostrando os " + sizeint + " mais relevantes!";
+        }
+
+        else
+            received=recebePacote();
 
         System.out.println(received);
-		return received;
-	}
+        return received;
+    }
 
 
     public String indexar(String username, String ws) {
@@ -141,12 +150,12 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         return received;
     }
 
-	public String logout(String username) {
-		String toSend = "type ! logout ; username ! " + username + " ; msg ! Logging out";
-		enviarPacote(toSend); //enviar ao Multicast Server
-		String received = recebePacote();
-		return received;
-	}
+    public String logout(String username) {
+        String toSend = "type ! logout ; username ! " + username + " ; msg ! Logging out";
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        return received;
+    }
 	public void deleteUserOnline(String username)
     {
         for(String name : usersOnline.keySet())
@@ -201,22 +210,20 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             System.out.println(info);
             return "fail to give Admin permissions";
         }
-
     }
 
-	// =======================================================
+	// ==========================MAIN=============================
 
 
-	public static void main(String args[]) throws SocketException {
+	public static void main(String args[]){
 
 		try {
 			RMIServer h = new RMIServer();
 			Registry r = LocateRegistry.createRegistry(7500);
 			System.out.println(LocateRegistry.getRegistry(7500));
 			r.rebind("project", h);
-			//System.out.println("Hello Server ready.");
 		} catch (RemoteException | SocketException re) {
-			System.out.println("Exception in HelloImpl.main: " + re);
+			System.out.println("Exception in RMIServer.main: " + re);
 		}
 	}
 

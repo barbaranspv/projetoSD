@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a6074510-9f5d-4f27-8c7d-ed3ed550ec6a" name="Default Changelist" comment="" />
+
+    <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMI_S_I.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMI_S_I.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Site.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Site.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMI_S_I.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMI_S_I.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +140,7 @@
       <workItem from="1571850415891" duration="7055000" />
       <workItem from="1571912588736" duration="8796000" />
       <workItem from="1571930636095" duration="6063000" />
-      <workItem from="1572009870530" duration="10072000" />
+
     </task>
     <task id="LOCAL-00001" summary="big stuff">
       <created>1571611261678</created>

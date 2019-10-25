@@ -156,13 +156,13 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             }
         }
     }
+
     public static String darAdmin(String adminName) throws RemoteException{
         System.out.println("Username da pessoa que desejas tornar Admin:");
         String user=scan.nextLine();
         String answer = server.notifyUserToAdmin(user,adminName);
         return answer;
     }
-
     public static String efetuarLogout(String username) throws RemoteException {
         String flag = server.logout(username);
         return flag;

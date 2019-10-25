@@ -18,4 +18,5 @@ public interface RMI_S_I extends Remote {
     String verPesquisas(String username) throws RemoteException;
 
     String verPainelAdmin(String username) throws RemoteException;
+
 }
