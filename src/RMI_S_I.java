@@ -16,4 +16,6 @@ public interface RMI_S_I extends Remote {
     public String notifyUserToAdmin(String username,String adminName) throws RemoteException;
 
     String verPesquisas(String username) throws RemoteException;
+
+    String verPainelAdmin(String username) throws RemoteException;
 }

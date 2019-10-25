@@ -39,15 +39,15 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
                             MenuPrincipal(msg[2]);
                             break;
                         }
-                    } else if (resposta.equals("Utilizador não existente, por favor efetue o registo")) {
-                        System.out.println(resposta);
+                    } else if (msg[0].equals("Utilizador não existente, por favor efetue o registo")) {
+                        System.out.println(msg[0]);
                         break;
-                    } else if (resposta.equals("Utilizador não existente, por favor efetue o registo ou verifique o username colocado")) {
-                        System.out.println(resposta);
+                    } else if (msg[0].equals("Utilizador não existente, por favor efetue o registo ou verifique o username colocado")) {
+                        System.out.println(msg[0]);
                         break;
-                    } else if(resposta.equals("Password incorreta! Tente novamente"))
+                    } else if(msg[0].equals("Password incorreta! Tente novamente"))
                     {
-                        System.out.println(resposta);
+                        System.out.println(msg[0]);
                         break;
                     }
                 }
@@ -141,7 +141,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             } else if (op.equals("4")) {
                 System.out.println(indexarURL(username));
             } else if (op.equals( "5")) {
-
+                System.out.println(verPainelAdmin(username));
             } else if (op.equals( "6")) {
                 System.out.println(darAdmin(username));
             } else if (op.equals("7")) {
@@ -174,7 +174,10 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         String result = server.pesquisar(username,pesquisa);
         return result;
     }
-
+    public static String verPainelAdmin(String username) throws RemoteException {
+        String result = server.verPainelAdmin(username);
+        return result;
+    }
 
     public static String verificarLigacoes(String username) throws RemoteException {
         System.out.println("Quer ver as ligações para que página?");
@@ -198,7 +201,9 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
     public static String indexarURL(String username) throws RemoteException {
         System.out.println("Que site quer indexar?");
         String site=scan.nextLine();
+        System.out.println("A indexar website... Aguarde por favor");
         String flag = server.indexar(username,site);
+
         return flag;
     }
 

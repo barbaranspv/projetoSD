@@ -86,6 +86,14 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		enviarPacote(toSend); //enviar ao Multicast Server
 		String received = recebePacote();
 		return received;
+	}
+
+	public String verPainelAdmin(String username){
+		String toSend = "type ! verAdmin ; username ! " + username ;
+		enviarPacote(toSend); //enviar ao Multicast Server
+		String received = recebePacote();
+		System.out.println(received);
+		return received;
 
 
 	}
@@ -112,10 +120,12 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         if (sizeint != 0) {
         	for (int i = 0; i < sizeint; i++) {
         		received = received + recebePacote() + "\n\n";
+
                 }
+
+			received = received + recebePacote() + "Mostrando os " + sizeint + " mais relevantes!";
             }
-		if (sizeint!=0)
-        	received = received + recebePacote() + "Mostrando os " + sizeint + " mais relevantes!";
+
 		else
 			received=recebePacote();
 
