@@ -11,16 +11,16 @@ import java.util.HashMap;
 public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	static private int PORT = 4371;
 	private final String MULTICAST_ADDRESS="224.3.2.3";
-	private DatagramSocket dSocket;
+	private MulticastSocket dSocket;
 	private  HashMap<String, String> notificacoes;
 	private  HashMap<String,RMI_C_I> usersOnline;
 
 	public RMIServer() throws RemoteException, SocketException {
 		super();
 		try{
-			dSocket =  new DatagramSocket(4370);
+			dSocket =  new MulticastSocket(4370);
 		}
-		catch(SocketException b){
+		catch(IOException b){
 			System.out.println("Falha ao criar o socket");
 		}
 		notificacoes = new HashMap<>();
@@ -49,17 +49,19 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	}
 
 	public String recebePacote() {
+
 		byte[] buffer = new byte[1000];
 		DatagramPacket message = new DatagramPacket(buffer, buffer.length);
 		while (true) {
 			try {
+				System.out.println("OLA");
 				dSocket.setSoTimeout(40000);
 			} catch (SocketException e) {
 				e.printStackTrace();
 			}
 			try {
 				dSocket.receive(message);
-				System.out.println(message);
+				System.out.println("MESSAGE: "+message.toString());
 				break;
 			} catch (IOException e) {
 				dSocket.close();
@@ -90,16 +92,10 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         enviarPacote(toSend); //enviar ao Multicast Server
         String received = recebePacote();
         return received;
-
+    }
 	public void sayHello() throws RemoteException {
 		System.out.println("Servidor a correr");
 	}
-
-    public String sayHello() throws RemoteException {
-        System.out.println("print do lado do servidor...!.");
-
-        return "Hello, World!";
-    }
 
     public String verLigacoes(String username, String page){
         String toSend = "type ! verLigação ; username ! " + username + " ; pagina ! " + page;
@@ -250,3 +246,4 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		}
 	}
 }
+
