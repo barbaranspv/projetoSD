@@ -13,8 +13,9 @@ public class MulticastServer extends Thread {
     private String MULTICAST_ADDRESS = "224.3.2.3";
     private int PORT = 4371;
     public ArrayList<Utilizador> listaUsers = new ArrayList<Utilizador>();
-    private HashMap< String, ArrayList<Site>> dic=leFicheiroObjetosHashMap();; //leFicheiroObjetosHashMap();  new HashMap< String, ArrayList<Site>>();
-    private ArrayList<Site> siteArray=leFicheiroObjetosSites();//leFicheiroObjetosSites(); new  ArrayList<Site>()
+    public HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
+    // private HashMap< String, ArrayList<Site>> dic=leFicheiroObjetosHashMap(); //leFicheiroObjetosHashMap();  new HashMap< String, ArrayList<Site>>();
+    // private ArrayList<Site> siteArray=leFicheiroObjetosSites(); //leFicheiroObjetosSites(); new  ArrayList<Site>()
 
     public MulticastServer() {
         super("Server " + (long) (Math.random() * 1000));
@@ -25,30 +26,30 @@ public class MulticastServer extends Thread {
 
         try {
             byte[] buffer2 = toSend.getBytes();
-                     DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, address, 4370);
-                aSocket.send(packet2);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, address, 4370);
+            aSocket.send(packet2);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 
-        public void run() {
-            boolean existUsername = false;
-            MulticastSocket socket = null;
-            try {
-                socket = new MulticastSocket(PORT);  // create socket and bind it
-                InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
-                socket.joinGroup(group);
-                while (true) {
-                    byte[] buffer = new byte[256];
-                    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                    socket.receive(packet);
+    public void run() {
+        boolean existUsername = false;
+        MulticastSocket socket = null;
+        try {
+            socket = new MulticastSocket(PORT);  // create socket and bind it
+            InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
+            socket.joinGroup(group);
+            while (true) {
+                byte[] buffer = new byte[256];
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+                socket.receive(packet);
 
                 System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
                 String message = new String(packet.getData(), 0, packet.getLength());
                 System.out.println(message);
                 String[] result = message.split(" ; ");
-                    String[] type = result[0].split(" ! ");
+                String[] type = result[0].split(" ! ");
                 //System.out.println(type[1]);
                 try {
 
@@ -86,7 +87,8 @@ public class MulticastServer extends Thread {
                                 enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo ou verifique o username colocado");
                             }
                         }
-                    } else if (type[1].equals("register")) {
+                    }
+                    else if (type[1].equals("register")) {
                         String username = result[1].split(" ! ")[1];
                         //System.out.println(username);
                         String password = result[2].split(" ! ")[1];
@@ -113,39 +115,39 @@ public class MulticastServer extends Thread {
                                 existUsername = false;
                             }
                         }
-                    } else if (type[1].equals("search")) {
+                    }
+
+                    else if (type[1].equals("search")) {
                         String username = result[1].split(" ! ")[1];
                         String kw = result[2].split(" ! ")[1];
-
+                        if (pesquisas.containsKey(kw))
+                            pesquisas.put(kw,pesquisas.get(kw)+1);
+                        else
+                            pesquisas.put(kw,1);
+                        String[] kwArray = kw.split(" ");
                         String search="";
-
-                        if (!dic.containsKey(kw) || (dic.get(kw).size()==0)){
-                            enviaInfoRMI(socket, packet.getAddress(), "0");
-                        }
-                        else if (dic.get(kw).size()<=20){
-                            Collections.sort(dic.get(kw), (Site s1, Site s2) -> (int)( s2.countPages-s1.countPages));
-                            enviaInfoRMI(socket, packet.getAddress(), Integer.toString(dic.get(kw).size()));
-                            for (int i=0;i< dic.get(kw).size();i++){
-                                search= search(kw,i);
-                                enviaInfoRMI(socket, packet.getAddress(), search);
+                        for (int i=0; i< listaUsers.size();i++){
+                            if (username.equals(listaUsers.get(i).username)){
+                                listaUsers.get(i).pesquisas.add(kw);
+                                break;
                             }
                         }
-                        else{
-                            enviaInfoRMI(socket, packet.getAddress(),"20");
-                            for (int i=0;i< 20;i++){
-                                    search= search(kw,i);
-                                    enviaInfoRMI(socket, packet.getAddress(), search);
-
-                            }
+                        if (kwArray.length==1){
+                            System.out.println(username + " esta a fazer uma pesquisa");
+                            search=search(kwArray[0],socket,packet);
+                            System.out.println(search);
+                            enviaInfoRMI(socket, packet.getAddress(), search);
                         }
-                        System.out.println(username+" esta a fazer uma pesquisa");
-                        System.out.println(search);
-                        enviaInfoRMI(socket, packet.getAddress(), "Foram encontrados "+dic.get(kw).size()+ " resultados." );
+                        else {
+                            System.out.println(username + " esta a fazer uma pesquisa");
+                            search= searchMultiple(kwArray, socket,packet);
+                            System.out.println(search);
+                            enviaInfoRMI(socket, packet.getAddress(), search);
 
+                        }
                     }else if (type[1].equals("indexar")) {
                         String username = result[1].split(" ! ")[1];
                         String ws = result[2].split(" ! ")[1];
-
                         String indexar= loadSite(ws);
                         System.out.println(username+" esta a indexar site");
                         enviaInfoRMI(socket, packet.getAddress(), indexar);
@@ -159,12 +161,37 @@ public class MulticastServer extends Thread {
                         System.out.println(username+" esta a ver ligacoes");
                         enviaInfoRMI(socket, packet.getAddress(), ligacoes);
 
-                    } else if (type[1].equals("logout")) {
+
+                    }else if (type[1].equals("verPesquisas")){
+                        String username = result[1].split(" ! ")[1];
+                        String pesquisas="";
+                        for (int i=0; i< listaUsers.size();i++){
+                            if (username.equals(listaUsers.get(i).username)){
+                                for (int j=0;j< listaUsers.get(i).pesquisas.size();j++ ){
+                                    if (j==0)
+                                        pesquisas="Pesquisas:\n";
+                                    pesquisas=pesquisas+ listaUsers.get(i).pesquisas.get(j) +"\n";
+                                }
+                                break;
+                            }
+                        }enviaInfoRMI(socket, packet.getAddress(), pesquisas);
+                    }
+
+                    else if (type[1].equals("verAdmin")){
+                        String username = result[1].split(" ! ")[1];
+                        System.out.println(username + " esta a ver painel de admin");
+                        String painelAdmin = verPainelAdmin();
+                        System.out.println(painelAdmin);
+                        enviaInfoRMI(socket, packet.getAddress(), painelAdmin);
+
+                    }
+                    else if (type[1].equals("logout")) {
                         System.out.println("entrei no logout");
                         String username = result[1].split(" ! ")[1];
                         System.out.println(username + " esta a fazer logout");
                         enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! off ; msg ! Goodbye!");
                         System.out.println("enviei a info");
+                        escreveFicheiroPesquisas();
                     }
                     else if (type[1].equals("verify")) {
                         int userExist=0;
@@ -198,6 +225,46 @@ public class MulticastServer extends Thread {
             socket.close();
         }
     }
+
+    private String verPainelAdmin() {
+        ArrayList<Site> siteArray = leFicheiroObjetosSites();
+        pesquisas = sortByValues(pesquisas);
+
+        String info= "------------------PAINEL DE ADMINISTRAÇÃO-----------------\nWebsites mais importantes:\n";
+        if (siteArray.size()>10) {
+            for (int i = 0; i < 10; i++) {
+                info = info + i + " - "+siteArray.get(i).title+" - " + siteArray.get(i).url + "\n";
+            }
+        }
+        else{
+            for (int i = 0; i < siteArray.size(); i++) {
+                info = info + i + " - " +siteArray.get(i).title+" - "+ siteArray.get(i).url + "\n";
+            }
+        }
+        info=info+ "\n" + "Pesquisas mais comuns: \n";
+        int conta=0;
+
+        if (pesquisas.size()>10){
+            for (String key: pesquisas.keySet()){
+                conta=conta+1;
+                info=info+conta+ " - "+key+" - "+ pesquisas.get(key) + "\n";
+
+                if (conta==10)
+                    break;
+            }
+        }
+
+        else{
+            for (String key: pesquisas.keySet()) {
+                conta = conta + 1;
+                info = info + conta +" - "+key+ " - " + pesquisas.get(key) + "\n";
+            }
+
+        }
+        return info;
+    }
+
+
     private void escreverFicheiroUsers(){
         File fich = new File("Users.txt");
         try {
@@ -257,8 +324,8 @@ public class MulticastServer extends Thread {
 
     public String loadSite(String ws){
         Map<String, Integer> countMap ;
-        //leFicheiroObjetosHashMap()
-        //leFicheiroObjetosSites()
+        HashMap<String, ArrayList<Site>> dic= leFicheiroObjetosHashMap();
+        ArrayList<Site> siteArray = leFicheiroObjetosSites();
         // Read website
         try {
             if (! ws.startsWith("http://") && ! ws.startsWith("https://"))
@@ -268,7 +335,7 @@ public class MulticastServer extends Thread {
             int controlo=0;
             System.out.println("Loading websites...");
             for (i =0; i< siteArray.size();i++){
-                if (siteArray.get(i).equals(ws)){
+                if (siteArray.get(i).url.equals(ws)){
                     controlo=controlo+1;
                     break;
                 }
@@ -279,38 +346,111 @@ public class MulticastServer extends Thread {
                 Site site = new Site();
                 site.url = ws;
                 site.title = doc.title();
-                site.text = doc.text();
+                if (doc.text().length()>300)
+                    site.text = doc.text().substring(0,300) + "..." ;
+                else
+                    site.text = doc.text();
                 countMap = countWords(doc.text());
                 site.words = countMap.keySet().toArray(new String[countMap.size()]);
                 siteArray.add(site);
             }
-            itera(ws,1);
-
-
-
-            escreveFicheiroObjetosHashMap();
-            escreveFicheiroObjetosSites();
+            itera(ws,1,siteArray,dic);
+            Collections.sort(siteArray, (Site s1, Site s2) ->  (s2.countPages - s1.countPages));
+            escreveFicheiroObjetosHashMap(dic);
+            escreveFicheiroObjetosSites(siteArray);
             // Get website text and count words
             String answer=ws+ " indexado, bem como outros indexados recursivamente.";
             return answer;
-        } catch (IOException e) {
+        }catch (org.jsoup.HttpStatusException d){
+            return "";
+        }
+
+        catch (IOException e) {
             e.printStackTrace();
             return "problema com indexação";
         }
+
     }
 
 
-    public String search(String kw,int n  ){
+    public String search(String kw, MulticastSocket socket ,DatagramPacket packet){
+        String search;
+        HashMap< String, ArrayList<Site>> dic=leFicheiroObjetosHashMap(); //leFicheiroObjetosHashMap();  new HashMap< String, ArrayList<Site>>();
+        if (!dic.containsKey(kw) || (dic.get(kw).size() == 0)) {
+            enviaInfoRMI(socket, packet.getAddress(), "0");
+            return "Não foram encontrados resultados!";
+        } else if (dic.get(kw).size() <= 20) {
+            Collections.sort(dic.get(kw), (Site s1, Site s2) ->  (s2.countPages - s1.countPages));
+            enviaInfoRMI(socket, packet.getAddress(), Integer.toString(dic.get(kw).size()));
 
-        String result = dic.get(kw).get(n).title+ "\n"+ dic.get(kw).get(n).url + "\n"+ dic.get(kw).get(n).text + "\n"+ dic.get(kw).get(n).countPages;
+            for (int i = 0; i < dic.get(kw).size(); i++) {
+                search = dic.get(kw).get(i).title+ "\n"+ dic.get(kw).get(i).url + "\n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages+ "\n";
+                enviaInfoRMI(socket, packet.getAddress(), search);
+            }return "Foram encontrados "+ dic.get(kw).size()+ " resultados!";
+        } else {
+            Collections.sort(dic.get(kw), (Site s1, Site s2) ->  (s2.countPages - s1.countPages));
+            enviaInfoRMI(socket, packet.getAddress(), "20");
+            for (int i = 0; i < 20; i++) {
+                search = dic.get(kw).get(i).title+ "\n"+ dic.get(kw).get(i).url + "\n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages+ "\n";
+                enviaInfoRMI(socket, packet.getAddress(), search);
 
-        return result;
+            }
+            return "Foram encontrados "+ dic.get(kw).size()+ " resultados!";
+        }
+
+    }
+    public String searchMultiple(String[] kw, MulticastSocket socket ,DatagramPacket packet) {
+        ArrayList<String> temp = new ArrayList<>();
+        ArrayList<Site> search = new ArrayList<>();
+        HashMap<String, ArrayList<Site>> dic=leFicheiroObjetosHashMap();
+        for (int i = 0; i < kw.length; i++) {
+            if (!dic.containsKey(kw[i]) || (dic.get(kw[i]).size() == 0)) {
+
+
+            } else {
+                for (int j = 0; j < dic.get(kw[i]).size(); j++)
+                    temp.add(dic.get(kw[i]).get(j).url);
+            }
+        }
+        Set<String> st = new HashSet<String>(temp);
+        for (String s : st) {
+            if (Collections.frequency(temp, s) == kw.length) {
+                for (int i = 0; i < dic.get(kw[0]).size(); i++) {
+                    if (dic.get(kw[0]).get(i).url.equals(s)) {
+                        search.add(dic.get(kw[0]).get(i));
+                    }
+                }
+            }
+
+        }
+        String searchStr="";
+        if  (search.size() == 0) {
+            enviaInfoRMI(socket, packet.getAddress(), "0");
+            return "Não foram encontrados resultados";
+        } else if (search.size() <= 20) {
+            Collections.sort(search, (Site s1, Site s2) -> (s2.countPages - s1.countPages));
+            enviaInfoRMI(socket, packet.getAddress(), Integer.toString(search.size()));
+            for (int i = 0; i < search.size(); i++) {
+                searchStr = search.get(i).title + "\n" + search.get(i).url + "\n" + search.get(i).text + "\n" + search.get(i).countPages;
+                enviaInfoRMI(socket, packet.getAddress(), searchStr);
+            }return "Foram encontrados "+ search.size()+ " resultados!";
+        }
+        else {
+            Collections.sort(search, (Site s1, Site s2) ->  (s2.countPages - s1.countPages));
+            enviaInfoRMI(socket, packet.getAddress(), "20");
+            for (int i = 0; i < 20; i++) {
+                searchStr = search.get(i).title + "\n" + search.get(i).url + "\n" + search.get(i).text + "\n" + search.get(i).countPages;
+                enviaInfoRMI(socket, packet.getAddress(), searchStr);
+            }
+            return "Foram encontrados "+ search.size()+ " resultados!";
+        }
     }
 
 
     public String verLigacoes(String ws){
         int i;
         String sites="";
+        ArrayList<Site> siteArray=leFicheiroObjetosSites(); //leFicheiroObjetosSites(); new  ArrayList<Site>()
         if (!ws.startsWith("http://") && !ws.startsWith("https://"))
             ws = "http://".concat(ws);
         for (i = 0;i< siteArray.size();i++){
@@ -320,7 +460,7 @@ public class MulticastServer extends Thread {
                     return "Esse site não tem sites que apontem para ele.";
                 else{
                     for(int j=0; j< siteArray.get(i).pages.size();j++){
-                        sites=sites+ "Site "+ i+ ": "+ siteArray.get(i).pages.get(j)+ "\n";
+                        sites=sites+ "Site "+ i+ ": "+ siteArray.get(i).pages.get(j).url+ "\n";
                     }
                     return sites;
                 }
@@ -328,7 +468,7 @@ public class MulticastServer extends Thread {
         }
         return "Esse site não se encontra na base de dados .";
     }
-    private void itera(String ws, int num) throws IOException {
+    private void itera(String ws, int num,ArrayList<Site> siteArray, HashMap<String, ArrayList<Site>> dic) throws IOException {
         // Read website
         Map<String, Integer> countMap;
         if (num > -1) {
@@ -377,7 +517,10 @@ public class MulticastServer extends Thread {
                         site = new Site();
                         site.url = link.attr("href");
                         site.title = link.text();
-                        site.text = text;
+                        if (doc.text().length()>300)
+                            site.text = doc.text().substring(0,300) + "..." ;
+                        else
+                            site.text = doc.text();
                         site.words = countMap.keySet().toArray(new String[countMap.size()]);
                         siteArray.add(site);
                     } else if (controlo == 1) {
@@ -415,20 +558,24 @@ public class MulticastServer extends Thread {
                             }
                         }
                     }
-                    itera(link.attr("href"), num - 1);
+                    itera(link.attr("href"), num - 1,siteArray, dic);
 
                 }
 
 
                 // Get website text and count words
 
-            } catch (IOException e) {
+            }catch(org.jsoup.HttpStatusException t) {
+
+            }
+
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    protected void escreveFicheiroObjetosSites(){
+    protected void escreveFicheiroObjetosSites(ArrayList<Site> siteArray){
         File f=new File("sites.txt");
 
         try {
@@ -444,7 +591,7 @@ public class MulticastServer extends Thread {
         }
 
     }
-    protected void escreveFicheiroObjetosHashMap(){
+    protected void escreveFicheiroObjetosHashMap(HashMap<String, ArrayList<Site>> dic){
         File f=new File("hashmap.txt");
 
         try {
@@ -483,6 +630,8 @@ public class MulticastServer extends Thread {
         return siteArray;
     }
 
+
+
     protected HashMap< String, ArrayList<Site>>  leFicheiroObjetosHashMap(){
         File f=new File("HashMap.txt");
         HashMap< String, ArrayList<Site>> dic= new HashMap<>() ;
@@ -503,6 +652,47 @@ public class MulticastServer extends Thread {
         }
         return dic;
 
+    }
+
+
+
+
+    protected void escreveFicheiroPesquisas(){
+        File f=new File("pesquisas.txt");
+
+        try {
+            FileOutputStream fos = new FileOutputStream(f);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(pesquisas);
+            oos.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Erro a criar ficheiro de hashmap.");
+        } catch (IOException ex) {
+            System.out.println("Erro a escrever para o ficheiro de hashmap. ");
+        }
+
+    }
+
+    protected HashMap<String,Integer> leFicheiroPesquisas(){
+        File f=new File("pesquisas.txt");
+        int i=0;
+        try {
+            FileInputStream fis = new FileInputStream(f);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            pesquisas = (HashMap<String,Integer>)ois.readObject();
+
+            ois.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Erro a abrir ficheiro de sites.");
+        } catch (IOException ex) {
+            System.out.println("Erro a ler ficheiro de sites.");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Erro a converter objeto de sites.");
+        }
+
+        return pesquisas;
     }
 
     private Map countWords(String text) {
@@ -556,8 +746,36 @@ public class MulticastServer extends Thread {
         MulticastUser user = new MulticastUser();
         user.start();
     }
+    
+    private static HashMap sortByValues(HashMap map) {
+        List list = new LinkedList(map.entrySet());
+        // Defined Custom Comparator here
+        Collections.sort(list, new Comparator() {
+            public int compare(Object o1, Object o2) {
+                return ((Comparable) ((Map.Entry) (o2)).getValue())
+                        .compareTo(((Map.Entry) (o1)).getValue());
+            }
+        });
 
+        // Here I am copying the sorted list in HashMap
+        // using LinkedHashMap to preserve the insertion order
+        HashMap sortedHashMap = new LinkedHashMap();
+        for (Iterator it = list.iterator(); it.hasNext();) {
+            Map.Entry entry = (Map.Entry) it.next();
+            sortedHashMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedHashMap;
+    }
 }
+
+
+
+
+
+
+
+
+
 
 class MulticastUser extends Thread {
     private String MULTICAST_ADDRESS = "224.0.224.0";
@@ -591,24 +809,24 @@ class MulticastUser extends Thread {
 }
 
 class Utilizador implements Serializable {
-    String username;
-    String password;
+    protected String username;
+    protected String password;
     boolean admin;
-    private ArrayList<String> listaURLS = new ArrayList<String>();
+    protected ArrayList<String> pesquisas = new ArrayList<String>();
 
     public Utilizador(String username,String password,boolean admin){
         this.username=username;
         this.password=password;
         this.admin=admin;
+
     }
 }
 class Site implements Serializable {
-    String url;
-    String title;
-    String text;
-    int countPages=0;
-    ArrayList<Site> pages= new ArrayList<>();
-    String[] words;
-
+    protected String url;
+    protected String title;
+    protected String text;
+    protected int countPages=0;
+    protected ArrayList<Site> pages= new ArrayList<>();
+    protected String[] words;
 
 }

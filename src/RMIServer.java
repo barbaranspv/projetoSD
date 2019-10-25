@@ -85,43 +85,73 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		return received+"-Nao tem notificacoes";
 	}
 
-	public String registaUtilizador(String username, String password) {
-		String toSend = "type ! register ; username ! " + username + " ; password ! " + password;
-		enviarPacote(toSend); //enviar ao Multicast Server
-		String received = recebePacote();
-		String[] result = received.split("-");
-		return received;
-	}
+    public String registaUtilizador(String username, String password) {
+        String toSend = "type ! register ; username ! " + username + " ; password ! " + password;
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        return received;
 
 	public void sayHello() throws RemoteException {
 		System.out.println("Servidor a correr");
 	}
 
-	public String verLigacoes(String username, String page){
-		String toSend = "type ! verLigação ; username ! " + username + " ; pagina ! " + page;
-		enviarPacote(toSend); //enviar ao Multicast Server
-		String received = recebePacote();
-		return received;
-	}
+    public String sayHello() throws RemoteException {
+        System.out.println("print do lado do servidor...!.");
 
-	public String pesquisar(String username, String pesquisa) {
-		String toSend = "type ! search ; username ! " + username + " ; key words ! " + pesquisa;
-		enviarPacote(toSend); //enviar ao Multicast Server
-		String size = recebePacote();
-		String received="";
-		int sizeint = Integer.parseInt(size);
-		System.out.println(sizeint);
-		if (sizeint!=0){
-		for (int i=0; i< sizeint;i++){
-			received=received + recebePacote()+ "\n\n";
-		}
-		received = received+ recebePacote() + "Mostrando os "+ sizeint + " mais relevantes!";
-		}
-		else{
-			received="Não foram encontrados resultados!";
-		}
-		return received;
-	}
+        return "Hello, World!";
+    }
+
+    public String verLigacoes(String username, String page){
+        String toSend = "type ! verLigação ; username ! " + username + " ; pagina ! " + page;
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        return received;
+    }
+
+    public String verPainelAdmin(String username){
+        String toSend = "type ! verAdmin ; username ! " + username ;
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        System.out.println(received);
+        return received;
+
+
+    }
+    public String verPesquisas(String username){
+        String toSend = "type ! verPesquisas ; username ! " + username ;
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        if (received.equals("")){
+            received= "Ainda não efetuou nenhuma pesquisa.";
+        }
+        return received;
+
+
+    }
+
+    public String pesquisar(String username, String pesquisa) {
+        String toSend = "type ! search ; username ! " + username + " ; key words ! " + pesquisa;
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String size;
+        String received = "";
+        int sizeint;
+        size = recebePacote();
+        sizeint = Integer.parseInt(size);
+        if (sizeint != 0) {
+            for (int i = 0; i < sizeint; i++) {
+                received = received + recebePacote() + "\n\n";
+
+            }
+
+            received = received + recebePacote() + "Mostrando os " + sizeint + " mais relevantes!";
+        }
+
+        else
+            received=recebePacote();
+
+        System.out.println(received);
+        return received;
+    }
 
 
     public String indexar(String username, String ws) {
@@ -131,12 +161,12 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         return received;
     }
 
-	public String logout(String username) {
-		String toSend = "type ! logout ; username ! " + username + " ; msg ! Logging out";
-		enviarPacote(toSend); //enviar ao Multicast Server
-		String received = recebePacote();
-		return received;
-	}
+    public String logout(String username) {
+        String toSend = "type ! logout ; username ! " + username + " ; msg ! Logging out";
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        return received;
+    }
 	public void deleteUserOnline(String username)
     {
         for(String name : usersOnline.keySet())

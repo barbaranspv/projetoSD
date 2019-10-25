@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+
     <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" afterDir="false" />
@@ -139,10 +140,6 @@
       <workItem from="1571850415891" duration="7055000" />
       <workItem from="1571912588736" duration="8796000" />
       <workItem from="1571930636095" duration="6063000" />
-      <workItem from="1571936812011" duration="13985000" />
-      <workItem from="1572006966670" duration="912000" />
-      <workItem from="1572007929625" duration="37000" />
-      <workItem from="1572008050596" duration="17600000" />
     </task>
     <task id="LOCAL-00001" summary="big stuff">
       <created>1571611261678</created>
