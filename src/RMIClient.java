@@ -172,7 +172,6 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         String pesquisa=scan.nextLine();
         System.out.println("A pesquisar... Aguarde por favor.");
         String result = server.pesquisar(username,pesquisa);
-        System.out.println(result);
         return result;
     }
 
