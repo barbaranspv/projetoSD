@@ -121,6 +121,12 @@ public class MulticastServer extends Thread {
                         String kw = result[2].split(" ! ")[1];
                         String[] kwArray = kw.split(" ");
                         String search="";
+                        for (int i=0; i< listaUsers.size();i++){
+                            if (username.equals(listaUsers.get(i).username)){
+                                listaUsers.get(i).pesquisas.add(kw);
+                                break;
+                            }
+                        }
                         if (kwArray.length==1){
                             System.out.println(username + " esta a fazer uma pesquisa");
                             search=search(kwArray[0],socket,packet);
@@ -151,7 +157,22 @@ public class MulticastServer extends Thread {
                         System.out.println(username+" esta a ver ligacoes");
                         enviaInfoRMI(socket, packet.getAddress(), ligacoes);
 
-                    } else if (type[1].equals("logout")) {
+
+                    }else if (type[1].equals("verPesquisas")){
+                        String username = result[1].split(" ! ")[1];
+                        String pesquisas="";
+                        for (int i=0; i< listaUsers.size();i++){
+                            if (username.equals(listaUsers.get(i).username)){
+                                for (int j=0;j< listaUsers.get(i).pesquisas.size();j++ ){
+                                    if (j==0)
+                                        pesquisas="Pesquisas:\n";
+                                    pesquisas=pesquisas+ listaUsers.get(i).pesquisas.get(j) +"\n";
+                                }
+                                break;
+                            }
+                        }enviaInfoRMI(socket, packet.getAddress(), pesquisas);
+                    }
+                    else if (type[1].equals("logout")) {
                         System.out.println("entrei no logout");
                         String username = result[1].split(" ! ")[1];
                         System.out.println(username + " esta a fazer logout");
@@ -260,7 +281,7 @@ public class MulticastServer extends Thread {
             int controlo=0;
             System.out.println("Loading websites...");
             for (i =0; i< siteArray.size();i++){
-                if (siteArray.get(i).equals(ws)){
+                if (siteArray.get(i).url.equals(ws)){
                     controlo=controlo+1;
                     break;
                 }
@@ -302,20 +323,18 @@ public class MulticastServer extends Thread {
                 enviaInfoRMI(socket, packet.getAddress(), Integer.toString(dic.get(kw).size()));
 
                 for (int i = 0; i < dic.get(kw).size(); i++) {
-                    search = dic.get(kw).get(i).title+ "\n"+ dic.get(kw).get(i).url + "\n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages;
+                    search = dic.get(kw).get(i).title+ "\n"+ dic.get(kw).get(i).url + "\n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages+ "\n";
                     enviaInfoRMI(socket, packet.getAddress(), search);
-                }return "Foram encontrados"+ dic.get(kw).size()+ " resultados!";
+                }return "Foram encontrados "+ dic.get(kw).size()+ " resultados!";
             } else {
                 Collections.sort(dic.get(kw), (Site s1, Site s2) ->  (s2.countPages - s1.countPages));
                 enviaInfoRMI(socket, packet.getAddress(), "20");
-                System.out.println("cheguei");
                 for (int i = 0; i < 20; i++) {
-                    search = dic.get(kw).get(i).title+ "\n"+ dic.get(kw).get(i).url + "\n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages;
+                    search = dic.get(kw).get(i).title+ "\n"+ dic.get(kw).get(i).url + "\n"+ dic.get(kw).get(i).text + "\n"+ dic.get(kw).get(i).countPages+ "\n";
                     enviaInfoRMI(socket, packet.getAddress(), search);
-                    System.out.println("im here");
 
                 }
-                return "Foram encontrados"+ dic.get(kw).size()+ " resultados!";
+                return "Foram encontrados "+ dic.get(kw).size()+ " resultados!";
             }
 
     }
@@ -352,7 +371,7 @@ public class MulticastServer extends Thread {
             for (int i = 0; i < search.size(); i++) {
                 searchStr = search.get(i).title + "\n" + search.get(i).url + "\n" + search.get(i).text + "\n" + search.get(i).countPages;
                 enviaInfoRMI(socket, packet.getAddress(), searchStr);
-            }return "Foram encontrados"+ search.size()+ " resultados!";
+            }return "Foram encontrados "+ search.size()+ " resultados!";
         }
         else {
             Collections.sort(search, (Site s1, Site s2) -> (int) (s2.countPages - s1.countPages));
@@ -361,7 +380,7 @@ public class MulticastServer extends Thread {
                 searchStr = search.get(i).title + "\n" + search.get(i).url + "\n" + search.get(i).text + "\n" + search.get(i).countPages;
                 enviaInfoRMI(socket, packet.getAddress(), searchStr);
             }
-            return "Foram encontrados"+ search.size()+ " resultados!";
+            return "Foram encontrados "+ search.size()+ " resultados!";
         }
 }
 
@@ -618,14 +637,6 @@ public class MulticastServer extends Thread {
         user.start();
     }
 
-
-
-
-
-
-
-
-
 }
 
 
@@ -668,24 +679,25 @@ class MulticastUser extends Thread {
 }
 
 class Utilizador implements Serializable {
-    String username;
-    String password;
-    boolean admin;
-    private ArrayList<String> listaURLS = new ArrayList<String>();
+    protected String username;
+    protected String password;
+     boolean admin;
+    protected ArrayList<String> pesquisas = new ArrayList<String>();
 
     public Utilizador(String username,String password,boolean admin){
         this.username=username;
         this.password=password;
         this.admin=admin;
+
     }
 }
 class Site implements Serializable {
-    String url;
-    String title;
-    String text;
-    int countPages=0;
-    ArrayList<Site> pages= new ArrayList<>();
-    String[] words;
+    protected String url;
+    protected String title;
+    protected String text;
+    protected int countPages=0;
+    protected ArrayList<Site> pages= new ArrayList<>();
+    protected String[] words;
 
 
 }

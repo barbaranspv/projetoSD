@@ -15,4 +15,5 @@ public interface RMI_S_I extends Remote {
     public void deleteUserOnline(String username) throws RemoteException;
     public String notifyUserToAdmin(String username,String adminName) throws RemoteException;
 
+    String verPesquisas(String username) throws RemoteException;
 }

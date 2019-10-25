@@ -72,7 +72,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
                 }
             }
             else if (op.equals("3")){
-
+                System.out.println(efetuarPesquisa("anónimo"));
             }
             else if (op.equals("4")) {
                 System.out.println("type ! status ; logged ! off ; msg ! Leaving...Bye");
@@ -103,7 +103,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             } else if (op.equals( "2")) {
                 System.out.println(verificarLigacoes( username));
             } else if (op.equals("3")) {
-
+                System.out.println(server.verPesquisas(username));
             } else if (op.equals("4")) {
                 String answer = efetuarLogout(username);
                 System.out.println(answer);
@@ -136,6 +136,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             } else if (op.equals( "2")) {
                 System.out.println(verificarLigacoes( username));
             } else if (op.equals( "3")) {
+                System.out.println(server.verPesquisas(username));
 
             } else if (op.equals("4")) {
                 System.out.println(indexarURL(username));
@@ -171,6 +172,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         String pesquisa=scan.nextLine();
         System.out.println("A pesquisar... Aguarde por favor.");
         String result = server.pesquisar(username,pesquisa);
+        System.out.println(result);
         return result;
     }
 

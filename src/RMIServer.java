@@ -43,11 +43,11 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		byte[] buffer = new byte[1000];
 		DatagramPacket message = new DatagramPacket(buffer, buffer.length);
 		while (true) {
-			try {
+			/*try {
 				dSocket.setSoTimeout(30000);
 			} catch (SocketException e) {
 				e.printStackTrace();
-			}
+			}*/
 			try {
 				dSocket.receive(message);
 				System.out.println(message);
@@ -89,6 +89,17 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
 
 	}
+    public String verPesquisas(String username){
+        String toSend = "type ! verPesquisas ; username ! " + username ;
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        if (received.equals("")){
+            received= "Ainda não efetuou nenhuma pesquisa.";
+        }
+        return received;
+
+
+    }
 
 	public String pesquisar(String username, String pesquisa) {
         String toSend = "type ! search ; username ! " + username + " ; key words ! " + pesquisa;
