@@ -739,9 +739,6 @@ public class MulticastServer extends Thread {
         return countMap;
     }
 
-
-
-
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
         server.start();
@@ -749,8 +746,7 @@ public class MulticastServer extends Thread {
         MulticastUser user = new MulticastUser();
         user.start();
     }
-
-
+    
     private static HashMap sortByValues(HashMap map) {
         List list = new LinkedList(map.entrySet());
         // Defined Custom Comparator here
@@ -771,7 +767,6 @@ public class MulticastServer extends Thread {
         return sortedHashMap;
     }
 }
-
 
 
 
