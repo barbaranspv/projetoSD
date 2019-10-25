@@ -1,3 +1,6 @@
+import java.net.MalformedURLException;
+import java.net.SocketException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
@@ -29,7 +32,24 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
                     String[] msg = resposta.split("-", 4);
                     if (msg[0].equals("type ! status ; logged ! on ; msg ! Welcome to ucBusca")) {
                         System.out.println(msg[0]+" - "+msg[3]);
-                        server.addUserOnline(msg[2], client);
+                        try {
+                            server.addUserOnline(msg[2], client);
+                        }
+                        catch(RemoteException e){
+                            int contador=0;
+                            while(contador<30)
+                            {
+                                try {
+                                    Thread.sleep(1000);
+                                    server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                                    server.addUserOnline(msg[2], client);
+                                }catch(NotBoundException | InterruptedException | RemoteException m){
+                                    contador++;
+                                    if(contador==30)
+                                        System.exit(-1);
+                                }
+                            }
+                        }
                         if (msg[1].equals("admin")) {
                             MenuAdmin(msg[2]);
                             break;
@@ -56,6 +76,24 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
                     if (msg[0].equals("type ! status ; logged ! on ; msg ! Welcome to ucBusca")) {
                         System.out.println(msg[0]);
                         server.addUserOnline(msg[2], client);
+                        try {
+                            server.addUserOnline(msg[2], client);
+                        }
+                        catch(RemoteException e){
+                            int contador=0;
+                            while(contador<30)
+                            {
+                                try {
+                                    Thread.sleep(1000);
+                                    server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                                    server.addUserOnline(msg[2], client);
+                                }catch(NotBoundException | InterruptedException | RemoteException m){
+                                    contador++;
+                                    if(contador==30)
+                                        System.exit(-1);
+                                }
+                            }
+                        }
                         if (msg[1].equals("admin")) {
                             System.out.println(msg[2]);
                             MenuAdmin(msg[2]);
@@ -95,7 +133,24 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             } else if (op == 4) {
                 String answer = efetuarLogout(username);
                 System.out.println(answer);
-                server.deleteUserOnline(username);
+                try {
+                    server.deleteUserOnline(username);
+                }
+                catch(RemoteException e){
+                    int contador=0;
+                    while(contador<30)
+                    {
+                        try {
+                            Thread.sleep(1000);
+                            server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                            server.deleteUserOnline(username);
+                        }catch(NotBoundException | InterruptedException | RemoteException m){
+                            contador++;
+                            if(contador==30)
+                                System.exit(-1);
+                        }
+                    }
+                }
                 break;
             }
         }
@@ -130,7 +185,24 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             } else if (op == 7) {
                 String answer = efetuarLogout(username);
                 System.out.println(answer);
-                server.deleteUserOnline(username);
+                try {
+                    server.deleteUserOnline(username);
+                }
+                catch(RemoteException e){
+                    int contador=0;
+                    while(contador<30)
+                    {
+                        try {
+                            Thread.sleep(1000);
+                            server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                            server.deleteUserOnline(username);
+                        }catch(NotBoundException | InterruptedException | RemoteException m){
+                            contador++;
+                            if(contador==30)
+                                System.exit(-1);
+                        }
+                    }
+                }
                 break;
             }
         }
@@ -138,19 +210,72 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
     public static String darAdmin(String adminName) throws RemoteException{
         System.out.println("Username da pessoa que desejas tornar Admin:");
         String user=scan.nextLine();
-        String answer = server.notifyUserToAdmin(user,adminName);
+        String answer = null;
+        try {
+            answer = server.notifyUserToAdmin(user,adminName);
+        }
+        catch(RemoteException e){
+            int contador=0;
+            while(contador<30)
+            {
+                try {
+                    Thread.sleep(1000);
+                    server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                    answer = server.notifyUserToAdmin(user,adminName);
+                }catch(NotBoundException | InterruptedException | RemoteException m){
+                    contador++;
+                    if(contador==30)
+                        System.exit(-1);
+                }
+            }
+        }
         return answer;
     }
 
     public static String efetuarLogout(String username) throws RemoteException {
-        String flag = server.logout(username);
+        String flag = null;
+        try {
+            flag = server.logout(username);
+        }
+        catch(RemoteException e){
+            int contador=0;
+            while(contador<30)
+            {
+                try {
+                    Thread.sleep(1000);
+                    server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                    flag = server.logout(username);
+                }catch(NotBoundException | InterruptedException | RemoteException m){
+                    contador++;
+                    if(contador==30)
+                        System.exit(-1);
+                }
+            }
+        }
         return flag;
     }
     public static String efetuarPesquisa(String username) throws RemoteException {
         System.out.println("Pesquisa por:");
         String pesquisa=scan.nextLine();
         String result = server.pesquisar(username,pesquisa);
-        System.out.println("oi");
+        try {
+            result = server.pesquisar(username,pesquisa);
+        }
+        catch(RemoteException e){
+            int contador=0;
+            while(contador<30)
+            {
+                try {
+                    Thread.sleep(1000);
+                    server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                    result = server.pesquisar(username,pesquisa);
+                }catch(NotBoundException | InterruptedException | RemoteException m){
+                    contador++;
+                    if(contador==30)
+                        System.exit(-1);
+                }
+            }
+        }
         return result;
     }
 
@@ -158,8 +283,25 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
     public static String verificarLigacoes(String username) throws RemoteException {
         System.out.println("Quer ver as ligações para que página?");
         String page=scan.nextLine();
-        String result = server.verLigacoes(username,page);
-
+        String result = null;
+        try {
+            result = server.verLigacoes(username,page);
+        }
+        catch(RemoteException e){
+            int contador=0;
+            while(contador<30)
+            {
+                try {
+                    Thread.sleep(1000);
+                    server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                    result = server.verLigacoes(username,page);
+                }catch(NotBoundException | InterruptedException | RemoteException m){
+                    contador++;
+                    if(contador==30)
+                        System.exit(-1);
+                }
+            }
+        }
         return result;
     }
 
@@ -168,7 +310,25 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         String user=scan.nextLine();
         System.out.println("Password:");
         String password=scan.nextLine();
-        String flag = server.confereLogin(user,password) ;
+        String flag=null;
+        try {
+            flag = server.confereLogin(user, password);
+        }
+        catch(RemoteException e){
+            int contador=0;
+            while(contador<30)
+            {
+                try {
+                    Thread.sleep(1000);
+                    server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                    flag = server.confereLogin(user, password);
+                }catch(NotBoundException | InterruptedException | RemoteException m){
+                    contador++;
+                    if(contador==30)
+                        System.exit(-1);
+                }
+            }
+        }
         return flag;
 
     }
@@ -177,7 +337,25 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
     public static String indexarURL(String username) throws RemoteException {
         System.out.println("Que site quer indexar?");
         String site=scan.nextLine();
-        String flag = server.indexar(username,site);
+        String flag = null;
+        try {
+            flag = server.indexar(username,site);
+        }
+        catch(RemoteException e){
+            int contador=0;
+            while(contador<30)
+            {
+                try {
+                    Thread.sleep(1000);
+                    server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                    flag = server.indexar(username,site);
+                }catch(NotBoundException | InterruptedException | RemoteException m){
+                    contador++;
+                    if(contador==30)
+                        System.exit(-1);
+                }
+            }
+        }
         return flag;
     }
 
@@ -187,8 +365,25 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         String user=scan.nextLine();
         System.out.println("Password:");
         String password=scan.nextLine();
-        String r = server.registaUtilizador(user,password) ;
-
+        String r = null;
+        try {
+            r = server.registaUtilizador(user,password);
+        }
+        catch(RemoteException e){
+            int contador=0;
+            while(contador<30)
+            {
+                try {
+                    Thread.sleep(1000);
+                    server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                    r = server.registaUtilizador(user,password);
+                }catch(NotBoundException | InterruptedException | RemoteException m){
+                    contador++;
+                    if(contador==30)
+                        System.exit(-1);
+                }
+            }
+        }
         return r;
     }
 
@@ -196,7 +391,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         System.out.println(message);
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws RemoteException {
         try {
             client = new RMIClient();
             server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
@@ -204,9 +399,19 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
 
             menuInicial();
 
-        } catch (Exception e) {
-            System.out.println("Exception in main: " + e);
-            e.printStackTrace();
+        } catch (RemoteException | NotBoundException e) {
+            int contador=0;
+            while(contador<30)
+            {
+                try {
+                    Thread.sleep(1000);
+                    server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                }catch(NotBoundException | InterruptedException | RemoteException m){
+                    contador++;
+                    if(contador==30)
+                        System.exit(-1);
+                }
+            }
         }
 
     }

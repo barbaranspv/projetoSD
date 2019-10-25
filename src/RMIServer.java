@@ -1,22 +1,30 @@
+
 import java.rmi.*;
 import java.rmi.server.*;
 import java.net.*;
 import java.io.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
 public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	static private int PORT = 4371;
-	private final String MULTICAST_ADDRESS = "224.3.2.3";
-	private DatagramSocket dSocket = new DatagramSocket(4370);
-	private static HashMap<String, String> notificacoes = new HashMap<>();
-	private static HashMap<String,RMI_C_I> usersOnline = new HashMap<String,RMI_C_I>();
+	private final String MULTICAST_ADDRESS="224.3.2.3";
+	private DatagramSocket dSocket;
+	private  HashMap<String, String> notificacoes;
+	private  HashMap<String,RMI_C_I> usersOnline;
 
 	public RMIServer() throws RemoteException, SocketException {
 		super();
+		try{
+			dSocket =  new DatagramSocket(4370);
+		}
+		catch(SocketException b){
+			System.out.println("Falha ao criar o socket");
+		}
+		notificacoes = new HashMap<>();
+		usersOnline = new HashMap<>();
 	}
 	//criar classe com extend thread para aplicar o run para o backup
 
@@ -54,6 +62,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 				System.out.println(message);
 				break;
 			} catch (IOException e) {
+				dSocket.close();
 				return "fail";
 			}
 		}
@@ -84,9 +93,8 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		return received;
 	}
 
-	public String sayHello() throws RemoteException {
-		System.out.println("print do lado do servidor...!.");
-		return "Hello, World!";
+	public void sayHello() throws RemoteException {
+		System.out.println("Servidor a correr");
 	}
 
 	public String verLigacoes(String username, String page){
@@ -187,17 +195,28 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
 	// ==========================MAIN=============================
 
-
-	public static void main(String args[]){
-
+	public static void main(String args[]) throws RemoteException, SocketException {
+		RMI_S_I server=new RMIServer();
 		try {
-			RMIServer h = new RMIServer();
 			Registry r = LocateRegistry.createRegistry(7500);
 			System.out.println(LocateRegistry.getRegistry(7500));
-			r.rebind("project", h);
-		} catch (RemoteException | SocketException re) {
-			System.out.println("Exception in RMIServer.main: " + re);
+			r.rebind("project", server);
+
+
+		} catch (RemoteException e) {
+			boolean programFails = true;
+			while (programFails) {
+				programFails = false;
+				try {
+					Thread.sleep(500);
+					LocateRegistry.createRegistry(7500).rebind("project",server);
+					System.out.println("Connected! Server Backup assumed");
+				} catch (RemoteException | InterruptedException b) {
+					System.out.println("Main RMI Server working... Waiting for failures");
+					programFails = true;
+
+				}
+			}
 		}
 	}
-
 }

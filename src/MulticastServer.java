@@ -549,9 +549,6 @@ public class MulticastServer extends Thread {
         return countMap;
     }
 
-
-
-
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
         server.start();
@@ -560,23 +557,7 @@ public class MulticastServer extends Thread {
         user.start();
     }
 
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
 
 class MulticastUser extends Thread {
     private String MULTICAST_ADDRESS = "224.0.224.0";

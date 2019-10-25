@@ -93,7 +93,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RMIServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="RMIServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RMIServer" />
       <module name="Projeto" />
       <method v="2">
@@ -140,6 +140,9 @@
       <workItem from="1571912588736" duration="8796000" />
       <workItem from="1571930636095" duration="6063000" />
       <workItem from="1571936812011" duration="13985000" />
+      <workItem from="1572006966670" duration="912000" />
+      <workItem from="1572007929625" duration="37000" />
+      <workItem from="1572008050596" duration="17600000" />
     </task>
     <task id="LOCAL-00001" summary="big stuff">
       <created>1571611261678</created>
