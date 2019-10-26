@@ -12,12 +12,14 @@ import java.util.*;
 public class MulticastServer extends Thread {
     private String MULTICAST_ADDRESS = "224.3.2.3";
     private int PORT = 4371;
-    public ArrayList<Utilizador> listaUsers = new ArrayList<Utilizador>();
-    public HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
+    public int id;
+    //public ArrayList<Utilizador> listaUsers = new ArrayList<Utilizador>();
+    //public HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
 
     public MulticastServer() {
         super("Server " + (long) (Math.random() * 1000));
     }
+
 
     public void enviaInfoRMI(DatagramSocket aSocket, InetAddress address, String toSend) {
 
@@ -33,6 +35,8 @@ public class MulticastServer extends Thread {
     public void run() {
         boolean existUsername = false;
         MulticastSocket socket = null;
+        id= (int) (Math.random() * 1000);
+        System.out.println(id);
         try {
             socket = new MulticastSocket(PORT);  // create socket and bind it
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
@@ -44,170 +48,194 @@ public class MulticastServer extends Thread {
 
                 System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
                 String message = new String(packet.getData(), 0, packet.getLength());
-                System.out.println(message);
+                //System.out.println(message);
+
                 String[] result = message.split(" ; ");
-                String[] type = result[0].split(" ! ");
+                String[] server = result[0].split(" !! ");
+                String[] type = result[1].split(" ! ");
                 //System.out.println(type[1]);
                 try {
-
-                    if (type[1].equals("login")) {
-                        System.out.println("entrei no login");
-                        String username = result[1].split(" ! ")[1];
-                        String password = result[2].split(" ! ")[1];
-                        System.out.println(username + " " + password);
-                        if (listaUsers.size() == 0)
-                            enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo");
-                        else {
-                            int i;
-                            int flagPercorreuTudo=1;
-                            for (i = listaUsers.size() - 1; i >= 0; i--) {
-                                if (username.equals(listaUsers.get(i).username)) {
-                                    if (listaUsers.get(i).password.equals(password)) {
-                                        if (listaUsers.get(i).admin == true) {
-                                            enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-" + username);
-                                            flagPercorreuTudo=0;
-                                            break;
+                    if (type[1].equals("checkIfOn")) {
+                        DatagramSocket checkSocket = new DatagramSocket();
+                        try {
+                            String toSend= "server !! "+id;
+                            byte[] buffer2 = toSend.getBytes();
+                            DatagramPacket packet2 = new DatagramPacket(buffer2, buffer2.length, packet.getAddress(),4372);
+                            checkSocket.send(packet2);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (Integer.parseInt(server[1])==id){
+                        if (type[1].equals("login")) {
+                            System.out.println("entrei no login");
+                            String username = result[2].split(" ! ")[1];
+                            System.out.println(username);
+                            String password = result[3].split(" ! ")[1];
+                            System.out.println(username + " " + password);
+                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers(); ;
+                            if (listaUsers.size() == 0)
+                                enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo");
+                            else {
+                                int i;
+                                int flagPercorreuTudo=1;
+                                for (i = listaUsers.size() - 1; i >= 0; i--) {
+                                    if (username.equals(listaUsers.get(i).username)) {
+                                        if (listaUsers.get(i).password.equals(password)) {
+                                            if (listaUsers.get(i).admin == true) {
+                                                enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-" + username);
+                                                flagPercorreuTudo=0;
+                                                break;
+                                            } else {
+                                                enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
+                                                flagPercorreuTudo=0;
+                                                break;
+                                            }
                                         } else {
-                                            enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
+                                            System.out.println("password incorreta");
+                                            enviaInfoRMI(socket, packet.getAddress(), "Password incorreta! Tente novamente");
                                             flagPercorreuTudo=0;
                                             break;
                                         }
-                                    } else {
-                                        System.out.println("password incorreta");
-                                        enviaInfoRMI(socket, packet.getAddress(), "Password incorreta! Tente novamente");
-                                        flagPercorreuTudo=0;
-                                        break;
                                     }
                                 }
-                            }
-                            if (flagPercorreuTudo == 1) {
-                                enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo ou verifique o username colocado");
-                            }
-                        }
-                    }
-                    else if (type[1].equals("register")) {
-                        String username = result[1].split(" ! ")[1];
-                        //System.out.println(username);
-                        String password = result[2].split(" ! ")[1];
-                        System.out.println(username + " " + password);
-                        if (listaUsers.isEmpty() == true) {
-                            Utilizador firstUser = new Utilizador(username, password, true);
-                            listaUsers.add(firstUser);
-                            escreverFicheiroUsers();
-                            enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-" + username);
-                        } else if (listaUsers.isEmpty() == false) {
-                            for (int i = listaUsers.size() - 1; i >= 0; i--) {
-                                if (username.equals(listaUsers.get(i).username)) {
-                                    existUsername = true;
+                                if (flagPercorreuTudo == 1) {
+                                    enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo ou verifique o username colocado");
                                 }
                             }
-                            if (existUsername == false) {
-                                Utilizador user = new Utilizador(username, password, false);
-                                listaUsers.add(user);
-                                escreverFicheiroUsers();
-                                enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
-                            } else {
-                                System.out.println(username);
-                                enviaInfoRMI(socket, packet.getAddress(), "Username já existente!");
-                                existUsername = false;
-                            }
                         }
-                    }
-
-                    else if (type[1].equals("search")) {
-                        String username = result[1].split(" ! ")[1];
-                        String kw = result[2].split(" ! ")[1];
-                        if (pesquisas.containsKey(kw))
-                            pesquisas.put(kw,pesquisas.get(kw)+1);
-                        else
-                            pesquisas.put(kw,1);
-                        String[] kwArray = kw.split(" ");
-                        String search="";
-                        for (int i=0; i< listaUsers.size();i++){
-                            if (username.equals(listaUsers.get(i).username)){
-                                listaUsers.get(i).pesquisas.add(kw);
-                                break;
-                            }
-                        }
-                        if (kwArray.length==1){
-                            System.out.println(username + " esta a fazer uma pesquisa");
-                            search=search(kwArray[0],socket,packet);
-                            System.out.println(search);
-                            enviaInfoRMI(socket, packet.getAddress(), search);
-                        }
-                        else {
-                            System.out.println(username + " esta a fazer uma pesquisa");
-                            search= searchMultiple(kwArray, socket,packet);
-                            System.out.println(search);
-                            enviaInfoRMI(socket, packet.getAddress(), search);
-
-                        }
-                    }else if (type[1].equals("indexar")) {
-                        String username = result[1].split(" ! ")[1];
-                        String ws = result[2].split(" ! ")[1];
-                        String indexar= loadSite(ws);
-                        System.out.println(username+" esta a indexar site");
-                        enviaInfoRMI(socket, packet.getAddress(), indexar);
-
-                    }
-                    else if (type[1].equals("verLigação")){
-                        String username = result[1].split(" ! ")[1];
-                        String ws = result[2].split(" ! ")[1];
-                        String ligacoes= verLigacoes(ws);
-                        System.out.println(ligacoes);
-                        System.out.println(username+" esta a ver ligacoes");
-                        enviaInfoRMI(socket, packet.getAddress(), ligacoes);
-
-
-                    }else if (type[1].equals("verPesquisas")){
-                        String username = result[1].split(" ! ")[1];
-                        String pesquisas="";
-                        for (int i=0; i< listaUsers.size();i++){
-                            if (username.equals(listaUsers.get(i).username)){
-                                for (int j=0;j< listaUsers.get(i).pesquisas.size();j++ ){
-                                    if (j==0)
-                                        pesquisas="Pesquisas:\n";
-                                    pesquisas=pesquisas+ listaUsers.get(i).pesquisas.get(j) +"\n";
+                        else if (type[1].equals("register")) {
+                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers(); ;
+                            String username = result[2].split(" ! ")[1];
+                            //System.out.println(username);
+                            String password = result[3].split(" ! ")[1];
+                            System.out.println(username + " " + password);
+                            if (listaUsers.isEmpty() == true) {
+                                Utilizador firstUser = new Utilizador(username, password, true);
+                                listaUsers.add(firstUser);
+                                escreverFicheiroUsers(listaUsers);
+                                enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca-admin-" + username);
+                            } else if (listaUsers.isEmpty() == false) {
+                                for (int i = listaUsers.size() - 1; i >= 0; i--) {
+                                    if (username.equals(listaUsers.get(i).username)) {
+                                        existUsername = true;
+                                    }
                                 }
-                                break;
-                            }
-                        }enviaInfoRMI(socket, packet.getAddress(), pesquisas);
-                    }
-
-                    else if (type[1].equals("verAdmin")){
-                        String username = result[1].split(" ! ")[1];
-                        System.out.println(username + " esta a ver painel de admin");
-                        String painelAdmin = verPainelAdmin();
-                        System.out.println(painelAdmin);
-                        enviaInfoRMI(socket, packet.getAddress(), painelAdmin);
-
-                    }
-                    else if (type[1].equals("logout")) {
-                        System.out.println("entrei no logout");
-                        String username = result[1].split(" ! ")[1];
-                        System.out.println(username + " esta a fazer logout");
-                        enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! off ; msg ! Goodbye!");
-                        System.out.println("enviei a info");
-                        escreveFicheiroPesquisas();
-                    }
-                    else if (type[1].equals("verify")) {
-                        int userExist=0;
-                        int i;
-                        String username = result[1].split(" ! ")[1];
-                        for (i = listaUsers.size() - 1; i >= 0; i--) {
-                            if(listaUsers.get(i).username.equals(username)) {
-                                userExist = 1;
-                                break;
+                                if (existUsername == false) {
+                                    Utilizador user = new Utilizador(username, password, false);
+                                    listaUsers.add(user);
+                                    escreverFicheiroUsers(listaUsers);
+                                    enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
+                                } else {
+                                    System.out.println(username);
+                                    enviaInfoRMI(socket, packet.getAddress(), "Username já existente!");
+                                    existUsername = false;
+                                }
                             }
                         }
-                        if(userExist==1) {
-                            enviaInfoRMI(socket, packet.getAddress(), "type ! verify ; username ! " + username + " ; msg ! User successfully verified");
-                            listaUsers.get(i).admin=true;
-                            escreverFicheiroUsers();
+
+                        else if (type[1].equals("search")) {
+                            String username = result[2].split(" ! ")[1];
+                            String kw = result[3].split(" ! ")[1];
+                            HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
+                            if (pesquisas.containsKey(kw))
+                                pesquisas.put(kw,pesquisas.get(kw)+1);
+                            else
+                                pesquisas.put(kw,1);
+                            escreveFicheiroPesquisas(pesquisas);
+                            String[] kwArray = kw.split(" ");
+                            String search="";
+                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers(); ;
+                            for (int i=0; i< listaUsers.size();i++){
+                                if (username.equals(listaUsers.get(i).username)){
+                                    listaUsers.get(i).pesquisas.add(kw);
+                                    escreverFicheiroUsers(listaUsers);
+                                    break;
+                                }
+                            }
+                            if (kwArray.length==1){
+                                System.out.println(username + " esta a fazer uma pesquisa");
+                                search=search(kwArray[0],socket,packet);
+                                System.out.println(search);
+                                enviaInfoRMI(socket, packet.getAddress(), search);
+                            }
+                            else {
+                                System.out.println(username + " esta a fazer uma pesquisa");
+                                search= searchMultiple(kwArray, socket,packet);
+                                System.out.println(search);
+                                enviaInfoRMI(socket, packet.getAddress(), search);
+
+                            }
+                        }else if (type[1].equals("indexar")) {
+                            String username = result[2].split(" ! ")[1];
+                            String ws = result[3].split(" ! ")[1];
+                            String indexar= loadSite(ws);
+                            System.out.println(username+" esta a indexar site");
+                            enviaInfoRMI(socket, packet.getAddress(), indexar);
+
                         }
-                        else
-                            enviaInfoRMI(socket, packet.getAddress(), "type ! verify ; username ! " + username + " ; msg ! User not found");
-                        System.out.println("enviei a info sobre a verificacao de existencia do user");
+                        else if (type[1].equals("verLigação")){
+                            String username = result[2].split(" ! ")[1];
+                            String ws = result[3].split(" ! ")[1];
+                            String ligacoes= verLigacoes(ws);
+                            System.out.println(ligacoes);
+                            System.out.println(username+" esta a ver ligacoes");
+                            enviaInfoRMI(socket, packet.getAddress(), ligacoes);
+
+
+                        }else if (type[1].equals("verPesquisas")){
+                            String username = result[2].split(" ! ")[1];
+                            String pesquisas="";
+                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers(); ;
+                            for (int i=0; i< listaUsers.size();i++){
+                                if (username.equals(listaUsers.get(i).username)){
+                                    for (int j=0;j< listaUsers.get(i).pesquisas.size();j++ ){
+                                        if (j==0)
+                                            pesquisas="Pesquisas:\n";
+                                        pesquisas=pesquisas+ listaUsers.get(i).pesquisas.get(j) +"\n";
+                                    }
+                                    break;
+                                }
+                            }enviaInfoRMI(socket, packet.getAddress(), pesquisas);
+                        }
+
+                        else if (type[1].equals("verAdmin")){
+                            String username = result[2].split(" ! ")[1];
+                            System.out.println(username + " esta a ver painel de admin");
+                            String painelAdmin = verPainelAdmin();
+                            System.out.println(painelAdmin);
+                            enviaInfoRMI(socket, packet.getAddress(), painelAdmin);
+
+                        }
+                        else if (type[1].equals("logout")) {
+                            System.out.println("entrei no logout");
+                            String username = result[2].split(" ! ")[1];
+                            System.out.println(username + " esta a fazer logout");
+                            enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! off ; msg ! Goodbye!");
+                            System.out.println("enviei a info");
+
+                        }
+                        else if (type[1].equals("verify")) {
+                            int userExist=0;
+                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers(); ;
+
+                            int i;
+                            String username = result[2].split(" ! ")[1];
+                            for (i = listaUsers.size() - 1; i >= 0; i--) {
+                                if(listaUsers.get(i).username.equals(username)) {
+                                    userExist = 1;
+                                    break;
+                                }
+                            }
+                            if(userExist==1) {
+                                enviaInfoRMI(socket, packet.getAddress(), "type ! verify ; username ! " + username + " ; msg ! User successfully verified");
+                                listaUsers.get(i).admin=true;
+                                escreverFicheiroUsers(listaUsers);
+                            }
+                            else
+                                enviaInfoRMI(socket, packet.getAddress(), "type ! verify ; username ! " + username + " ; msg ! User not found");
+                            System.out.println("enviei a info sobre a verificacao de existencia do user");
+                        }
                     }
                 } catch (NumberFormatException n) {
                     System.out.println("Nao foi possivel fazer parseInt da mensagem"); // nao esta a dar bem
@@ -223,8 +251,12 @@ public class MulticastServer extends Thread {
         }
     }
 
+
+
+
     private String verPainelAdmin() {
         ArrayList<Site> siteArray = leFicheiroObjetosSites();
+        HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
         pesquisas = sortByValues(pesquisas);
 
         String info= "------------------PAINEL DE ADMINISTRAÇÃO-----------------\nWebsites mais importantes:\n";
@@ -262,7 +294,7 @@ public class MulticastServer extends Thread {
     }
 
 
-    private void escreverFicheiroUsers(){
+    private void escreverFicheiroUsers(ArrayList<Utilizador> listaUsers){
         File fich = new File("Users.txt");
         try {
             FileOutputStream is = new FileOutputStream(fich);
@@ -275,8 +307,9 @@ public class MulticastServer extends Thread {
             System.out.println("Erro ao escrever no ficheiro");
         }
     }
-    private void lerFicheiroUsers(){
+    private ArrayList<Utilizador> lerFicheiroUsers(){
         File fich = new File("Users.txt");
+        ArrayList<Utilizador> listaUsers= new ArrayList<>() ;
         if(fich.exists() && fich.isFile())
         {
             try
@@ -317,6 +350,7 @@ public class MulticastServer extends Thread {
                 System.out.println("Erro ao ler no ficheiro");
             }
         }
+        return listaUsers;
     }
 
     public String loadSite(String ws){
@@ -358,6 +392,7 @@ public class MulticastServer extends Thread {
             // Get website text and count words
             String answer=ws+ " indexado, bem como outros indexados recursivamente.";
             return answer;
+
         }catch (org.jsoup.HttpStatusException d){
             return "";
         }
@@ -654,7 +689,7 @@ public class MulticastServer extends Thread {
 
 
 
-    protected void escreveFicheiroPesquisas(){
+    protected void escreveFicheiroPesquisas( HashMap<String, Integer> pesquisas ){
         File f=new File("pesquisas.txt");
 
         try {
@@ -673,6 +708,7 @@ public class MulticastServer extends Thread {
 
     protected HashMap<String,Integer> leFicheiroPesquisas(){
         File f=new File("pesquisas.txt");
+        HashMap<String, Integer> pesquisas = new HashMap<String, Integer> ();
         int i=0;
         try {
             FileInputStream fis = new FileInputStream(f);

@@ -1,10 +1,14 @@
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
 import java.rmi.*;
 import java.rmi.server.*;
 import java.net.*;
 import java.io.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 
@@ -12,7 +16,8 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	static private int PORT = 4371;
 	private final String MULTICAST_ADDRESS="224.3.2.3";
 	private MulticastSocket dSocket;
-	private  HashMap<String, String> notificacoes;
+    private  ArrayList<String> multicastServers = new ArrayList<>();
+    private  HashMap<String, String> notificacoes;
 	private  HashMap<String,RMI_C_I> usersOnline;
 
 	public RMIServer() throws RemoteException, SocketException {
@@ -72,7 +77,8 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	}
 
 	public String confereLogin(String username, String password) {
-		String toSend = "type ! login ; username ! " + username + " ; password ! " + password;
+	    String id=chooseMulticastServer();
+		String toSend = "server !! "+id+ " ; type ! login ; username ! " + username + " ; password ! " + password;
 		enviarPacote(toSend); //envia ao Multicast Server
 		String received = recebePacote();
 		System.out.println(received);
@@ -88,24 +94,29 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	}
 
     public String registaUtilizador(String username, String password) {
-        String toSend = "type ! register ; username ! " + username + " ; password ! " + password;
+        String id=chooseMulticastServer();
+        String toSend = "server !! "+id+ " ; type ! register ; username ! " + username + " ; password ! " + password;
         enviarPacote(toSend); //enviar ao Multicast Server
         String received = recebePacote();
         return received;
     }
 	public void sayHello() throws RemoteException {
 		System.out.println("Servidor a correr");
+        checkServers check = new checkServers();
+        check.start();
 	}
 
     public String verLigacoes(String username, String page){
-        String toSend = "type ! verLigação ; username ! " + username + " ; pagina ! " + page;
+        String id=chooseMulticastServer();
+        String toSend = "server !! "+id+ " ; type ! verLigação ; username ! " + username + " ; pagina ! " + page;
         enviarPacote(toSend); //enviar ao Multicast Server
         String received = recebePacote();
         return received;
     }
 
     public String verPainelAdmin(String username){
-        String toSend = "type ! verAdmin ; username ! " + username ;
+        String id=chooseMulticastServer();
+        String toSend = "server !! "+id+ " ; type ! verAdmin ; username ! " + username ;
         enviarPacote(toSend); //enviar ao Multicast Server
         String received = recebePacote();
         System.out.println(received);
@@ -114,7 +125,8 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
     }
     public String verPesquisas(String username){
-        String toSend = "type ! verPesquisas ; username ! " + username ;
+        String id=chooseMulticastServer();
+        String toSend ="server !! "+id+  " ; type ! verPesquisas ; username ! " + username ;
         enviarPacote(toSend); //enviar ao Multicast Server
         String received = recebePacote();
         if (received.equals("")){
@@ -126,7 +138,8 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
     }
 
     public String pesquisar(String username, String pesquisa) {
-        String toSend = "type ! search ; username ! " + username + " ; key words ! " + pesquisa;
+        String id=chooseMulticastServer();
+        String toSend ="server !! "+id+  " ; type ! search ; username ! " + username + " ; key words ! " + pesquisa;
         enviarPacote(toSend); //enviar ao Multicast Server
         String size;
         String received = "";
@@ -151,14 +164,16 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
 
     public String indexar(String username, String ws) {
-        String toSend = "type ! indexar ; username ! " + username + " ; website ! " + ws;
+        String id=chooseMulticastServer();
+        String toSend = "server !! "+id+ " ; type ! indexar ; username ! " + username + " ; website ! " + ws;
         enviarPacote(toSend); //enviar ao Multicast Server
         String received = recebePacote();
         return received;
     }
 
     public String logout(String username) {
-        String toSend = "type ! logout ; username ! " + username + " ; msg ! Logging out";
+        String id=chooseMulticastServer();
+        String toSend = "server !! "+id+ " ; type ! logout ; username ! " + username + " ; msg ! Logging out";
         enviarPacote(toSend); //enviar ao Multicast Server
         String received = recebePacote();
         return received;
@@ -192,7 +207,8 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	public String notifyUserToAdmin(String username,String adminName) throws RemoteException {
 	    //verificar se o user existe
         //verificar se está online
-        String toSend = "type ! verify ; username ! " + username + " ; msg ! Verify user";
+        String id=chooseMulticastServer();
+        String toSend = "server !! "+id+" ; type ! verify ; username ! " + username + " ; msg ! Verify user";
         enviarPacote(toSend); //enviar ao Multicast Server
         String received = recebePacote();
         String[] result = received.split(" ; ");
@@ -245,5 +261,90 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 			}
 		}
 	}
+    private class checkServers extends Thread {
+        @Override
+        public void run() {
+            while (true){
+                multicastServers=checkActiveMulticastServers();
+                try {
+                    Thread.sleep(15000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+	}
+
+        public ArrayList<String> checkActiveMulticastServers() {
+            String s = "server !! 0 ; type ! checkIfOn ; ";
+
+            try {
+                MulticastSocket socket = new MulticastSocket();
+                InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
+                socket.joinGroup(group);
+
+                byte[] buffer = s.getBytes();
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(MULTICAST_ADDRESS), PORT);
+                socket.send(packet);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            DatagramSocket nSocket = null;
+
+            try {
+                nSocket = new DatagramSocket(4372);
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+            ArrayList<String> arrayList = new ArrayList<>();
+            byte[] buffer = new byte[1000];
+            DatagramPacket request = new DatagramPacket(buffer, buffer.length);
+            while (true) {
+                try {
+                    nSocket.setSoTimeout(500);
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                }
+                try {
+
+                    nSocket.receive(request);
+                    //System.out.println("MESSAGE: " + request.toString());
+                    String temp = new String(request.getData(), 0, request.getLength());
+                    //System.out.println("here");
+                    String[] split = temp.split(" !! ");
+
+                    arrayList.add(split[1]);
+                    //System.out.println("Resposta vinda do multicast: "  + split[1]);
+                    break;
+                } catch (IOException e) {
+                    nSocket.close();
+
+                }
+
+
+            }
+            nSocket.close();
+            return arrayList;
+        }
+
+
+
+    public String chooseMulticastServer() {
+        int max = multicastServers.size()-1;
+        int min = 0;
+
+
+        int k = (int) Math.floor(Math.random() * ((max - min) + 1) + min);
+
+        System.out.println("K: " + k);
+
+        for (String x: multicastServers) {
+            System.out.println(x);
+        }
+
+        return multicastServers.get(k);
+    }
 }
+
 
