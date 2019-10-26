@@ -31,9 +31,8 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             if (op.equals("1")) {
                 while (true) {
                     String resposta = efetuarLogin();
-                    String[] msg = resposta.split("-", 3);
+                    String[] msg = resposta.split("-", 4);
                     if (msg[0].equals("type ! status ; logged ! on ; msg ! Welcome to ucBusca")) {
-                        System.out.println(msg[0]+" - "+msg[3]);
                         try {
                             server.addUserOnline(msg[2], client);
                         }
@@ -52,8 +51,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
                                 }
                             }
                         }
-                        System.out.println(msg[0]);
-
+                        System.out.println(msg[0]+" - "+msg[3]);
                         if (msg[1].equals("admin")) {
                             MenuAdmin(msg[2]);
                             break;
@@ -280,7 +278,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         System.out.println("Pesquisa por:");
         String pesquisa=scan.nextLine();
         System.out.println("A pesquisar... Aguarde por favor.");
-        String result = null
+        String result = null;
         try {
             result = server.pesquisar(username,pesquisa);
         }
