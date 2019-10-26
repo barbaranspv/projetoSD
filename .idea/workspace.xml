@@ -58,7 +58,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.RMIClient">
+  <component name="RunManager" selected="Application.MulticastServer">
     <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <method v="2">
@@ -137,6 +137,7 @@
       <workItem from="1571850415891" duration="7055000" />
       <workItem from="1571912588736" duration="8796000" />
       <workItem from="1571930636095" duration="6063000" />
+      <workItem from="1572035237273" duration="2039000" />
     </task>
     <task id="LOCAL-00001" summary="big stuff">
       <created>1571611261678</created>

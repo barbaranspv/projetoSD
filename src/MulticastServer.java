@@ -14,12 +14,9 @@ public class MulticastServer extends Thread {
     private int PORT = 4371;
     public ArrayList<Utilizador> listaUsers = new ArrayList<Utilizador>();
     public HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
-    // private HashMap< String, ArrayList<Site>> dic=leFicheiroObjetosHashMap(); //leFicheiroObjetosHashMap();  new HashMap< String, ArrayList<Site>>();
-    // private ArrayList<Site> siteArray=leFicheiroObjetosSites(); //leFicheiroObjetosSites(); new  ArrayList<Site>()
 
     public MulticastServer() {
         super("Server " + (long) (Math.random() * 1000));
-
     }
 
     public void enviaInfoRMI(DatagramSocket aSocket, InetAddress address, String toSend) {
