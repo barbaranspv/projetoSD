@@ -1,3 +1,4 @@
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -48,7 +49,7 @@ public class MulticastServer extends Thread {
 
                 System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
                 String message = new String(packet.getData(), 0, packet.getLength());
-                //System.out.println(message);
+                System.out.println(message);
 
                 String[] result = message.split(" ; ");
                 String[] server = result[0].split(" !! ");
@@ -393,9 +394,8 @@ public class MulticastServer extends Thread {
             String answer=ws+ " indexado, bem como outros indexados recursivamente.";
             return answer;
 
-        }catch (org.jsoup.HttpStatusException d){
-            return "";
         }
+
 
         catch (IOException e) {
             e.printStackTrace();
@@ -509,6 +509,7 @@ public class MulticastServer extends Thread {
                     ws = "http://".concat(ws);
 
                 // Attempt to connect and get the document
+
                 Document doc = Jsoup.connect(ws).get();  // Documentation: https://jsoup.org/
 
                 // Title
@@ -597,13 +598,14 @@ public class MulticastServer extends Thread {
 
                 // Get website text and count words
 
-            }catch(org.jsoup.HttpStatusException t) {
+            }
+            catch (HttpStatusException f){
 
             }
-
             catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
     }
 

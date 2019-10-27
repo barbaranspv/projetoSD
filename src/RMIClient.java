@@ -372,6 +372,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         String site=scan.nextLine();
         String flag = null;
         try {
+            System.out.println("A indexar website... Aguarde por favor");
             flag = server.indexar(username,site);
         }
         catch(RemoteException e){
@@ -390,7 +391,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
                 }
             }
         }
-        System.out.println("A indexar website... Aguarde por favor");
+
         return flag;
     }
 

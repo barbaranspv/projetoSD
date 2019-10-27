@@ -8,13 +8,14 @@
       <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer$checkServers.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer$checkServers.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Projeto/Site.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Site.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pesquisas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pesquisas.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites.txt" beforeDir="false" afterPath="$PROJECT_DIR$/sites.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -62,7 +63,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.MulticastServer">
+  <component name="RunManager" selected="Application.RMIServer">
     <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <method v="2">
