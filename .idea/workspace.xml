@@ -2,18 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Users.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Users.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hashmap.txt" beforeDir="false" afterPath="$PROJECT_DIR$/hashmap.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer$checkServers.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer$checkServers.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Site.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Site.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pesquisas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pesquisas.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites.txt" beforeDir="false" afterPath="$PROJECT_DIR$/sites.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RMIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />

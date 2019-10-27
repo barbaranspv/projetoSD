@@ -280,6 +280,9 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         }
         return flag;
     }
+
+
+    //Função que chama funçao de pesquisar no server que depois comunicará com o multicast e efeturá a pesquisa
     public static String efetuarPesquisa(String username) throws RemoteException {
         System.out.println("Pesquisa por:");
         String pesquisa=scan.nextLine();
@@ -306,11 +309,13 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         }
         return result;
     }
+
+    //Ver painel de administração
     public static String verPainelAdmin(String username) throws RemoteException {
         String result = server.verPainelAdmin(username);
         return result;
     }
-
+    //Função p ver ligacoes para uma certa página
     public static String verificarLigacoes(String username) throws RemoteException {
         System.out.println("Quer ver as ligações para que página?");
         String page=scan.nextLine();
@@ -336,7 +341,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         }
         return result;
     }
-
+    // Função para efetuar login
     public static String efetuarLogin() throws RemoteException {
         System.out.println("Username:");
         String user=scan.nextLine();
@@ -366,7 +371,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
 
     }
 
-
+//Função para indexar url
     public static String indexarURL(String username) throws RemoteException {
         System.out.println("Que site quer indexar?");
         String site=scan.nextLine();
@@ -395,7 +400,7 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
         return flag;
     }
 
-
+//Função para registar utilizador
     public static String registarUtilizador() throws RemoteException {
         System.out.println("Username:");
         String user=scan.nextLine();
