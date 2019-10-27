@@ -1,3 +1,4 @@
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,7 +21,7 @@ public class MulticastServer extends Thread {
         super("Server " + (long) (Math.random() * 1000));
     }
 
-
+//Envia string para o rmi server
     public void enviaInfoRMI(DatagramSocket aSocket, InetAddress address, String toSend) {
 
         try {
@@ -48,7 +49,7 @@ public class MulticastServer extends Thread {
 
                 System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
                 String message = new String(packet.getData(), 0, packet.getLength());
-                //System.out.println(message);
+                System.out.println(message);
 
                 String[] result = message.split(" ; ");
                 String[] server = result[0].split(" !! ");
@@ -270,7 +271,7 @@ public class MulticastServer extends Thread {
 
 
 
-
+//Prepara painel admin
     private String verPainelAdmin() {
         ArrayList<Site> siteArray = leFicheiroObjetosSites();
         HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
@@ -311,116 +312,31 @@ public class MulticastServer extends Thread {
     }
 
 
-    private void escreverFicheiroUsers(ArrayList<Utilizador> listaUsers){
-        File fich = new File("Users.txt");
-        try {
-            FileOutputStream is = new FileOutputStream(fich);
-            ObjectOutputStream ois = new ObjectOutputStream(is);
-            ois.writeObject(listaUsers);
-            ois.close();
-        } catch (FileNotFoundException b) {
-            System.out.println("Nao encontrei o ficheiro");
-        } catch (IOException b) {
-            System.out.println("Erro ao escrever no ficheiro");
-        }
-    }
-    private ArrayList<Utilizador> lerFicheiroUsers(){
-        File fich = new File("Users.txt");
-        ArrayList<Utilizador> listaUsers= new ArrayList<>() ;
-        if(fich.exists() && fich.isFile())
-        {
-            try
-            {
-                FileReader fr=new FileReader(fich);
-                BufferedReader br=new BufferedReader(fr);
-                String line;
-                if((line=br.readLine())!=null)
-                {
-                    br.close();
-                    try
-                    {
-                        FileInputStream es = new FileInputStream(fich);
-                        ObjectInputStream oi = new ObjectInputStream(es);
-                        listaUsers=(ArrayList<Utilizador>)oi.readObject();
-                        oi.close();
+
+//Prepara ligacoes para certa pagina
+    public String verLigacoes(String ws){
+        int i;
+        String sites="";
+        ArrayList<Site> siteArray=leFicheiroObjetosSites(); //leFicheiroObjetosSites(); new  ArrayList<Site>()
+        if (!ws.startsWith("http://") && !ws.startsWith("https://"))
+            ws = "http://".concat(ws);
+        for (i = 0;i< siteArray.size();i++){
+
+            if (siteArray.get(i).url.equals(ws)){
+                if (siteArray.get(i).pages.size()==0)
+                    return "Esse site não tem sites que apontem para ele.";
+                else{
+                    for(int j=0; j< siteArray.get(i).pages.size();j++){
+                        sites=sites+ "Site "+ i+ ": "+ siteArray.get(i).pages.get(j).url+ "\n";
                     }
-                    catch (FileNotFoundException e)
-                    {
-                        System.out.println("Nao encontrei o ficheiro");
-                    }
-                    catch(IOException e)
-                    {
-                        System.out.println("Erro ao ler no ficheiro de alunos");
-                    }
-                    catch(ClassNotFoundException e)
-                    {
-                        System.out.println("Erro a criar objeto");
-                    }
+                    return sites;
                 }
             }
-            catch (FileNotFoundException e)
-            {
-                System.out.println("Nao encontrei o ficheiro");
-            }
-            catch(IOException e)
-            {
-                System.out.println("Erro ao ler no ficheiro");
-            }
         }
-        return listaUsers;
+        return "Esse site não se encontra na base de dados .";
     }
 
-    public String loadSite(String ws){
-        Map<String, Integer> countMap ;
-        HashMap<String, ArrayList<Site>> dic= leFicheiroObjetosHashMap();
-        ArrayList<Site> siteArray = leFicheiroObjetosSites();
-        // Read website
-        try {
-            if (! ws.startsWith("http://") && ! ws.startsWith("https://"))
-                ws = "http://".concat(ws);
-            int i;
-
-            int controlo=0;
-            System.out.println("Loading websites...");
-            for (i =0; i< siteArray.size();i++){
-                if (siteArray.get(i).url.equals(ws)){
-                    controlo=controlo+1;
-                    break;
-                }
-            }
-            if (controlo==0) {
-                // Attempt to connect and get the document
-                Document doc = Jsoup.connect(ws).get();
-                Site site = new Site();
-                site.url = ws;
-                site.title = doc.title();
-                if (doc.text().length()>300)
-                    site.text = doc.text().substring(0,300) + "..." ;
-                else
-                    site.text = doc.text();
-                countMap = countWords(doc.text());
-                site.words = countMap.keySet().toArray(new String[countMap.size()]);
-                siteArray.add(site);
-            }
-            itera(ws,1,siteArray,dic);
-            Collections.sort(siteArray, (Site s1, Site s2) ->  (s2.countPages - s1.countPages));
-            escreveFicheiroObjetosHashMap(dic);
-            escreveFicheiroObjetosSites(siteArray);
-            // Get website text and count words
-            String answer=ws+ " indexado, bem como outros indexados recursivamente.";
-            return answer;
-
-        }catch (org.jsoup.HttpStatusException d){
-            return "";
-        }
-
-        catch (IOException e) {
-            e.printStackTrace();
-            return "problema com indexação";
-        }
-
-    }
-
+    //Pesquisa uma keyword
 
     public String search(String kw, MulticastSocket socket ,DatagramPacket packet){
         String search;
@@ -448,6 +364,8 @@ public class MulticastServer extends Thread {
         }
 
     }
+
+    //Pesquisa multiple keywords
     public String searchMultiple(String[] kw, MulticastSocket socket ,DatagramPacket packet) {
         ArrayList<String> temp = new ArrayList<>();
         ArrayList<Site> search = new ArrayList<>();
@@ -496,27 +414,59 @@ public class MulticastServer extends Thread {
     }
 
 
-    public String verLigacoes(String ws){
-        int i;
-        String sites="";
-        ArrayList<Site> siteArray=leFicheiroObjetosSites(); //leFicheiroObjetosSites(); new  ArrayList<Site>()
-        if (!ws.startsWith("http://") && !ws.startsWith("https://"))
-            ws = "http://".concat(ws);
-        for (i = 0;i< siteArray.size();i++){
 
-            if (siteArray.get(i).url.equals(ws)){
-                if (siteArray.get(i).pages.size()==0)
-                    return "Esse site não tem sites que apontem para ele.";
-                else{
-                    for(int j=0; j< siteArray.get(i).pages.size();j++){
-                        sites=sites+ "Site "+ i+ ": "+ siteArray.get(i).pages.get(j).url+ "\n";
-                    }
-                    return sites;
+//Indexa site
+    public String loadSite(String ws){
+        Map<String, Integer> countMap ;
+        HashMap<String, ArrayList<Site>> dic= leFicheiroObjetosHashMap();
+        ArrayList<Site> siteArray = leFicheiroObjetosSites();
+        // Read website
+        try {
+            if (! ws.startsWith("http://") && ! ws.startsWith("https://"))
+                ws = "http://".concat(ws);
+            int i;
+
+            int controlo=0;
+            System.out.println("Loading websites...");
+            for (i =0; i< siteArray.size();i++){
+                if (siteArray.get(i).url.equals(ws)){
+                    controlo=controlo+1;
+                    break;
                 }
             }
+            if (controlo==0) {
+                // Attempt to connect and get the document
+                Document doc = Jsoup.connect(ws).get();
+                Site site = new Site();
+                site.url = ws;
+                site.title = doc.title();
+                if (doc.text().length()>300)
+                    site.text = doc.text().substring(0,300) + "..." ;
+                else
+                    site.text = doc.text();
+                countMap = countWords(doc.text());
+                site.words = countMap.keySet().toArray(new String[countMap.size()]);
+                siteArray.add(site);
+            }
+            itera(ws,1,siteArray,dic);
+            Collections.sort(siteArray, (Site s1, Site s2) ->  (s2.countPages - s1.countPages));
+            escreveFicheiroObjetosHashMap(dic);
+            escreveFicheiroObjetosSites(siteArray);
+            // Get website text and count words
+            String answer=ws+ " indexado, bem como outros indexados recursivamente.";
+            return answer;
+
         }
-        return "Esse site não se encontra na base de dados .";
+
+
+        catch (IOException e) {
+            e.printStackTrace();
+            return "problema com indexação";
+        }
+
     }
+
+   //Indexa recursivamente outros sites
     private void itera(String ws, int num,ArrayList<Site> siteArray, HashMap<String, ArrayList<Site>> dic) throws IOException {
         // Read website
         Map<String, Integer> countMap;
@@ -526,6 +476,7 @@ public class MulticastServer extends Thread {
                     ws = "http://".concat(ws);
 
                 // Attempt to connect and get the document
+
                 Document doc = Jsoup.connect(ws).get();  // Documentation: https://jsoup.org/
 
                 // Title
@@ -614,16 +565,64 @@ public class MulticastServer extends Thread {
 
                 // Get website text and count words
 
-            }catch(org.jsoup.HttpStatusException t) {
+            }
+            catch (HttpStatusException f){
 
             }
-
             catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
     }
 
+
+    private Map countWords(String text) {
+        Map<String, Integer> countMap = new TreeMap<>();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8))));
+        String line;
+
+        // Get words and respective count
+        while (true) {
+            try {
+                if ((line = reader.readLine()) == null)
+                    break;
+                String[] words = line.split("[ ,;:.?!“”(){}\\[\\]<>']+");
+                for (String word : words) {
+                    word = word.toLowerCase();
+                    if ("".equals(word)) {
+                        continue;
+                    }
+                    if (!countMap.containsKey(word)) {
+                        countMap.put(word, 1);
+                    }
+                    else {
+                        countMap.put(word, countMap.get(word) + 1);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Close reader
+        try {
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Display words and counts
+        //for (String word : countMap.keySet()) {
+        // if (word.length() >= 3) { // Shall we ignore small words?
+        // System.out.println(word + "\t" + countMap.get(word));
+        //}
+        //}
+        return countMap;
+    }
+
+
+//FICHEIROS
     protected void escreveFicheiroObjetosSites(ArrayList<Site> siteArray){
         File f=new File("sites.txt");
 
@@ -745,49 +744,65 @@ public class MulticastServer extends Thread {
         return pesquisas;
     }
 
-    private Map countWords(String text) {
-        Map<String, Integer> countMap = new TreeMap<>();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8))));
-        String line;
-
-        // Get words and respective count
-        while (true) {
-            try {
-                if ((line = reader.readLine()) == null)
-                    break;
-                String[] words = line.split("[ ,;:.?!“”(){}\\[\\]<>']+");
-                for (String word : words) {
-                    word = word.toLowerCase();
-                    if ("".equals(word)) {
-                        continue;
+    private void escreverFicheiroUsers(ArrayList<Utilizador> listaUsers){
+        File fich = new File("Users.txt");
+        try {
+            FileOutputStream is = new FileOutputStream(fich);
+            ObjectOutputStream ois = new ObjectOutputStream(is);
+            ois.writeObject(listaUsers);
+            ois.close();
+        } catch (FileNotFoundException b) {
+            System.out.println("Nao encontrei o ficheiro");
+        } catch (IOException b) {
+            System.out.println("Erro ao escrever no ficheiro");
+        }
+    }
+    private ArrayList<Utilizador> lerFicheiroUsers(){
+        File fich = new File("Users.txt");
+        ArrayList<Utilizador> listaUsers= new ArrayList<>() ;
+        if(fich.exists() && fich.isFile())
+        {
+            try
+            {
+                FileReader fr=new FileReader(fich);
+                BufferedReader br=new BufferedReader(fr);
+                String line;
+                if((line=br.readLine())!=null)
+                {
+                    br.close();
+                    try
+                    {
+                        FileInputStream es = new FileInputStream(fich);
+                        ObjectInputStream oi = new ObjectInputStream(es);
+                        listaUsers=(ArrayList<Utilizador>)oi.readObject();
+                        oi.close();
                     }
-                    if (!countMap.containsKey(word)) {
-                        countMap.put(word, 1);
+                    catch (FileNotFoundException e)
+                    {
+                        System.out.println("Nao encontrei o ficheiro");
                     }
-                    else {
-                        countMap.put(word, countMap.get(word) + 1);
+                    catch(IOException e)
+                    {
+                        System.out.println("Erro ao ler no ficheiro de alunos");
+                    }
+                    catch(ClassNotFoundException e)
+                    {
+                        System.out.println("Erro a criar objeto");
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            }
+            catch (FileNotFoundException e)
+            {
+                System.out.println("Nao encontrei o ficheiro");
+            }
+            catch(IOException e)
+            {
+                System.out.println("Erro ao ler no ficheiro");
             }
         }
-
-        // Close reader
-        try {
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Display words and counts
-        //for (String word : countMap.keySet()) {
-        // if (word.length() >= 3) { // Shall we ignore small words?
-        // System.out.println(word + "\t" + countMap.get(word));
-        //}
-        //}
-        return countMap;
+        return listaUsers;
     }
+
 
     public static void main(String[] args) {
         MulticastServer server = new MulticastServer();
@@ -796,7 +811,9 @@ public class MulticastServer extends Thread {
         MulticastUser user = new MulticastUser();
         user.start();
     }
-    
+
+
+    // Função para fazer o sort da hashmap de pesquisas
     private static HashMap sortByValues(HashMap map) {
         List list = new LinkedList(map.entrySet());
         // Defined Custom Comparator here

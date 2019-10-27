@@ -16,13 +16,16 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	static private int PORT = 4371;
 	private final String MULTICAST_ADDRESS="224.3.2.3";
 	private MulticastSocket dSocket;
-    private  ArrayList<String> multicastServers = new ArrayList<>();
+    private static ArrayList<String> multicastServers = new ArrayList<>();
     private  HashMap<String, String> notificacoes;
 	private  HashMap<String,RMI_C_I> usersOnline;
+	private static DatagramSocket nSocket;
+	private static boolean run=true;
 
 	public RMIServer() throws RemoteException, SocketException {
 		super();
 		try{
+
 			dSocket =  new MulticastSocket(4370);
 		}
 		catch(IOException b){
@@ -37,7 +40,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	public void ping() {
 		System.out.println("Ping recebido");
 	}
-
+//Função para enviar pacote p multicast
 	public void enviarPacote(String s) {
 		try {
 			MulticastSocket socket = new MulticastSocket();
@@ -52,14 +55,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 			e.printStackTrace();
 		}
 	}
-
+//Função para receber pacote do multicast
 	public String recebePacote() {
 
-		byte[] buffer = new byte[1000];
+		byte[] buffer = new byte[2000];
 		DatagramPacket message = new DatagramPacket(buffer, buffer.length);
 		while (true) {
 			try {
-				System.out.println("OLA");
 				dSocket.setSoTimeout(40000);
 			} catch (SocketException e) {
 				e.printStackTrace();
@@ -69,12 +71,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 				System.out.println("MESSAGE: "+message.toString());
 				break;
 			} catch (IOException e) {
-				dSocket.close();
-				return "fail";
+				//dSocket.close();
+				//return "Ocorreu um problema, tente mais tarde.";
 			}
 		}
 		return new String(message.getData(), 0, message.getLength());
 	}
+
 
 	public String confereLogin(String username, String password) {
 	    String id=chooseMulticastServer();
@@ -105,7 +108,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         checkServers check = new checkServers();
         check.start();
 	}
-
+//Função que comunica com multicast para ver ligacoes de uma certa pagina
     public String verLigacoes(String username, String page){
         String id=chooseMulticastServer();
         String toSend = "server !! "+id+ " ; type ! verLigação ; username ! " + username + " ; pagina ! " + page;
@@ -113,7 +116,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         String received = recebePacote();
         return received;
     }
-
+    //Função que comunica com multicast para ver painel administraçao
     public String verPainelAdmin(String username){
         String id=chooseMulticastServer();
         String toSend = "server !! "+id+ " ; type ! verAdmin ; username ! " + username ;
@@ -124,6 +127,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
 
     }
+    //Função que comunica com multicast para ver pesquisas
     public String verPesquisas(String username){
         String id=chooseMulticastServer();
         String toSend ="server !! "+id+  " ; type ! verPesquisas ; username ! " + username ;
@@ -136,7 +140,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
 
     }
-
+    //Função que comunica com multicast para efetuar pesquisas
     public String pesquisar(String username, String pesquisa) {
         String id=chooseMulticastServer();
         String toSend ="server !! "+id+  " ; type ! search ; username ! " + username + " ; key words ! " + pesquisa;
@@ -158,11 +162,11 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         else
             received=recebePacote();
 
-        System.out.println(received);
+        //System.out.println(received);
         return received;
     }
 
-
+    //Função que comunica com multicast para indexar url e urls por recursao
     public String indexar(String username, String ws) {
         String id=chooseMulticastServer();
         String toSend = "server !! "+id+ " ; type ! indexar ; username ! " + username + " ; website ! " + ws;
@@ -256,8 +260,14 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 				programFails = false;
 				try {
 					Thread.sleep(500);
+
 					LocateRegistry.createRegistry(7500).rebind("project",server);
+                    run=false;
 					System.out.println("Connected! Server Backup assumed");
+					run=true;
+					checkServers check = new checkServers();
+                    check.start();
+
 				} catch (RemoteException | InterruptedException b) {
 					System.out.println("Main RMI Server working... Waiting for failures");
 					programFails = true;
@@ -266,36 +276,36 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 			}
 		}
 	}
-    private class checkServers extends Thread {
+
+    private static class checkServers extends Thread {
         @Override
         public void run() {
-            while (true){
+            while (run){
                 multicastServers=checkActiveMulticastServers();
                 try {
-                    Thread.sleep(15000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }
 	}
-
-        public ArrayList<String> checkActiveMulticastServers() {
+//Funçao que verifica que servers multicast estao online atraves do envio e rececao de pacotes
+        public static ArrayList<String> checkActiveMulticastServers() {
             String s = "server !! 0 ; type ! checkIfOn ; ";
-
             try {
                 MulticastSocket socket = new MulticastSocket();
-                InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
+                InetAddress group = InetAddress.getByName("224.3.2.3");
                 socket.joinGroup(group);
 
                 byte[] buffer = s.getBytes();
-                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(MULTICAST_ADDRESS), PORT);
+                DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("224.3.2.3"), PORT);
                 socket.send(packet);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            DatagramSocket nSocket = null;
+            nSocket = null;
 
             try {
                 nSocket = new DatagramSocket(4372);
@@ -306,21 +316,14 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             byte[] buffer = new byte[1000];
             DatagramPacket request = new DatagramPacket(buffer, buffer.length);
             while (true) {
-                try {
-                    nSocket.setSoTimeout(500);
-                } catch (SocketException e) {
-                    e.printStackTrace();
-                }
+
                 try {
 
                     nSocket.receive(request);
-                    //System.out.println("MESSAGE: " + request.toString());
                     String temp = new String(request.getData(), 0, request.getLength());
-                    //System.out.println("here");
                     String[] split = temp.split(" !! ");
 
                     arrayList.add(split[1]);
-                    //System.out.println("Resposta vinda do multicast: "  + split[1]);
                     break;
                 } catch (IOException e) {
                     nSocket.close();
@@ -334,21 +337,16 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         }
 
 
-
+//Escolhe ao acaso que server multicast utilizar
     public String chooseMulticastServer() {
         int max = multicastServers.size()-1;
         int min = 0;
+        int n = (int) Math.floor(Math.random() * ((max - min) + 1) + min);
+
+        System.out.println("Escolheu o servidor "+ multicastServers.get(n));
 
 
-        int k = (int) Math.floor(Math.random() * ((max - min) + 1) + min);
-
-        System.out.println("K: " + k);
-
-        for (String x: multicastServers) {
-            System.out.println(x);
-        }
-
-        return multicastServers.get(k);
+        return multicastServers.get(n);
     }
 }
 
