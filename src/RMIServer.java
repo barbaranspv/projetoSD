@@ -205,8 +205,6 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	}
 
 	public String notifyUserToAdmin(String username,String adminName) throws RemoteException {
-	    //verificar se o user existe
-        //verificar se está online
         String id=chooseMulticastServer();
         String toSend = "server !! "+id+" ; type ! verify ; username ! " + username + " ; msg ! Verify user";
         enviarPacote(toSend); //enviar ao Multicast Server
@@ -233,6 +231,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             System.out.println(info);
             return "fail to give Admin permissions";
         }
+    }
+    public String verifyAdminPermissions(String username){
+        String id=chooseMulticastServer();
+        String toSend = "server !! "+id+" ; type ! verifyAdmin ; username ! " + username + " ; msg ! Verify admin permissions";
+        enviarPacote(toSend); //enviar ao Multicast Server
+        String received = recebePacote();
+        return received;
     }
 
 	// ==========================MAIN=============================

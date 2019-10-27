@@ -73,7 +73,7 @@ public class MulticastServer extends Thread {
                             System.out.println(username);
                             String password = result[3].split(" ! ")[1];
                             System.out.println(username + " " + password);
-                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers(); ;
+                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers();
                             if (listaUsers.size() == 0)
                                 enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo");
                             else {
@@ -208,12 +208,29 @@ public class MulticastServer extends Thread {
 
                         }
                         else if (type[1].equals("logout")) {
-                            System.out.println("entrei no logout");
                             String username = result[2].split(" ! ")[1];
                             System.out.println(username + " esta a fazer logout");
                             enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! off ; msg ! Goodbye!");
                             System.out.println("enviei a info");
 
+                        }
+                        else if (type[1].equals("verifyAdmin")) {
+                            String username = result[2].split(" ! ")[1];
+                            int userIsAdmin=0;
+                            System.out.println("Verificando se o user "+username+" foi nomeado como admin");
+                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers();
+                            for (int i = listaUsers.size() - 1; i >= 0; i--) {
+                                if(listaUsers.get(i).username.equals(username)) {
+                                    if(listaUsers.get(i).admin==true){
+                                        userIsAdmin = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(userIsAdmin==1)
+                                enviaInfoRMI(socket, packet.getAddress(), "User is Admin");
+                            else
+                                enviaInfoRMI(socket, packet.getAddress(), "User is not Admin");
                         }
                         else if (type[1].equals("verify")) {
                             int userExist=0;
