@@ -14,13 +14,18 @@ public class MulticastServer extends Thread {
     private String MULTICAST_ADDRESS = "224.3.2.3";
     private int PORT = 4371;
     public int id;
-    //public ArrayList<Utilizador> listaUsers = new ArrayList<Utilizador>();
-    //public HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
+
 
     public MulticastServer() {
         super("Server " + (long) (Math.random() * 1000));
     }
 
+    /**
+     * Envia string para o rmi server
+     * @param aSocket
+     * @param address
+     * @param toSend
+     */
 //Envia string para o rmi server
     public void enviaInfoRMI(DatagramSocket aSocket, InetAddress address, String toSend) {
 
@@ -33,6 +38,9 @@ public class MulticastServer extends Thread {
         }
     }
 
+    /**
+     * Run da thread do multicast
+     */
     public void run() {
         boolean existUsername = false;
         MulticastSocket socket = null;
@@ -54,7 +62,6 @@ public class MulticastServer extends Thread {
                 String[] result = message.split(" ; ");
                 String[] server = result[0].split(" !! ");
                 String[] type = result[1].split(" ! ");
-                //System.out.println(type[1]);
                 try {
                     if (type[1].equals("checkIfOn")) {
                         DatagramSocket checkSocket = new DatagramSocket();
@@ -71,9 +78,7 @@ public class MulticastServer extends Thread {
                         if (type[1].equals("login")) {
                             System.out.println("entrei no login");
                             String username = result[2].split(" ! ")[1];
-                            System.out.println(username);
                             String password = result[3].split(" ! ")[1];
-                            System.out.println(username + " " + password);
                             ArrayList<Utilizador> listaUsers =lerFicheiroUsers();
                             if (listaUsers.size() == 0)
                                 enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo");
@@ -108,9 +113,7 @@ public class MulticastServer extends Thread {
                         else if (type[1].equals("register")) {
                             ArrayList<Utilizador> listaUsers =lerFicheiroUsers(); ;
                             String username = result[2].split(" ! ")[1];
-                            //System.out.println(username);
                             String password = result[3].split(" ! ")[1];
-                            System.out.println(username + " " + password);
                             if (listaUsers.isEmpty() == true) {
                                 Utilizador firstUser = new Utilizador(username, password, true);
                                 listaUsers.add(firstUser);
@@ -128,7 +131,6 @@ public class MulticastServer extends Thread {
                                     escreverFicheiroUsers(listaUsers);
                                     enviaInfoRMI(socket, packet.getAddress(), "type ! status ; logged ! on ; msg ! Welcome to ucBusca- -" + username);
                                 } else {
-                                    System.out.println(username);
                                     enviaInfoRMI(socket, packet.getAddress(), "Username já existente!");
                                     existUsername = false;
                                 }
@@ -179,7 +181,6 @@ public class MulticastServer extends Thread {
                             String username = result[2].split(" ! ")[1];
                             String ws = result[3].split(" ! ")[1];
                             String ligacoes= verLigacoes(ws);
-                            System.out.println(ligacoes);
                             System.out.println(username+" esta a ver ligacoes");
                             enviaInfoRMI(socket, packet.getAddress(), ligacoes);
 
@@ -204,7 +205,6 @@ public class MulticastServer extends Thread {
                             String username = result[2].split(" ! ")[1];
                             System.out.println(username + " esta a ver painel de admin");
                             String painelAdmin = verPainelAdmin();
-                            System.out.println(painelAdmin);
                             enviaInfoRMI(socket, packet.getAddress(), painelAdmin);
 
                         }
@@ -270,9 +270,12 @@ public class MulticastServer extends Thread {
     }
 
 
-
+    /**
+     * Prepara painel admin
+     * @return
+     */
 //Prepara painel admin
-    private String verPainelAdmin() {
+    public String verPainelAdmin() {
         ArrayList<Site> siteArray = leFicheiroObjetosSites();
         HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
         pesquisas = sortByValues(pesquisas);
@@ -312,7 +315,11 @@ public class MulticastServer extends Thread {
     }
 
 
-
+    /**
+     * Prepara ligacoes para certa pagina
+     * @param ws
+     * @return
+     */
 //Prepara ligacoes para certa pagina
     public String verLigacoes(String ws){
         int i;
@@ -327,7 +334,7 @@ public class MulticastServer extends Thread {
                     return "Esse site não tem sites que apontem para ele.";
                 else{
                     for(int j=0; j< siteArray.get(i).pages.size();j++){
-                        sites=sites+ "Site "+ i+ ": "+ siteArray.get(i).pages.get(j).url+ "\n";
+                        sites=sites+ "Site "+ j+ ": "+ siteArray.get(i).pages.get(j).url+ "\n";
                     }
                     return sites;
                 }
@@ -338,6 +345,13 @@ public class MulticastServer extends Thread {
 
     //Pesquisa uma keyword
 
+    /**
+     * Pesquisa uma keyword
+     * @param kw
+     * @param socket
+     * @param packet
+     * @return
+     */
     public String search(String kw, MulticastSocket socket ,DatagramPacket packet){
         String search;
         HashMap< String, ArrayList<Site>> dic=leFicheiroObjetosHashMap(); //leFicheiroObjetosHashMap();  new HashMap< String, ArrayList<Site>>();
@@ -366,6 +380,14 @@ public class MulticastServer extends Thread {
     }
 
     //Pesquisa multiple keywords
+
+    /**
+     * Pesquisa multiple keywords
+     * @param kw
+     * @param socket
+     * @param packet
+     * @return
+     */
     public String searchMultiple(String[] kw, MulticastSocket socket ,DatagramPacket packet) {
         ArrayList<String> temp = new ArrayList<>();
         ArrayList<Site> search = new ArrayList<>();
@@ -416,6 +438,12 @@ public class MulticastServer extends Thread {
 
 
 //Indexa site
+
+    /**
+     * Indexa site
+     * @param ws
+     * @return
+     */
     public String loadSite(String ws){
         Map<String, Integer> countMap ;
         HashMap<String, ArrayList<Site>> dic= leFicheiroObjetosHashMap();
@@ -467,7 +495,16 @@ public class MulticastServer extends Thread {
     }
 
    //Indexa recursivamente outros sites
-    private void itera(String ws, int num,ArrayList<Site> siteArray, HashMap<String, ArrayList<Site>> dic) throws IOException {
+
+    /**
+     * Indexa recursivamente outros sites
+     * @param ws
+     * @param num
+     * @param siteArray
+     * @param dic
+     * @throws IOException
+     */
+    public void itera(String ws, int num,ArrayList<Site> siteArray, HashMap<String, ArrayList<Site>> dic) throws IOException {
         // Read website
         Map<String, Integer> countMap;
         if (num > -1) {
@@ -612,17 +649,17 @@ public class MulticastServer extends Thread {
             e.printStackTrace();
         }
 
-        // Display words and counts
-        //for (String word : countMap.keySet()) {
-        // if (word.length() >= 3) { // Shall we ignore small words?
-        // System.out.println(word + "\t" + countMap.get(word));
-        //}
-        //}
+
         return countMap;
     }
 
 
 //FICHEIROS
+
+    /**
+     * FICHEIROS
+     * @param siteArray
+     */
     protected void escreveFicheiroObjetosSites(ArrayList<Site> siteArray){
         File f=new File("sites.txt");
 
@@ -639,6 +676,11 @@ public class MulticastServer extends Thread {
         }
 
     }
+
+    /**
+     * FICHEIROS
+     * @param dic
+     */
     protected void escreveFicheiroObjetosHashMap(HashMap<String, ArrayList<Site>> dic){
         File f=new File("hashmap.txt");
 
@@ -656,6 +698,10 @@ public class MulticastServer extends Thread {
 
     }
 
+    /**
+     * FICHEIROS
+     * @return
+     */
     protected ArrayList<Site> leFicheiroObjetosSites(){
         File f=new File("sites.txt");
         ArrayList<Site> siteArray= new ArrayList<Site>();
@@ -678,7 +724,10 @@ public class MulticastServer extends Thread {
         return siteArray;
     }
 
-
+    /**
+     * FICHEIROS
+     * @return
+     */
 
     protected HashMap< String, ArrayList<Site>>  leFicheiroObjetosHashMap(){
         File f=new File("HashMap.txt");
@@ -703,8 +752,10 @@ public class MulticastServer extends Thread {
     }
 
 
-
-
+    /**
+     * FICHEIROS
+     * @param pesquisas
+     */
     protected void escreveFicheiroPesquisas( HashMap<String, Integer> pesquisas ){
         File f=new File("pesquisas.txt");
 
@@ -722,6 +773,10 @@ public class MulticastServer extends Thread {
 
     }
 
+    /**
+     * FICHEIROS
+     * @return
+     */
     protected HashMap<String,Integer> leFicheiroPesquisas(){
         File f=new File("pesquisas.txt");
         HashMap<String, Integer> pesquisas = new HashMap<String, Integer> ();
@@ -744,6 +799,10 @@ public class MulticastServer extends Thread {
         return pesquisas;
     }
 
+    /**
+     * FICHEIROS
+     * @param listaUsers
+     */
     private void escreverFicheiroUsers(ArrayList<Utilizador> listaUsers){
         File fich = new File("Users.txt");
         try {
@@ -757,6 +816,11 @@ public class MulticastServer extends Thread {
             System.out.println("Erro ao escrever no ficheiro");
         }
     }
+
+    /**
+     * FICHEIROS
+     * @return
+     */
     private ArrayList<Utilizador> lerFicheiroUsers(){
         File fich = new File("Users.txt");
         ArrayList<Utilizador> listaUsers= new ArrayList<>() ;
@@ -814,6 +878,12 @@ public class MulticastServer extends Thread {
 
 
     // Função para fazer o sort da hashmap de pesquisas
+
+    /**
+     * Função para fazer o sort da hashmap de pesquisas
+     * @param map
+     * @return
+     */
     private static HashMap sortByValues(HashMap map) {
         List list = new LinkedList(map.entrySet());
         // Defined Custom Comparator here
@@ -875,6 +945,9 @@ class MulticastUser extends Thread {
     }
 }
 
+/**
+ * Classe utilizador
+ */
 class Utilizador implements Serializable {
     protected String username;
     protected String password;
@@ -888,6 +961,10 @@ class Utilizador implements Serializable {
 
     }
 }
+
+/**
+ * Classe site
+ */
 class Site implements Serializable {
     protected String url;
     protected String title;

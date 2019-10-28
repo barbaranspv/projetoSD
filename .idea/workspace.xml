@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="RMIServer:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/MulticastServer_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/RMIServer_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MulticastServer/MulticastServer.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MulticastServer/RMIClient.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MulticastServer/RMIServer.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MulticastServer/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/new/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,14 +37,15 @@
   <component name="ProjectId" id="1SKW4s9DwCYQLMP8Sy2q6YpNn6F" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/jsoup-1.12.1.jar!/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/new2" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="File.Encoding" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -51,8 +64,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.RMIClient">
-  <component name="RunManager" selected="Application.RMIServer">
+  <component name="RunManager" selected="Application.MulticastServer">
     <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <method v="2">
