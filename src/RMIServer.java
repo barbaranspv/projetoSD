@@ -197,12 +197,6 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
 	public void addUserOnline(String username, RMI_C_I cliente){
 		usersOnline.put(username,cliente);
-		/*
-		if(username==null)
-			System.out.println("Username a null");
-		if(cliente==null)
-			System.out.println("cliente a null");
-		 */
 		System.out.println("User: "+username+ " está online com o id: "+ cliente.toString());
         for (String i : usersOnline.keySet())
             System.out.println("key: " + i + " | value: " + usersOnline.get(i));
