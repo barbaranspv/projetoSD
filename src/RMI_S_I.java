@@ -9,6 +9,7 @@ public interface RMI_S_I extends Remote {
     String indexar(String username, String site) throws RemoteException;
     public void ping() throws RemoteException;
     public void addUserOnline(String username,RMI_C_I client) throws RemoteException;
+    public String verifyAdminPermissions(String username) throws RemoteException;
 
     String verLigacoes(String username, String page)throws RemoteException;
 

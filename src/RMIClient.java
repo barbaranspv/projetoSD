@@ -129,6 +129,31 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
     public static void MenuPrincipal(String username) throws RemoteException {
         String op;
         while(true) {
+            String admin=null;
+            try {
+                admin=server.verifyAdminPermissions(username);
+            }
+            catch(RemoteException e){
+                int contador=0;
+                while(contador<30)
+                {
+                    try {
+                        Thread.sleep(1000);
+                        server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                        admin=server.verifyAdminPermissions(username);
+                        break;
+                    }catch(NotBoundException | InterruptedException | RemoteException m){
+                        contador++;
+                        if(contador==30)
+                            System.exit(-1);
+                    }
+                }
+            }
+            if(admin.equals("User is Admin"))
+            {
+                MenuAdmin(username);
+                break;
+            }
             System.out.println("\n____________Menu Principal:___________");
             System.out.println("1-Efetuar Pesquisa");
             System.out.println("2-Ver ligações para uma determinada pagina");
@@ -143,7 +168,27 @@ public class RMIClient extends UnicastRemoteObject implements RMI_C_I{
             } else if (op.equals( "2")) {
                 System.out.println(verificarLigacoes( username));
             } else if (op.equals("3")) {
-                System.out.println(server.verPesquisas(username));
+                String answer=null;
+                try {
+                    answer=server.verPesquisas(username);
+                }
+                catch(RemoteException e){
+                    int contador=0;
+                    while(contador<30)
+                    {
+                        try {
+                            Thread.sleep(1000);
+                            server = (RMI_S_I) LocateRegistry.getRegistry(7500).lookup("project");
+                            answer=server.verPesquisas(username);
+                            break;
+                        }catch(NotBoundException | InterruptedException | RemoteException m){
+                            contador++;
+                            if(contador==30)
+                                System.exit(-1);
+                        }
+                    }
+                }
+                System.out.println(answer);
             } else if (op.equals("4")) {
                 String answer = efetuarLogout(username);
                 System.out.println(answer);
