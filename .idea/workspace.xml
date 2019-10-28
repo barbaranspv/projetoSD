@@ -2,21 +2,28 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
+      <artifact name="MulticastServer:jar" />
+      <artifact name="RMIClient:jar" />
       <artifact name="RMIServer:jar" />
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/MulticastServer_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/RMIServer_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MulticastServer/MulticastServer.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MulticastServer/RMIClient.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MulticastServer/RMIServer.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MulticastServer/src/META-INF/MANIFEST.MF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/new/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/RMIClient/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/MulticastServer_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/MulticastServer_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/RMIClient_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/RMIClient_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/RMIServer_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/RMIServer_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MulticastServer/MulticastServer.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MulticastServer/RMIClient.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MulticastServer/RMIServer.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MulticastServer/src/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/MulticastServer_jar/MulticastServer.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/RMIClient_jar/RMIClient.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/RMIServer_jar/RMIServer.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MulticastServer/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MulticastServer/META-INF/MANIFEST.MF" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,7 +47,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/new2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/RMIClient" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
@@ -64,32 +71,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.MulticastServer">
-    <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="pt.uc.dei.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MulticastServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="MulticastServer" />
-      <module name="Projeto" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JAR Application.Projeto.jar (1)">
     <configuration name="RMIClient" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RMIClient" />
       <module name="Projeto" />
@@ -97,26 +79,41 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RMIServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="RMIServer" />
-      <module name="Projeto" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+    <configuration name="MulticastServer.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/MulticastServer_jar/MulticastServer.jar" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Projeto.jar (1)" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/RMIClient_jar/Projeto.jar" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Projeto.jar (2)" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/RMIServer_jar/Projeto.jar" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Projeto.jar (3)" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/MulticastServer_jar/Projeto.jar" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Projeto.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/Projeto_jar/Projeto.jar" />
+      <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Application.RMIClient" />
-      <item itemvalue="Application.MulticastServer" />
-      <item itemvalue="Application.RMIServer" />
-      <item itemvalue="Application.Main" />
-      <item itemvalue="Application.Main (1)" />
+      <item itemvalue="JAR Application.MulticastServer.jar" />
+      <item itemvalue="JAR Application.Projeto.jar" />
+      <item itemvalue="JAR Application.Projeto.jar (1)" />
+      <item itemvalue="JAR Application.Projeto.jar (2)" />
+      <item itemvalue="JAR Application.Projeto.jar (3)" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.RMIServer" />
-        <item itemvalue="Application.MulticastServer" />
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.Main (1)" />
+        <item itemvalue="JAR Application.Projeto.jar (1)" />
+        <item itemvalue="JAR Application.Projeto.jar (3)" />
+        <item itemvalue="JAR Application.Projeto.jar (2)" />
+        <item itemvalue="JAR Application.MulticastServer.jar" />
+        <item itemvalue="JAR Application.Projeto.jar" />
       </list>
     </recent_temporary>
   </component>
