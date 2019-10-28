@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />
-    </list>
+    <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
