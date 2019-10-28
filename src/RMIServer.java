@@ -40,6 +40,11 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 	public void ping() {
 		System.out.println("Ping recebido");
 	}
+
+    /**
+     * Função para enviar pacote p multicast
+     * @param s
+     */
 //Função para enviar pacote p multicast
 	public void enviarPacote(String s) {
 		try {
@@ -55,6 +60,11 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 			e.printStackTrace();
 		}
 	}
+
+    /**
+     * Função para receber pacote do multicast
+     * @return
+     */
 //Função para receber pacote do multicast
 	public String recebePacote() {
 
@@ -68,7 +78,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 			}
 			try {
 				dSocket.receive(message);
-				System.out.println("MESSAGE: "+message.toString());
+				System.out.println("Mensagem: "+message.toString());
 				break;
 			} catch (IOException e) {
 				//dSocket.close();
@@ -78,7 +88,12 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		return new String(message.getData(), 0, message.getLength());
 	}
 
-
+    /**
+     * Função que envia e recebe info do multicast quanto ao login
+     * @param username
+     * @param password
+     * @return
+     */
 	public String confereLogin(String username, String password) {
 	    String id=chooseMulticastServer();
 		String toSend = "server !! "+id+ " ; type ! login ; username ! " + username + " ; password ! " + password;
@@ -96,6 +111,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 		return received+"-Nao tem notificacoes";
 	}
 
+    /**
+     * Função que envia e recebe info do multicast face ao registo
+     * @param username
+     * @param password
+     * @return
+     */
+
     public String registaUtilizador(String username, String password) {
         String id=chooseMulticastServer();
         String toSend = "server !! "+id+ " ; type ! register ; username ! " + username + " ; password ! " + password;
@@ -103,11 +125,23 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         String received = recebePacote();
         return received;
     }
+
+    /**
+     * Função que faz print quando servidor começa a correr e inicia checkservers, que irá verificar servidores multicast ativos
+     * @throws RemoteException
+     */
 	public void sayHello() throws RemoteException {
 		System.out.println("Servidor a correr");
         checkServers check = new checkServers();
         check.start();
 	}
+
+    /**
+     * Função que comunica com multicast para ver ligacoes de uma certa pagina
+     * @param username
+     * @param page
+     * @return
+     */
 //Função que comunica com multicast para ver ligacoes de uma certa pagina
     public String verLigacoes(String username, String page){
         String id=chooseMulticastServer();
@@ -116,6 +150,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         String received = recebePacote();
         return received;
     }
+
+
+    /**
+     * Função que comunica com multicast para ver painel administraçao
+     * @param username
+     * @return
+     */
     //Função que comunica com multicast para ver painel administraçao
     public String verPainelAdmin(String username){
         String id=chooseMulticastServer();
@@ -127,6 +168,12 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
 
     }
+
+    /**
+     * Função que comunica com multicast para ver pesquisas
+     * @param username
+     * @return
+     */
     //Função que comunica com multicast para ver pesquisas
     public String verPesquisas(String username){
         String id=chooseMulticastServer();
@@ -140,6 +187,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
 
     }
+
+    /**
+     * Função que comunica com multicast para efetuar pesquisas
+     * @param username
+     * @param pesquisa
+     * @return
+     */
     //Função que comunica com multicast para efetuar pesquisas
     public String pesquisar(String username, String pesquisa) {
         String id=chooseMulticastServer();
@@ -166,6 +220,12 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         return received;
     }
 
+    /**
+     * Função que comunica com multicast para indexar url e urls por recursao
+     * @param username
+     * @param ws
+     * @return
+     */
     //Função que comunica com multicast para indexar url e urls por recursao
     public String indexar(String username, String ws) {
         String id=chooseMulticastServer();
@@ -175,6 +235,11 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         return received;
     }
 
+    /**
+     * Função que comunica com multicast para fazer logout
+     * @param username
+     * @return
+     */
     public String logout(String username) {
         String id=chooseMulticastServer();
         String toSend = "server !! "+id+ " ; type ! logout ; username ! " + username + " ; msg ! Logging out";
@@ -182,7 +247,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         String received = recebePacote();
         return received;
     }
-	public void deleteUserOnline(String username)
+
+
+    /**
+     * Função que remove user de users online
+     * @param username
+     */
+    public void deleteUserOnline(String username)
     {
         for(String name : usersOnline.keySet())
         {
@@ -195,6 +266,11 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         }
     }
 
+    /**
+     * Função que adiciona user a users online
+     * @param username
+     * @param cliente
+     */
 	public void addUserOnline(String username, RMI_C_I cliente){
 		usersOnline.put(username,cliente);
 		/*
@@ -208,6 +284,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             System.out.println("key: " + i + " | value: " + usersOnline.get(i));
 	}
 
+    /**
+     * Função para notificar user que é admin agora
+     * @param username
+     * @param adminName
+     * @return
+     * @throws RemoteException
+     */
 	public String notifyUserToAdmin(String username,String adminName) throws RemoteException {
         String id=chooseMulticastServer();
         String toSend = "server !! "+id+" ; type ! verify ; username ! " + username + " ; msg ! Verify user";
@@ -236,6 +319,12 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             return "fail to give Admin permissions";
         }
     }
+
+    /**
+     * Verifica se é admin
+     * @param username
+     * @return
+     */
     public String verifyAdminPermissions(String username){
         String id=chooseMulticastServer();
         String toSend = "server !! "+id+" ; type ! verifyAdmin ; username ! " + username + " ; msg ! Verify admin permissions";
@@ -290,6 +379,11 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             }
         }
 	}
+
+    /**
+     * Funçao que verifica que servers multicast estao online atraves do envio e rececao de pacotes
+     * @return
+     */
 //Funçao que verifica que servers multicast estao online atraves do envio e rececao de pacotes
         public static ArrayList<String> checkActiveMulticastServers() {
             String s = "server !! 0 ; type ! checkIfOn ; ";
@@ -336,7 +430,10 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             return arrayList;
         }
 
-
+    /**
+     * Escolhe ao acaso que server multicast utilizar
+     * @return
+     */
 //Escolhe ao acaso que server multicast utilizar
     public String chooseMulticastServer() {
         int max = multicastServers.size()-1;

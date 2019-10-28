@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="" />
+    <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Users.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Users.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/JSoup.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer$checkServers.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer$checkServers.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Site.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Site.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pesquisas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pesquisas.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/JSoup.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +42,7 @@
   <component name="ProjectId" id="1SKW4s9DwCYQLMP8Sy2q6YpNn6F" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/jsoup-1.12.1.jar!/" />
@@ -28,7 +50,7 @@
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="File.Encoding" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -48,7 +70,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Application.RMIClient">
-  <component name="RunManager" selected="Application.RMIServer">
     <configuration name="Main (1)" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <method v="2">
