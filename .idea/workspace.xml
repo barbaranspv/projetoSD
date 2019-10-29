@@ -9,21 +9,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/RMIClient/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/MulticastServer_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/MulticastServer_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/RMIClient_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/RMIClient_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/RMIServer_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/RMIServer_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MulticastServer/MulticastServer.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MulticastServer/RMIClient.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MulticastServer/RMIServer.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MulticastServer/src/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/MulticastServer_jar/MulticastServer.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/RMIClient_jar/RMIClient.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/RMIServer_jar/RMIServer.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MulticastServer/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MulticastServer/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Users.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Users.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hashmap.txt" beforeDir="false" afterPath="$PROJECT_DIR$/hashmap.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMI/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIClient/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer$checkServers.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer$checkServers.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Site.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Site.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Projeto/novo/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pesquisas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pesquisas.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites.txt" beforeDir="false" afterPath="$PROJECT_DIR$/sites.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMI/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMIClient/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/novo/META-INF/MANIFEST.MF" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -71,7 +79,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JAR Application.Projeto.jar (1)">
+  <component name="RunManager" selected="Application.RMIClient">
+    <configuration name="MulticastServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="MulticastServer" />
+      <module name="Projeto" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="RMIClient" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RMIClient" />
       <module name="Projeto" />
@@ -79,41 +94,40 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MulticastServer.jar" type="JarApplication" temporary="true">
-      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/MulticastServer_jar/MulticastServer.jar" />
-      <method v="2" />
+    <configuration name="RMIServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="RMIServer" />
+      <module name="Projeto" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="Projeto.jar (1)" type="JarApplication" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/RMIClient_jar/Projeto.jar" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Projeto.jar (2)" type="JarApplication" temporary="true">
-      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/RMIServer_jar/Projeto.jar" />
       <method v="2" />
     </configuration>
     <configuration name="Projeto.jar (3)" type="JarApplication" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/MulticastServer_jar/Projeto.jar" />
       <method v="2" />
     </configuration>
-    <configuration name="Projeto.jar" type="JarApplication" temporary="true">
-      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/Projeto_jar/Projeto.jar" />
+    <configuration name="RMIServer.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/RMIServer_jar/RMIServer.jar" />
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Application.RMIClient" />
-      <item itemvalue="JAR Application.MulticastServer.jar" />
-      <item itemvalue="JAR Application.Projeto.jar" />
+      <item itemvalue="Application.MulticastServer" />
+      <item itemvalue="Application.RMIServer" />
       <item itemvalue="JAR Application.Projeto.jar (1)" />
-      <item itemvalue="JAR Application.Projeto.jar (2)" />
       <item itemvalue="JAR Application.Projeto.jar (3)" />
+      <item itemvalue="JAR Application.RMIServer.jar" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.RMIServer" />
+        <item itemvalue="Application.MulticastServer" />
+        <item itemvalue="JAR Application.RMIServer.jar" />
         <item itemvalue="JAR Application.Projeto.jar (1)" />
         <item itemvalue="JAR Application.Projeto.jar (3)" />
-        <item itemvalue="JAR Application.Projeto.jar (2)" />
-        <item itemvalue="JAR Application.MulticastServer.jar" />
-        <item itemvalue="JAR Application.Projeto.jar" />
       </list>
     </recent_temporary>
   </component>
@@ -142,6 +156,8 @@
       <workItem from="1571930636095" duration="6063000" />
       <workItem from="1572035237273" duration="2300000" />
       <workItem from="1572127613538" duration="3505000" />
+      <workItem from="1572292722434" duration="2817000" />
+      <workItem from="1572295934901" duration="2262000" />
     </task>
     <task id="LOCAL-00001" summary="big stuff">
       <created>1571611261678</created>

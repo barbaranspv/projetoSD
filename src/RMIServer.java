@@ -51,23 +51,15 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 			MulticastSocket socket = new MulticastSocket();
 			InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
 			socket.joinGroup(group);
-
 			byte[] buffer = s.getBytes();
 			DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(MULTICAST_ADDRESS), PORT);
 			socket.send(packet);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
-    /**
-     * Função para receber pacote do multicast
-     * @return
-     */
 //Função para receber pacote do multicast
 	public String recebePacote() {
-
 		byte[] buffer = new byte[2000];
 		DatagramPacket message = new DatagramPacket(buffer, buffer.length);
 		while (true) {
@@ -385,16 +377,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
                 MulticastSocket socket = new MulticastSocket();
                 InetAddress group = InetAddress.getByName("224.3.2.3");
                 socket.joinGroup(group);
-
                 byte[] buffer = s.getBytes();
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("224.3.2.3"), PORT);
                 socket.send(packet);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
             nSocket = null;
-
             try {
                 nSocket = new DatagramSocket(4372);
             } catch (SocketException e) {
@@ -404,9 +393,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             byte[] buffer = new byte[1000];
             DatagramPacket request = new DatagramPacket(buffer, buffer.length);
             while (true) {
-
                 try {
-
                     nSocket.receive(request);
                     String temp = new String(request.getData(), 0, request.getLength());
                     String[] split = temp.split(" !! ");
@@ -415,10 +402,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
                     break;
                 } catch (IOException e) {
                     nSocket.close();
-
                 }
-
-
             }
             nSocket.close();
             return arrayList;

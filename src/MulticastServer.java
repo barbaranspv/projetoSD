@@ -279,37 +279,29 @@ public class MulticastServer extends Thread {
         ArrayList<Site> siteArray = leFicheiroObjetosSites();
         HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
         pesquisas = sortByValues(pesquisas);
-
         String info= "------------------PAINEL DE ADMINISTRAÇÃO-----------------\nWebsites mais importantes:\n";
         if (siteArray.size()>10) {
             for (int i = 0; i < 10; i++) {
-                info = info + i + " - "+siteArray.get(i).title+" - " + siteArray.get(i).url + "\n";
-            }
+                info = info + i + " - "+siteArray.get(i).title+" - " + siteArray.get(i).url + "\n"; }
         }
         else{
             for (int i = 0; i < siteArray.size(); i++) {
-                info = info + i + " - " +siteArray.get(i).title+" - "+ siteArray.get(i).url + "\n";
-            }
+                info = info + i + " - " +siteArray.get(i).title+" - "+ siteArray.get(i).url + "\n"; }
         }
         info=info+ "\n" + "Pesquisas mais comuns: \n";
         int conta=0;
-
         if (pesquisas.size()>10){
             for (String key: pesquisas.keySet()){
                 conta=conta+1;
                 info=info+conta+ " - "+key+" - "+ pesquisas.get(key) + "\n";
-
                 if (conta==10)
-                    break;
-            }
+                    break; }
         }
-
         else{
             for (String key: pesquisas.keySet()) {
                 conta = conta + 1;
                 info = info + conta +" - "+key+ " - " + pesquisas.get(key) + "\n";
             }
-
         }
         return info;
     }
@@ -394,8 +386,6 @@ public class MulticastServer extends Thread {
         HashMap<String, ArrayList<Site>> dic=leFicheiroObjetosHashMap();
         for (int i = 0; i < kw.length; i++) {
             if (!dic.containsKey(kw[i]) || (dic.get(kw[i]).size() == 0)) {
-
-
             } else {
                 for (int j = 0; j < dic.get(kw[i]).size(); j++)
                     temp.add(dic.get(kw[i]).get(j).url);
@@ -410,7 +400,6 @@ public class MulticastServer extends Thread {
                     }
                 }
             }
-
         }
         String searchStr="";
         if  (search.size() == 0) {
@@ -422,8 +411,7 @@ public class MulticastServer extends Thread {
             for (int i = 0; i < search.size(); i++) {
                 searchStr = search.get(i).title + "\n" + search.get(i).url + "\n" + search.get(i).text + "\n" + search.get(i).countPages;
                 enviaInfoRMI(socket, packet.getAddress(), searchStr);
-            }return "Foram encontrados "+ search.size()+ " resultados!";
-        }
+            }return "Foram encontrados "+ search.size()+ " resultados!"; }
         else {
             Collections.sort(search, (Site s1, Site s2) ->  (s2.countPages - s1.countPages));
             enviaInfoRMI(socket, packet.getAddress(), "20");
@@ -448,20 +436,16 @@ public class MulticastServer extends Thread {
         Map<String, Integer> countMap ;
         HashMap<String, ArrayList<Site>> dic= leFicheiroObjetosHashMap();
         ArrayList<Site> siteArray = leFicheiroObjetosSites();
-        // Read website
         try {
             if (! ws.startsWith("http://") && ! ws.startsWith("https://"))
                 ws = "http://".concat(ws);
             int i;
-
             int controlo=0;
             System.out.println("Loading websites...");
             for (i =0; i< siteArray.size();i++){
                 if (siteArray.get(i).url.equals(ws)){
                     controlo=controlo+1;
-                    break;
-                }
-            }
+                    break; } }
             if (controlo==0) {
                 // Attempt to connect and get the document
                 Document doc = Jsoup.connect(ws).get();
@@ -474,13 +458,11 @@ public class MulticastServer extends Thread {
                     site.text = doc.text();
                 countMap = countWords(doc.text());
                 site.words = countMap.keySet().toArray(new String[countMap.size()]);
-                siteArray.add(site);
-            }
+                siteArray.add(site); }
             itera(ws,1,siteArray,dic);
             Collections.sort(siteArray, (Site s1, Site s2) ->  (s2.countPages - s1.countPages));
             escreveFicheiroObjetosHashMap(dic);
             escreveFicheiroObjetosSites(siteArray);
-            // Get website text and count words
             String answer=ws+ " indexado, bem como outros indexados recursivamente.";
             return answer;
 
@@ -511,34 +493,22 @@ public class MulticastServer extends Thread {
             try {
                 if (!ws.startsWith("http://") && !ws.startsWith("https://"))
                     ws = "http://".concat(ws);
-
-                // Attempt to connect and get the document
-
                 Document doc = Jsoup.connect(ws).get();  // Documentation: https://jsoup.org/
-
-                // Title
-                //System.out.println(doc.title() + "\n");
-
-                // Get all links
                 Elements links = doc.select("a[href]");
                 int j;
                 for (j = 0; j < siteArray.size(); j++) {
                     if (siteArray.get(j).url.equals(ws))
                         break;
                 }
-
                 for (Element link : links) {
                     // Ignore bookmarks within the page
                     if (link.attr("href").startsWith("#")) {
                         continue;
                     }
-
                     // Shall we ignore local links? Otherwise we have to rebuild them for future parsing
                     if (!link.attr("href").startsWith("http")) {
                         continue;
                     }
-                    // System.out.println("Link: " + link.attr("href"));
-                    //System.out.println("Text: " + link.text() + "\n");
                     String text = doc.text(); // We can use doc.body().text() if we only want to get text from <body></body>
                     countMap = countWords(text);
                     int controlo = 0;
@@ -562,12 +532,10 @@ public class MulticastServer extends Thread {
                         siteArray.add(site);
                     } else if (controlo == 1) {
                         site = siteArray.get(i);
-
                     }
                     controlo = 0;
                     for (i = 0; i < site.pages.size(); i++) {
                         if (site.pages.get(i).url.equals(siteArray.get(j).url)) {
-
                             controlo = controlo + 1;
                             break;
                         }
@@ -576,7 +544,6 @@ public class MulticastServer extends Thread {
                         site.countPages = site.countPages + 1;
                         site.pages.add(siteArray.get(j));
                     }
-
                     for (String word : countMap.keySet()) {
                         if (!dic.containsKey(word)) {
                             ArrayList<Site> outrosLinks = new ArrayList<>();
@@ -598,9 +565,6 @@ public class MulticastServer extends Thread {
                     itera(link.attr("href"), num - 1,siteArray, dic);
 
                 }
-
-
-                // Get website text and count words
 
             }
             catch (HttpStatusException f){
@@ -624,7 +588,7 @@ public class MulticastServer extends Thread {
             try {
                 if ((line = reader.readLine()) == null)
                     break;
-                String[] words = line.split("[ ,;:.?!“”(){}\\[\\]<>']+");
+                String[] words = line.split("[ ,;:.?!(){}\\[\\]<>']+");
                 for (String word : words) {
                     word = word.toLowerCase();
                     if ("".equals(word)) {
