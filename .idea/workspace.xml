@@ -10,12 +10,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Users.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Users.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hashmap.txt" beforeDir="false" afterPath="$PROJECT_DIR$/hashmap.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pesquisas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pesquisas.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites.txt" beforeDir="false" afterPath="$PROJECT_DIR$/sites.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -64,7 +58,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.MulticastServer">
+  <component name="RunManager" selected="Application.RMIServer">
     <configuration name="MulticastServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MulticastServer" />
       <module name="Projeto" />
@@ -100,8 +94,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.MulticastServer" />
         <item itemvalue="Application.RMIServer" />
+        <item itemvalue="Application.MulticastServer" />
       </list>
     </recent_temporary>
   </component>
@@ -136,7 +130,7 @@
       <workItem from="1573824332238" duration="58000" />
       <workItem from="1573828475644" duration="1151000" />
       <workItem from="1574783625109" duration="417000" />
-      <workItem from="1574784230747" duration="6481000" />
+      <workItem from="1574784230747" duration="8578000" />
     </task>
     <task id="LOCAL-00001" summary="big stuff">
       <created>1571611261678</created>

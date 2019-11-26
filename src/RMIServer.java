@@ -21,11 +21,11 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
     private  HashMap<String,RMI_C_I> usersOnline;
     private static DatagramSocket nSocket;
     private static boolean run=true;
-    checkServers check;
+    static checkServers check;
 
     public RMIServer() throws RemoteException, SocketException {
         super();
-        checkServers check = new checkServers();
+        check = new checkServers();
         check.start();
         try{
 
@@ -163,6 +163,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
      */
     //Função que comunica com multicast para ver painel administraçao
     public String verPainelAdmin(String username){
+        System.out.println("ali");
         String id=chooseMulticastServer();
         String toSend = "server !! "+id+ " ; type ! verAdmin ; username ! " + username ;
         enviarPacote(toSend); //enviar ao Multicast Server
@@ -353,12 +354,11 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
                 programFails = false;
                 try {
                     Thread.sleep(500);
-
                     LocateRegistry.createRegistry(7500).rebind("project",server);
                     run=false;
                     System.out.println("Connected! Server Backup assumed");
                     run=true;
-                    checkServers check = new checkServers();
+                    check = new checkServers();
                     check.start();
 
                 } catch (RemoteException | InterruptedException b) {
@@ -380,6 +380,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
             }
         }
     }
