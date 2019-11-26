@@ -9,29 +9,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Users.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Users.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hashmap.txt" beforeDir="false" afterPath="$PROJECT_DIR$/hashmap.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/META-INF/MANIFEST.MF" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/MulticastUser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMI/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIClient/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer$checkServers.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer$checkServers.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Site.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Site.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Projeto/Utilizador.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/novo/META-INF/MANIFEST.MF" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pesquisas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/pesquisas.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites.txt" beforeDir="false" afterPath="$PROJECT_DIR$/sites.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MulticastServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MulticastServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMI/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMIClient/META-INF/MANIFEST.MF" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/novo/META-INF/MANIFEST.MF" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -55,12 +40,12 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/RMIClient" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="File.Encoding" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -79,8 +64,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.RMIClient">
-    <configuration name="MulticastServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Application.MulticastServer">
+    <configuration name="MulticastServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MulticastServer" />
       <module name="Projeto" />
       <method v="2">
@@ -94,7 +79,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RMIServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="RMIServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="RMIServer" />
       <module name="Projeto" />
       <method v="2">
@@ -113,21 +98,10 @@
       <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/RMIServer_jar/RMIServer.jar" />
       <method v="2" />
     </configuration>
-    <list>
-      <item itemvalue="Application.RMIClient" />
-      <item itemvalue="Application.MulticastServer" />
-      <item itemvalue="Application.RMIServer" />
-      <item itemvalue="JAR Application.Projeto.jar (1)" />
-      <item itemvalue="JAR Application.Projeto.jar (3)" />
-      <item itemvalue="JAR Application.RMIServer.jar" />
-    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.RMIServer" />
         <item itemvalue="Application.MulticastServer" />
-        <item itemvalue="JAR Application.RMIServer.jar" />
-        <item itemvalue="JAR Application.Projeto.jar (1)" />
-        <item itemvalue="JAR Application.Projeto.jar (3)" />
+        <item itemvalue="Application.RMIServer" />
       </list>
     </recent_temporary>
   </component>
@@ -157,7 +131,12 @@
       <workItem from="1572035237273" duration="2300000" />
       <workItem from="1572127613538" duration="3505000" />
       <workItem from="1572292722434" duration="2817000" />
-      <workItem from="1572295934901" duration="2262000" />
+      <workItem from="1572295934901" duration="2761000" />
+      <workItem from="1572358514660" duration="6215000" />
+      <workItem from="1573824332238" duration="58000" />
+      <workItem from="1573828475644" duration="1151000" />
+      <workItem from="1574783625109" duration="417000" />
+      <workItem from="1574784230747" duration="6481000" />
     </task>
     <task id="LOCAL-00001" summary="big stuff">
       <created>1571611261678</created>
@@ -180,6 +159,20 @@
             <State>
               <option name="COLUMN_ORDER" />
             </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
           </value>
         </entry>
       </map>

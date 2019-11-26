@@ -12,6 +12,12 @@ import java.util.*;
 
 public class MulticastServer extends Thread {
     private String MULTICAST_ADDRESS = "224.3.2.3";
+    public ArrayList<Utilizador> listaUsers =lerFicheiroUsers();
+    public HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
+    public ArrayList<Site> siteArray = leFicheiroObjetosSites();
+    public HashMap< String, ArrayList<Site>> dic=leFicheiroObjetosHashMap();
+
+
     private int PORT = 4371;
     public int id;
 
@@ -50,15 +56,14 @@ public class MulticastServer extends Thread {
             socket = new MulticastSocket(PORT);  // create socket and bind it
             InetAddress group = InetAddress.getByName(MULTICAST_ADDRESS);
             socket.joinGroup(group);
+            System.out.println("ready");
             while (true) {
                 byte[] buffer = new byte[256];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
-
                 System.out.println("Received packet from " + packet.getAddress().getHostAddress() + ":" + packet.getPort() + " with message:");
                 String message = new String(packet.getData(), 0, packet.getLength());
                 System.out.println(message);
-
                 String[] result = message.split(" ; ");
                 String[] server = result[0].split(" !! ");
                 String[] type = result[1].split(" ! ");
@@ -79,7 +84,7 @@ public class MulticastServer extends Thread {
                             System.out.println("entrei no login");
                             String username = result[2].split(" ! ")[1];
                             String password = result[3].split(" ! ")[1];
-                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers();
+
                             if (listaUsers.size() == 0)
                                 enviaInfoRMI(socket, packet.getAddress(), "Utilizador não existente, por favor efetue o registo");
                             else {
@@ -111,7 +116,6 @@ public class MulticastServer extends Thread {
                             }
                         }
                         else if (type[1].equals("register")) {
-                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers(); ;
                             String username = result[2].split(" ! ")[1];
                             String password = result[3].split(" ! ")[1];
                             if (listaUsers.isEmpty() == true) {
@@ -140,7 +144,6 @@ public class MulticastServer extends Thread {
                         else if (type[1].equals("search")) {
                             String username = result[2].split(" ! ")[1];
                             String kw = result[3].split(" ! ")[1];
-                            HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
                             if (pesquisas.containsKey(kw))
                                 pesquisas.put(kw,pesquisas.get(kw)+1);
                             else
@@ -148,7 +151,6 @@ public class MulticastServer extends Thread {
                             escreveFicheiroPesquisas(pesquisas);
                             String[] kwArray = kw.split(" ");
                             String search="";
-                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers(); ;
                             for (int i=0; i< listaUsers.size();i++){
                                 if (username.equals(listaUsers.get(i).username)){
                                     listaUsers.get(i).pesquisas.add(kw);
@@ -188,7 +190,6 @@ public class MulticastServer extends Thread {
                         }else if (type[1].equals("verPesquisas")){
                             String username = result[2].split(" ! ")[1];
                             String pesquisas="";
-                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers(); ;
                             for (int i=0; i< listaUsers.size();i++){
                                 if (username.equals(listaUsers.get(i).username)){
                                     for (int j=0;j< listaUsers.get(i).pesquisas.size();j++ ){
@@ -219,7 +220,6 @@ public class MulticastServer extends Thread {
                             String username = result[2].split(" ! ")[1];
                             int userIsAdmin=0;
                             System.out.println("Verificando se o user "+username+" foi nomeado como admin");
-                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers();
                             for (int i = listaUsers.size() - 1; i >= 0; i--) {
                                 if(listaUsers.get(i).username.equals(username)) {
                                     if(listaUsers.get(i).admin==true){
@@ -235,7 +235,6 @@ public class MulticastServer extends Thread {
                         }
                         else if (type[1].equals("verify")) {
                             int userExist=0;
-                            ArrayList<Utilizador> listaUsers =lerFicheiroUsers(); ;
 
                             int i;
                             String username = result[2].split(" ! ")[1];
@@ -276,8 +275,6 @@ public class MulticastServer extends Thread {
      */
 //Prepara painel admin
     public String verPainelAdmin() {
-        ArrayList<Site> siteArray = leFicheiroObjetosSites();
-        HashMap<String, Integer> pesquisas = leFicheiroPesquisas();
         pesquisas = sortByValues(pesquisas);
         String info= "------------------PAINEL DE ADMINISTRAÇÃO-----------------\nWebsites mais importantes:\n";
         if (siteArray.size()>10) {
@@ -346,7 +343,7 @@ public class MulticastServer extends Thread {
      */
     public String search(String kw, MulticastSocket socket ,DatagramPacket packet){
         String search;
-        HashMap< String, ArrayList<Site>> dic=leFicheiroObjetosHashMap(); //leFicheiroObjetosHashMap();  new HashMap< String, ArrayList<Site>>();
+         //leFicheiroObjetosHashMap();  new HashMap< String, ArrayList<Site>>();
         if (!dic.containsKey(kw) || (dic.get(kw).size() == 0)) {
             enviaInfoRMI(socket, packet.getAddress(), "0");
             return "Não foram encontrados resultados!";
@@ -383,7 +380,6 @@ public class MulticastServer extends Thread {
     public String searchMultiple(String[] kw, MulticastSocket socket ,DatagramPacket packet) {
         ArrayList<String> temp = new ArrayList<>();
         ArrayList<Site> search = new ArrayList<>();
-        HashMap<String, ArrayList<Site>> dic=leFicheiroObjetosHashMap();
         for (int i = 0; i < kw.length; i++) {
             if (!dic.containsKey(kw[i]) || (dic.get(kw[i]).size() == 0)) {
             } else {
@@ -434,8 +430,7 @@ public class MulticastServer extends Thread {
      */
     public String loadSite(String ws){
         Map<String, Integer> countMap ;
-        HashMap<String, ArrayList<Site>> dic= leFicheiroObjetosHashMap();
-        ArrayList<Site> siteArray = leFicheiroObjetosSites();
+
         try {
             if (! ws.startsWith("http://") && ! ws.startsWith("https://"))
                 ws = "http://".concat(ws);
@@ -868,10 +863,6 @@ public class MulticastServer extends Thread {
         return sortedHashMap;
     }
 }
-
-
-
-
 
 
 
