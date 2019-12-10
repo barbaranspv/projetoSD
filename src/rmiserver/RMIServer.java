@@ -1,14 +1,12 @@
+package rmiserver;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
-import java.rmi.*;
-import java.rmi.server.*;
+import java.io.IOException;
 import java.net.*;
-import java.io.*;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 
@@ -40,6 +38,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         usersOnline = new HashMap<>();
     }
     //criar classe com extend thread para aplicar o run para o backup
+
+
+
+    public String ola() throws RemoteException{
+        System.out.println("Print no rmi do tomcat");
+        return "ola123";
+    }
 
 
     public void ping() {
@@ -169,10 +174,12 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         enviarPacote(toSend); //enviar ao Multicast Server
         String received = recebePacote();
         System.out.println(received);
+        received=received+ "Servidores multicast ativos:\n"+ multicastServers.size();
         return received;
 
 
     }
+
 
     /**
      * Função que comunica com multicast para ver pesquisas
@@ -200,26 +207,27 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
      * @return
      */
     //Função que comunica com multicast para efetuar pesquisas
-    public String pesquisar(String username, String pesquisa) {
+    public ArrayList pesquisar(String username, String pesquisa) {
         String id=chooseMulticastServer();
         String toSend ="server !! "+id+  " ; type ! search ; username ! " + username + " ; key words ! " + pesquisa;
         enviarPacote(toSend); //enviar ao Multicast Server
         String size;
-        String received = "";
+        ArrayList<String> received = new ArrayList();
         int sizeint;
         size = recebePacote();
         sizeint = Integer.parseInt(size);
         if (sizeint != 0) {
             for (int i = 0; i < sizeint; i++) {
-                received = received + recebePacote() + "\n\n";
+                System.out.println("AJUDA");
+                received.add(recebePacote());
 
             }
 
-            received = received + recebePacote() + "Mostrando os " + sizeint + " mais relevantes!";
+            received.add( recebePacote() + "Mostrando os " + sizeint + " mais relevantes!");
         }
 
         else
-            received=recebePacote();
+            received.add(recebePacote());
 
         //System.out.println(received);
         return received;
