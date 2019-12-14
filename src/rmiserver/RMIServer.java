@@ -1,5 +1,5 @@
+package rmiserver;
 
-<<<<<<< HEAD:src/rmiserver/RMIServer.java
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.*;
 import com.github.scribejava.core.oauth.OAuthService;
@@ -12,18 +12,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-=======
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
-import java.rmi.*;
-import java.rmi.server.*;
->>>>>>> parent of 1d96523... ok:src/RMIServer.java
 import java.net.*;
-import java.io.*;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 
@@ -33,6 +27,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
     private MulticastSocket dSocket;
     private static ArrayList<String> multicastServers = new ArrayList<>();
     private  HashMap<String, String> notificacoes;
+    private  HashMap<String, String> notificacoesBean= new HashMap<>();
     private  HashMap<String,RMI_C_I> usersOnline;
     private static DatagramSocket nSocket;
     private static boolean run=true;
@@ -197,6 +192,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
     }
 
+
     /**
      * Função que comunica com multicast para ver pesquisas
      * @param username
@@ -223,37 +219,28 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
      * @return
      */
     //Função que comunica com multicast para efetuar pesquisas
-    public String pesquisar(String username, String pesquisa) {
+    public ArrayList pesquisar(String username, String pesquisa) {
         String id=chooseMulticastServer();
         String toSend ="server !! "+id+  " ; type ! search ; username ! " + username + " ; key words ! " + pesquisa;
         enviarPacote(toSend); //enviar ao Multicast Server
         String size;
-<<<<<<< HEAD:src/rmiserver/RMIServer.java
         String recebe;
         ArrayList<String> received = new ArrayList();
-=======
-        String received = "";
->>>>>>> parent of 1d96523... ok:src/RMIServer.java
         int sizeint;
         size = recebePacote();
         sizeint = Integer.parseInt(size);
         if (sizeint != 0) {
             for (int i = 0; i < sizeint; i++) {
-<<<<<<< HEAD:src/rmiserver/RMIServer.java
                 System.out.println("AJUDA");
                 recebe=recebePacote();
                 received.add(recebe + "Linguagem original: " + getLang(recebe)+"\n");
-=======
-                received = received + recebePacote() + "\n\n";
-
->>>>>>> parent of 1d96523... ok:src/RMIServer.java
             }
 
-            received = received + recebePacote() + "Mostrando os " + sizeint + " mais relevantes!";
+            received.add( recebePacote() + "Mostrando os " + sizeint + " mais relevantes!");
         }
 
         else
-            received=recebePacote();
+            received.add(recebePacote());
 
         //System.out.println(received);
         return received;
@@ -269,39 +256,39 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         String[] temp=null;
         try {
             if (!string.equals("")){
-            // Initiate the REST client.
-            temp=string.split("\n");
-            text=temp[2].replaceAll(" ","%20");
+                // Initiate the REST client.
+                temp=string.split("\n");
+                text=temp[2].replaceAll(" ","%20");
 
-            System.out.println(string);
-            URL url = new URL("https://translate.yandex.net/api/v1.5/tr.json/detect?key=trnsl.1.1.20191211T202548Z.c64b5c1f5cdd8ab5.be998cf218e819ba4779266908b1cbc1bc41c18d&text="+text);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            // HTTP Verb
-            connection.setRequestMethod("GET");
-            // Get requests data from the server.
+                System.out.println(string);
+                URL url = new URL("https://translate.yandex.net/api/v1.5/tr.json/detect?key=trnsl.1.1.20191211T202548Z.c64b5c1f5cdd8ab5.be998cf218e819ba4779266908b1cbc1bc41c18d&text="+text);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                // HTTP Verb
+                connection.setRequestMethod("GET");
+                // Get requests data from the server.
 
-            connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Content-Type", "application/json");
 
-            int status = connection.getResponseCode();
-            BufferedReader in = new BufferedReader( new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            StringBuffer content = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            in.close();
-            connection.disconnect();
-            System.out.println(content);
-            JSONObject jsonObj = (JSONObject) JSONValue.parse(content.toString());
+                int status = connection.getResponseCode();
+                BufferedReader in = new BufferedReader( new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuffer content = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+                in.close();
+                connection.disconnect();
+                System.out.println(content);
+                JSONObject jsonObj = (JSONObject) JSONValue.parse(content.toString());
 
-            lang= (String) jsonObj.get("lang");
-            Reader streamReader = null;
+                lang= (String) jsonObj.get("lang");
+                Reader streamReader = null;
 
-            if (status > 299) {
-                streamReader = new InputStreamReader(connection.getErrorStream());
-            } else {
-                streamReader = new InputStreamReader(connection.getInputStream());
-            }
+                if (status > 299) {
+                    streamReader = new InputStreamReader(connection.getErrorStream());
+                } else {
+                    streamReader = new InputStreamReader(connection.getInputStream());
+                }
             }
         } catch(IOException e) {
             e.printStackTrace();
@@ -344,7 +331,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             translated= (JSONArray)jsonObj.get("text");
             if (translated != null) {
 
-                    translatedstr=translated.get(0).toString();
+                translatedstr=translated.get(0).toString();
 
             }
             System.out.println(translatedstr);
@@ -466,7 +453,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         String apiSecret = "***REMOVED***";
         System.out.println("help");
 
-         service = new ServiceBuilder()
+        service = new ServiceBuilder()
                 .provider(FacebookApi2.class)
                 .apiKey(apiKey)
                 .apiSecret(apiSecret)
@@ -484,37 +471,37 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
     @Override
     public String authUser(String code) throws RemoteException {
-            String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/me";
-            Token EMPTY_TOKEN = null;
+        String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/me";
+        Token EMPTY_TOKEN = null;
 
-            System.out.println("And paste the authorization code here");
-            System.out.print(">>");
-            Verifier verifier = new Verifier(code);
+        System.out.println("And paste the authorization code here");
+        System.out.print(">>");
+        Verifier verifier = new Verifier(code);
 
 
-            System.out.println();
+        System.out.println();
 
-            // Trade the Request Token and Verfier for the Access Token
-            System.out.println("Trading the Request Token for an Access Token...");
-            Token accessToken = service.getAccessToken(EMPTY_TOKEN, verifier);
-            System.out.println("Got the Access Token!");
-            System.out.println("(if your curious it looks like this: " + accessToken + " )");
-            System.out.println();
+        // Trade the Request Token and Verfier for the Access Token
+        System.out.println("Trading the Request Token for an Access Token...");
+        Token accessToken = service.getAccessToken(EMPTY_TOKEN, verifier);
+        System.out.println("Got the Access Token!");
+        System.out.println("(if your curious it looks like this: " + accessToken + " )");
+        System.out.println();
 
-            // Now let's go and ask for a protected resource!
-            System.out.println("Now we're going to access a protected resource...");
-            OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL, service);
-            service.signRequest(accessToken, request);
-            Response response = request.send();
-            System.out.println("Got it! Lets see what we found...");
-            System.out.println();
-            System.out.println(response.getCode());
-            System.out.println(response.getBody());
+        // Now let's go and ask for a protected resource!
+        System.out.println("Now we're going to access a protected resource...");
+        OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL, service);
+        service.signRequest(accessToken, request);
+        Response response = request.send();
+        System.out.println("Got it! Lets see what we found...");
+        System.out.println();
+        System.out.println(response.getCode());
+        System.out.println(response.getBody());
 
-            System.out.println();
-            System.out.println("Thats it man! Go and build something awesome with Scribe! :)");
-            return response.getBody();
-        }
+        System.out.println();
+        System.out.println("Thats it man! Go and build something awesome with Scribe! :)");
+        return response.getBody();
+    }
 
 
 
@@ -553,6 +540,18 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             System.out.println(info);
             return "fail to give Admin permissions";
         }
+    }
+
+
+
+    public HashMap<String, String> buscaParaNotificar(String username){
+        HashMap<String, String> notificacoesBean2;
+        System.out.println("notificacoesBean size: "+this.notificacoesBean.size());
+        notificacoesBean2=(HashMap) this.notificacoesBean.clone();
+        System.out.println("notificacoesBean2 size: "+notificacoesBean2.size());
+        this.notificacoesBean.remove(username);
+        System.out.println("notificacoesBean2 size apos remove: "+notificacoesBean2.size());
+        return notificacoesBean2;
     }
 
     /**
@@ -651,5 +650,3 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         return multicastServers.get(n);
     }
 }
-
-
