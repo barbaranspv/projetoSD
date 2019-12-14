@@ -27,10 +27,5 @@ public interface RMI_S_I extends Remote {
     String verPainelAdmin(String username) throws RemoteException;
 
     HashMap<String, String> buscaParaNotificar(String username) throws RemoteException;
-    String traduzir(String s) throws RemoteException;
-    String addFacebook() throws RemoteException;
-    String authUser(String code) throws RemoteException;
-
-
 
 }
