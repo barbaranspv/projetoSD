@@ -1,5 +1,4 @@
-
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+package rmiserver;
 
 import java.rmi.*;
 import java.rmi.server.*;
@@ -8,7 +7,6 @@ import java.io.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 

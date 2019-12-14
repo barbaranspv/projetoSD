@@ -1,5 +1,5 @@
-import java.net.MalformedURLException;
-import java.net.SocketException;
+package rmiserver;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
