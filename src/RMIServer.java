@@ -1,13 +1,16 @@
-package rmiserver;
 
-import java.io.IOException;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
+import java.rmi.*;
+import java.rmi.server.*;
 import java.net.*;
-import java.rmi.RemoteException;
+import java.io.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+
 
 public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
     static private int PORT = 4371;
@@ -15,7 +18,6 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
     private MulticastSocket dSocket;
     private static ArrayList<String> multicastServers = new ArrayList<>();
     private  HashMap<String, String> notificacoes;
-    private  HashMap<String, String> notificacoesBean;
     private  HashMap<String,RMI_C_I> usersOnline;
     private static DatagramSocket nSocket;
     private static boolean run=true;
@@ -34,16 +36,10 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         catch(IOException b){
             System.out.println("Falha ao criar o socket");
         }
-        notificacoesBean = new HashMap<>();
         notificacoes = new HashMap<>();
         usersOnline = new HashMap<>();
     }
     //criar classe com extend thread para aplicar o run para o backup
-
-    public String ola() throws RemoteException{
-        System.out.println("Print no rmi do tomcat");
-        return "ola123";
-    }
 
 
     public void ping() {
@@ -120,16 +116,6 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         return received+"-Nao tem notificacoes";
     }
 
-    public HashMap<String, String> buscaParaNotificar(String username){
-        HashMap<String, String> notificacoesBean2;
-        System.out.println("notificacoesBean size: "+this.notificacoesBean.size());
-        notificacoesBean2=(HashMap) this.notificacoesBean.clone();
-        System.out.println("notificacoesBean2 size: "+notificacoesBean2.size());
-        this.notificacoesBean.remove(username);
-        System.out.println("notificacoesBean2 size apos remove: "+notificacoesBean2.size());
-        return notificacoesBean2;
-    }
-
     /**
      * Função que envia e recebe info do multicast face ao registo
      * @param username
@@ -184,8 +170,9 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         String received = recebePacote();
         System.out.println(received);
         return received;
-    }
 
+
+    }
 
     /**
      * Função que comunica com multicast para ver pesquisas
@@ -213,27 +200,26 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
      * @return
      */
     //Função que comunica com multicast para efetuar pesquisas
-    public ArrayList pesquisar(String username, String pesquisa) {
+    public String pesquisar(String username, String pesquisa) {
         String id=chooseMulticastServer();
         String toSend ="server !! "+id+  " ; type ! search ; username ! " + username + " ; key words ! " + pesquisa;
         enviarPacote(toSend); //enviar ao Multicast Server
         String size;
-        ArrayList<String> received = new ArrayList();
+        String received = "";
         int sizeint;
         size = recebePacote();
         sizeint = Integer.parseInt(size);
         if (sizeint != 0) {
             for (int i = 0; i < sizeint; i++) {
-                System.out.println("AJUDA");
-                received.add(recebePacote());
+                received = received + recebePacote() + "\n\n";
 
             }
 
-            received.add( recebePacote() + "Mostrando os " + sizeint + " mais relevantes!");
+            received = received + recebePacote() + "Mostrando os " + sizeint + " mais relevantes!";
         }
 
         else
-            received.add(recebePacote());
+            received=recebePacote();
 
         //System.out.println(received);
         return received;
@@ -322,15 +308,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             if (usersOnline.containsKey(username)){ //se o user que se vai tornar admin estiver online, temos de o notificar
                 //notificar o utilizador que é admin
                 usersOnline.get(username).showNotification(message);
-                return "n|Definiste o utilizador " + username + " como Administrador.";
+                return "Definiste o utilizador " + username + " como Administrador.";
             }
             else{
                 //guardar notificacao para quando ficar online
                 notificacoes.put(username,message);
-                this.notificacoesBean.put(username,message);
-                System.out.println("Coloquei as notificaçoes:\n");
                 //quando alguem ficar online verificar as notificacoes
-                return "n|Definiste o utilizador " + username + " como Administrador. Ele sera notificado quando estiver online";
+                return "\nDefiniste o utilizador " + username + " como Administrador. Ele sera notificado quando estiver online";
             }
         }
         else if(info[1].equals("User not found"))
