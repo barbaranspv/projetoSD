@@ -9,21 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f49f082-5c5e-4241-b98b-711670074703" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/new/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/new2/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/new2/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer$checkServers.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMIServer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMI_C_I.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Projeto/RMI_S_I.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rmiserver/RMIClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rmiserver/RMIServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMI_C_I.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rmiserver/RMI_C_I.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMI_S_I.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/rmiserver/RMI_S_I.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMIServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMIServer.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,12 +34,12 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ProjetoSD2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -71,7 +58,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.RMIClient">
+  <component name="RunManager" selected="Application.RMIServer">
     <configuration name="MulticastServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MulticastServer" />
       <module name="Projeto" />
@@ -80,14 +67,14 @@
       </method>
     </configuration>
     <configuration name="RMIClient" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="rmiserver.RMIClient" />
+      <option name="MAIN_CLASS_NAME" value="RMIClient" />
       <module name="Projeto" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="RMIServer" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="rmiserver.RMIServer" />
+      <option name="MAIN_CLASS_NAME" value="RMIServer" />
       <module name="Projeto" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -144,9 +131,6 @@
       <workItem from="1573828475644" duration="1151000" />
       <workItem from="1574783625109" duration="417000" />
       <workItem from="1574784230747" duration="8578000" />
-      <workItem from="1575929800171" duration="2165000" />
-      <workItem from="1574784230747" duration="9400000" />
-      <workItem from="1575659280982" duration="7740000" />
     </task>
     <task id="LOCAL-00001" summary="big stuff">
       <created>1571611261678</created>

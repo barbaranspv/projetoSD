@@ -1,24 +1,16 @@
-package rmiserver;
 
-import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.model.*;
-import com.github.scribejava.core.oauth.OAuthService;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import uc.sd.apis.FacebookApi2;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.rmi.*;
+import java.rmi.server.*;
 import java.net.*;
-import java.rmi.RemoteException;
+import java.io.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+
 
 public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
     static private int PORT = 4371;
@@ -26,15 +18,14 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
     private MulticastSocket dSocket;
     private static ArrayList<String> multicastServers = new ArrayList<>();
     private  HashMap<String, String> notificacoes;
-    private  HashMap<String, String> notificacoesBean;
     private  HashMap<String,RMI_C_I> usersOnline;
     private static DatagramSocket nSocket;
     private static boolean run=true;
-    private static checkServers check=new checkServers();
-    private OAuthService service;
+    static checkServers check;
 
     public RMIServer() throws RemoteException, SocketException {
         super();
+        check = new checkServers();
         check.start();
         try{
 
@@ -45,23 +36,10 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         catch(IOException b){
             System.out.println("Falha ao criar o socket");
         }
-        notificacoesBean = new HashMap<>();
         notificacoes = new HashMap<>();
         usersOnline = new HashMap<>();
     }
     //criar classe com extend thread para aplicar o run para o backup
-
-    public String ola() throws RemoteException{
-        System.out.println("Print no rmi do tomcat");
-        return "ola123";
-    }
-
-
-
-    public String ola() throws RemoteException{
-        System.out.println("Print no rmi do tomcat");
-        return "ola123";
-    }
 
 
     public void ping() {
@@ -138,16 +116,6 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         return received+"-Nao tem notificacoes";
     }
 
-    public HashMap<String, String> buscaParaNotificar(String username){
-        HashMap<String, String> notificacoesBean2;
-        System.out.println("notificacoesBean size: "+this.notificacoesBean.size());
-        notificacoesBean2=(HashMap) this.notificacoesBean.clone();
-        System.out.println("notificacoesBean2 size: "+notificacoesBean2.size());
-        this.notificacoesBean.remove(username);
-        System.out.println("notificacoesBean2 size apos remove: "+notificacoesBean2.size());
-        return notificacoesBean2;
-    }
-
     /**
      * Função que envia e recebe info do multicast face ao registo
      * @param username
@@ -201,10 +169,10 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         enviarPacote(toSend); //enviar ao Multicast Server
         String received = recebePacote();
         System.out.println(received);
-        received=received+ "Servidores multicast ativos:\n"+ multicastServers.size();
         return received;
-    }
 
+
+    }
 
     /**
      * Função que comunica com multicast para ver pesquisas
@@ -232,165 +200,31 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
      * @return
      */
     //Função que comunica com multicast para efetuar pesquisas
-    public ArrayList pesquisar(String username, String pesquisa) {
+    public String pesquisar(String username, String pesquisa) {
         String id=chooseMulticastServer();
         String toSend ="server !! "+id+  " ; type ! search ; username ! " + username + " ; key words ! " + pesquisa;
         enviarPacote(toSend); //enviar ao Multicast Server
         String size;
-        String recebe;
-        ArrayList<String> received = new ArrayList();
+        String received = "";
         int sizeint;
         size = recebePacote();
         sizeint = Integer.parseInt(size);
         if (sizeint != 0) {
             for (int i = 0; i < sizeint; i++) {
-                System.out.println("AJUDA");
-                recebe=recebePacote();
-                received.add(recebe + "Linguagem original: " + getLang(recebe)+"\n");
+                received = received + recebePacote() + "\n\n";
+
             }
 
-            received.add( recebePacote() + "Mostrando os " + sizeint + " mais relevantes!");
+            received = received + recebePacote() + "Mostrando os " + sizeint + " mais relevantes!";
         }
 
         else
-            received.add(recebePacote());
+            received=recebePacote();
 
         //System.out.println(received);
         return received;
     }
 
-
-
-
-
-    public String getLang(String string) {
-        String lang="";
-        String text=null;
-        String[] temp=null;
-        try {
-            if (!string.equals("")){
-            // Initiate the REST client.
-            temp=string.split("\n");
-            text=temp[2].replaceAll(" ","%20");
-
-            System.out.println(string);
-            URL url = new URL("https://translate.yandex.net/api/v1.5/tr.json/detect?key=trnsl.1.1.20191211T202548Z.c64b5c1f5cdd8ab5.be998cf218e819ba4779266908b1cbc1bc41c18d&text="+text);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            // HTTP Verb
-            connection.setRequestMethod("GET");
-            // Get requests data from the server.
-
-            connection.setRequestProperty("Content-Type", "application/json");
-
-            int status = connection.getResponseCode();
-            BufferedReader in = new BufferedReader( new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            StringBuffer content = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            in.close();
-            connection.disconnect();
-            System.out.println(content);
-            JSONObject jsonObj = (JSONObject) JSONValue.parse(content.toString());
-
-            lang= (String) jsonObj.get("lang");
-            Reader streamReader = null;
-
-            if (status > 299) {
-                streamReader = new InputStreamReader(connection.getErrorStream());
-            } else {
-                streamReader = new InputStreamReader(connection.getInputStream());
-            }
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-        return lang;
-    }
-
-
-
-
-
-    public String traduzir(String texto) {
-        JSONArray translated=null;
-        String translatedstr=null;
-        String text=null;
-        try {
-            // Initiate the REST client.
-            text=texto.replaceAll(" ","%20");
-
-            URL url = new URL("https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20191211T202548Z.c64b5c1f5cdd8ab5.be998cf218e819ba4779266908b1cbc1bc41c18d&text="+text+"&lang=pt");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            // HTTP Verb
-            connection.setRequestMethod("GET");
-            // Get requests data from the server.
-
-            connection.setRequestProperty("Content-Type", "application/json");
-
-            int status = connection.getResponseCode();
-            BufferedReader in = new BufferedReader( new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            StringBuffer content = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            in.close();
-            connection.disconnect();
-            System.out.println(content);
-            JSONObject jsonObj = (JSONObject) JSONValue.parse(content.toString());
-
-            translated= (JSONArray)jsonObj.get("text");
-            if (translated != null) {
-
-                    translatedstr=translated.get(0).toString();
-
-            }
-            System.out.println(translatedstr);
-            Reader streamReader = null;
-
-            if (status > 299) {
-                streamReader = new InputStreamReader(connection.getErrorStream());
-            } else {
-                streamReader = new InputStreamReader(connection.getInputStream());
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-        return translatedstr;
-    }
-    // ==========================MAIN=============================
-
-    public static void main(String args[]) throws RemoteException, SocketException {
-        RMI_S_I server=new RMIServer();
-        try {
-            Registry r = LocateRegistry.createRegistry(7500);
-            System.out.println(LocateRegistry.getRegistry(7500));
-            r.rebind("project", server);
-
-
-        } catch (RemoteException e) {
-            boolean programFails = true;
-            while (programFails) {
-                programFails = false;
-                try {
-                    Thread.sleep(500);
-                    LocateRegistry.createRegistry(7500).rebind("project",server);
-                    run=false;
-                    System.out.println("Connected! Server Backup assumed");
-                    run=true;
-                    check = new checkServers();
-                    check.start();
-
-                } catch (RemoteException | InterruptedException b) {
-                    System.out.println("Main RMI Server working... Waiting for failures");
-                    programFails = true;
-
-                }
-            }
-        }
-    }
     /**
      * Função que comunica com multicast para indexar url e urls por recursao
      * @param username
@@ -455,70 +289,6 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             System.out.println("key: " + i + " | value: " + usersOnline.get(i));
     }
 
-
-
-    public String addFacebook() throws RemoteException{
-
-
-        Token EMPTY_TOKEN = null;
-        // Replace these with your own api key and secret
-        String apiKey = "***REMOVED***";
-        String apiSecret = "***REMOVED***";
-        System.out.println("help");
-
-         service = new ServiceBuilder()
-                .provider(FacebookApi2.class)
-                .apiKey(apiKey)
-                .apiSecret(apiSecret)
-                .callback("https://localhost:8443/ProjetoSD/adfacebook2.action") // Do not change this.
-                .scope("public_profile")
-                .build();
-        System.out.println("bro");
-
-        String authorizationUrl = service.getAuthorizationUrl(EMPTY_TOKEN);
-        System.out.println("Got the Authorization URL!");
-        System.out.println("Now go and authorize Scribe here:");
-        System.out.println(authorizationUrl);
-        return authorizationUrl;
-    }
-
-    @Override
-    public String authUser(String code) throws RemoteException {
-            String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/me";
-            Token EMPTY_TOKEN = null;
-
-            System.out.println("And paste the authorization code here");
-            System.out.print(">>");
-            Verifier verifier = new Verifier(code);
-
-
-            System.out.println();
-
-            // Trade the Request Token and Verfier for the Access Token
-            System.out.println("Trading the Request Token for an Access Token...");
-            Token accessToken = service.getAccessToken(EMPTY_TOKEN, verifier);
-            System.out.println("Got the Access Token!");
-            System.out.println("(if your curious it looks like this: " + accessToken + " )");
-            System.out.println();
-
-            // Now let's go and ask for a protected resource!
-            System.out.println("Now we're going to access a protected resource...");
-            OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL, service);
-            service.signRequest(accessToken, request);
-            Response response = request.send();
-            System.out.println("Got it! Lets see what we found...");
-            System.out.println();
-            System.out.println(response.getCode());
-            System.out.println(response.getBody());
-
-            System.out.println();
-            System.out.println("Thats it man! Go and build something awesome with Scribe! :)");
-            return response.getBody();
-        }
-
-
-
-
     /**
      * Função para notificar user que é admin agora
      * @param username
@@ -538,15 +308,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             if (usersOnline.containsKey(username)){ //se o user que se vai tornar admin estiver online, temos de o notificar
                 //notificar o utilizador que é admin
                 usersOnline.get(username).showNotification(message);
-                return "n|Definiste o utilizador " + username + " como Administrador.";
+                return "Definiste o utilizador " + username + " como Administrador.";
             }
             else{
                 //guardar notificacao para quando ficar online
                 notificacoes.put(username,message);
-                this.notificacoesBean.put(username,message);
-                System.out.println("Coloquei as notificaçoes:\n");
                 //quando alguem ficar online verificar as notificacoes
-                return "n|Definiste o utilizador " + username + " como Administrador. Ele sera notificado quando estiver online";
+                return "\nDefiniste o utilizador " + username + " como Administrador. Ele sera notificado quando estiver online";
             }
         }
         else if(info[1].equals("User not found"))
@@ -570,7 +338,37 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
         return received;
     }
 
+    // ==========================MAIN=============================
 
+    public static void main(String args[]) throws RemoteException, SocketException {
+        RMI_S_I server=new RMIServer();
+        try {
+            Registry r = LocateRegistry.createRegistry(7500);
+            System.out.println(LocateRegistry.getRegistry(7500));
+            r.rebind("project", server);
+
+
+        } catch (RemoteException e) {
+            boolean programFails = true;
+            while (programFails) {
+                programFails = false;
+                try {
+                    Thread.sleep(500);
+                    LocateRegistry.createRegistry(7500).rebind("project",server);
+                    run=false;
+                    System.out.println("Connected! Server Backup assumed");
+                    run=true;
+                    check = new checkServers();
+                    check.start();
+
+                } catch (RemoteException | InterruptedException b) {
+                    System.out.println("Main RMI Server working... Waiting for failures");
+                    programFails = true;
+
+                }
+            }
+        }
+    }
 
     private static class checkServers extends Thread {
         @Override
@@ -578,7 +376,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             while (run){
                 multicastServers=checkActiveMulticastServers();
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -624,6 +422,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
                 nSocket.receive(request);
                 String temp = new String(request.getData(), 0, request.getLength());
                 String[] split = temp.split(" !! ");
+
                 arrayList.add(split[1]);
                 break;
             } catch (IOException e) {
