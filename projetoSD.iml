@@ -9,8 +9,11 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="RMIClient_jar" level="project" />
     <orderEntry type="library" name="jsoup-1.12.11" level="project" />
-    <orderEntry type="library" name="jsoup-1.12.1" level="project" />
     <orderEntry type="library" name="RMIServer_jar" level="project" />
     <orderEntry type="library" name="MulticastServer_jar" level="project" />
+    <orderEntry type="library" name="json-20190722" level="project" />
+    <orderEntry type="library" name="json_simple-1.1" level="project" />
+    <orderEntry type="module" module-name="ProjetoSD" />
+    <orderEntry type="library" name="jsoup-1.12.1" level="project" />
   </component>
 </module>

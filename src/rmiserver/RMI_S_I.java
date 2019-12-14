@@ -23,5 +23,10 @@ public interface RMI_S_I extends Remote {
     String verPesquisas(String username) throws RemoteException;
 
     String verPainelAdmin(String username) throws RemoteException;
+    String traduzir(String s) throws RemoteException;
+    String addFacebook() throws RemoteException;
+    String authUser(String code) throws RemoteException;
+
+
 
 }
