@@ -14,5 +14,7 @@
     <orderEntry type="library" exported="" name="RMIServer_jar1" level="project" />
     <orderEntry type="library" exported="" name="src" level="project" />
     <orderEntry type="library" exported="" name="javax.websocket-api-1.1" level="project" />
+    <orderEntry type="module" module-name="ProjetoSD" />
+    <orderEntry type="library" name="json-simple-1.1" level="project" />
   </component>
 </module>
