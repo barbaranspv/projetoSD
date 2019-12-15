@@ -180,7 +180,6 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
      */
     //Função que comunica com multicast para ver painel administraçao
     public String verPainelAdmin(String username){
-        System.out.println("ali");
         String id=chooseMulticastServer();
         String toSend = "server !! "+id+ " ; type ! verAdmin ; username ! " + username ;
         enviarPacote(toSend); //enviar ao Multicast Server
