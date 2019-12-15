@@ -366,6 +366,7 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
                     LocateRegistry.createRegistry(7500).rebind("project",server);
                     run=false;
                     System.out.println("Connected! Server Backup assumed");
+
                     run=true;
                     check = new checkServers();
                     check.start();
@@ -525,13 +526,13 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
             if (usersOnline.containsKey(username)){ //se o user que se vai tornar admin estiver online, temos de o notificar
                 //notificar o utilizador que é admin
                 usersOnline.get(username).showNotification(message);
-                return "Definiste o utilizador " + username + " como Administrador.";
+                return "n|Definiste o utilizador " + username + " como Administrador.";
             }
             else{
                 //guardar notificacao para quando ficar online
                 notificacoes.put(username,message);
                 //quando alguem ficar online verificar as notificacoes
-                return "\nDefiniste o utilizador " + username + " como Administrador. Ele sera notificado quando estiver online";
+                return "n|Definiste o utilizador " + username + " como Administrador. Ele sera notificado quando estiver online";
             }
         }
         else if(info[1].equals("User not found"))
