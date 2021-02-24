@@ -34,7 +34,7 @@ public class PesquisarAction extends ActionSupport implements SessionAware {
                 System.out.println(info);
                         }
             pesquisa= URLEncoder.encode(pesquisa,"UTF-8");
-            shareUrl="https://www.facebook.com/dialog/feed?app_id=***REMOVED***&display=popup&link=https://ucbusca.pt:8443/ProjetoSD/pesquisar.action?pesquisa="+pesquisa +"&redirect_uri=https://ucbusca.pt:8443/ProjetoSD/pesquisar.action?pesquisa="+pesquisa;
+            shareUrl="https://www.facebook.com/dialog/feed?app_id=571271423436722&display=popup&link=https://ucbusca.pt:8443/ProjetoSD/pesquisar.action?pesquisa="+pesquisa +"&redirect_uri=https://ucbusca.pt:8443/ProjetoSD/pesquisar.action?pesquisa="+pesquisa;
             return SUCCESS;
         }
         else
