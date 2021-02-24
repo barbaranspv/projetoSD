@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ProjetoSD.iml" filepath="$PROJECT_DIR$/ProjetoSD.iml" />
+      <module fileurl="file://$USER_HOME$/Documents/GitHub/projetoSD/projetoSD.iml" filepath="$USER_HOME$/Documents/GitHub/projetoSD/projetoSD.iml" />
+      <module fileurl="file://$PROJECT_DIR$/projetoSD1.iml" filepath="$PROJECT_DIR$/projetoSD1.iml" />
+      <module fileurl="file://$USER_HOME$/Documents/GitHub/projetoSD/projetoSD2.iml" filepath="$USER_HOME$/Documents/GitHub/projetoSD/projetoSD2.iml" />
+      <module fileurl="file://$USER_HOME$/Documents/GitHub/projetoSD/projetoSD3.iml" filepath="$USER_HOME$/Documents/GitHub/projetoSD/projetoSD3.iml" />
+    </modules>
+  </component>
+</project>

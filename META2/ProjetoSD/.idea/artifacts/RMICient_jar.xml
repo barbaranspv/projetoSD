@@ -1,0 +1,39 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="RMICient:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/RMICient_jar</output-path>
+    <root id="archive" name="projetoSD.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$USER_HOME$/Documents/GitHub/projetoSD/novo/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="projetoSD" />
+      <element id="module-output" name="ProjetoSD" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/asm-commons-3.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/asm-3.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/asm-tree-3.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/commons-lang3-3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/ognl-3.0.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/commons-io-2.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/javassist-3.11.0.GA.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/freemarker-2.3.19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/javax.servlet.jsp.jstl-api-1.2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/javax.servlet.jsp.jstl-1.2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/struts2-core-2.3.16.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/commons-fileupload-1.3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/log4j-1.2.14.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/WebContent/WEB-INF/lib/xwork-core-2.3.16.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Dropbox/Apps/NONIO-Inforestudante/Licenciatura em Engenharia Informática/2019 2020/1.º Semestre/Sistemas Distribuídos/Ficha8_REST (1)/Ficha8_REST/lib/json_simple-1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Dropbox/Apps/NONIO-Inforestudante/Licenciatura em Engenharia Informática/2019 2020/1.º Semestre/Sistemas Distribuídos/Ficha8_REST/Ficha8_REST/lib/async-http-client-1.9.31.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-simple/1.6.2/slf4j-simple-1.6.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.6.2/slf4j-api-1.6.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/GitHub/projetoSD/out/artifacts/MulticastServer_jar/jsoup-1.12.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/GitHub/projetoSD/out/artifacts/MulticastServer_jar/MulticastServer.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/GitHub/projetoSD/lib/jsoup-1.12.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/GitHub/projetoSD/out/artifacts/RMIServer_jar/jsoup-1.12.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/GitHub/projetoSD/out/artifacts/RMIServer_jar/RMIServer.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/GitHub/projetoSD/out/artifacts/RMIClient_jar/RMIClient.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/GitHub/projetoSD/out/artifacts/RMIClient_jar/jsoup-1.12.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Dropbox/Apps/NONIO-Inforestudante/Licenciatura em Engenharia Informática/2019 2020/1.º Semestre/Sistemas Distribuídos/Ficha8_REST/Ficha8_REST/lib/slf4j-api-1.7.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Desktop/JAVAX/javax.websocket-api-1.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
