@@ -448,8 +448,8 @@ public class RMIServer extends UnicastRemoteObject implements RMI_S_I {
 
         Token EMPTY_TOKEN = null;
         // Replace these with your own api key and secret
-        String apiKey = "xxxx";
-        String apiSecret = "xxxx";
+        String apiKey = "***REMOVED***";
+        String apiSecret = "***REMOVED***";
 
         service = new ServiceBuilder()
                 .provider(FacebookApi2.class)
